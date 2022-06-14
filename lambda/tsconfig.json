@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "lib": ["es2020", "dom"],
+    "moduleResolution": "node",
+    "module": "commonJS",
+    "outDir": "./dist",
+    "strict": true,
+    "target": "es2020",
+    "typeRoots": ["src/@types", "node_modules/@types", "../node_modules/@types"]
+  },
+  "include": ["./src/**/*", "./tests/**/*"]
+}
