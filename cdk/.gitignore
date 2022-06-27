@@ -1,0 +1,17 @@
+*.d.ts
+*.js
+node_modules
+cdktf.out
+cdktf.log
+*terraform.*.tfstate*
+.gen
+.terraform
+tsconfig.tsbuildinfo
+!jest.config.js
+!setup.js
+.env
+.npmrc
+help
+__tests__
+setup.js
+jest.config.js
