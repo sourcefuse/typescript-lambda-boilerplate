@@ -36,8 +36,16 @@ class MyStack extends TerraformStack {
 
     new aws.AwsProvider(this, "aws", {
       region: process.env.region,
+      accessKey: process.env.accessKey,
+      secretKey: process.env.secretKey,
+      allowedAccountIds: [
+        process.env.allowedAccountIds ?? "accountId"
+      ],
+      assumeRole: {
+       roleArn: process.env.roleArn,
+      }
     });
-
+    console.log(process.env.allowedAccountIds);
     // Create Lambda executable
     const asset = new TerraformAsset(this, "lambda-asset", {
       path: path.resolve(__dirname, config.path),
