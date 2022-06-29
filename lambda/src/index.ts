@@ -20,4 +20,3 @@ export const handler = (event: APIGatewayEvent, context: Context): APIGatewayPro
 		};
 	}
 };
-
