@@ -10,7 +10,6 @@ export const handler = (event: APIGatewayEvent, context: Context): APIGatewayPro
 	try {
 		return lambdaFunction.main();
 	} catch (error) {
-		// @ts-ignore
 		const message = error.message as string;
 		logger.error(message);
 		return {
