@@ -30,7 +30,7 @@ const lambdaRolePolicy = {
   ]
 };
 
-class MyStack extends TerraformStack {
+class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
 
@@ -45,7 +45,6 @@ class MyStack extends TerraformStack {
        roleArn: process.env.roleArn,
       }
     });
-    console.log(process.env.allowedAccountIds);
     // Create Lambda executable
     const asset = new TerraformAsset(this, "lambda-asset", {
       path: path.resolve(__dirname, config.path),
@@ -65,8 +64,8 @@ class MyStack extends TerraformStack {
     });
 
     // Create Lambda role
-    const role = new aws.iam.IamRole(this, "lambda-exec", {       
-      name: `cdktf-${name}`,                                 // need to create iam role on backstage
+    const role = new aws.iam.IamRole(this, "lambda-role", {       
+      name: `cdktf-role-${name}`,                                
       assumeRolePolicy: JSON.stringify(lambdaRolePolicy)
     });
 
@@ -77,7 +76,7 @@ class MyStack extends TerraformStack {
     });
 
     // Create Lambda function
-    const lambdaFunc = new aws.lambdafunction.LambdaFunction(this, "cdktf-lambda", {
+    const Function = new aws.lambdafunction.LambdaFunction(this, "cdktf-lambda", {
       functionName: `cdktf-${name}`,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
@@ -90,11 +89,11 @@ class MyStack extends TerraformStack {
     const api = new aws.apigatewayv2.Apigatewayv2Api(this, "api-gw", {
       name: name,
       protocolType: "HTTP",
-      target: lambdaFunc.arn
+      target: Function.arn
     });
 
     new aws.lambdafunction.LambdaPermission(this, "apigw-lambda", {
-      functionName: lambdaFunc.functionName,
+      functionName: Function.functionName,
       action: "lambda:InvokeFunction",
       principal: "apigateway.amazonaws.com",
       sourceArn: `${api.executionArn}/*/*`,
@@ -108,7 +107,7 @@ class MyStack extends TerraformStack {
 
 const app = new App();
 
-new MyStack(app, 'lambda', {
+new LambdaStack(app, 'lambda', {
   path: "../lambda/dist",
   handler: "index.handler",
   runtime: "nodejs14.x",
