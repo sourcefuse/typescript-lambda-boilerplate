@@ -7,9 +7,8 @@ import { App, TerraformStack, TerraformAsset, AssetType, TerraformOutput } from 
 import * as aws from "@cdktf/provider-aws";
 import * as dotenv from "dotenv";
 dotenv.config({ path: __dirname+'/.env' });
-
 interface LambdaFunctionConfig {
-  path: string,
+  path: any,
   handler: string,
   runtime: string,
   stageName: string,
@@ -108,7 +107,7 @@ class LambdaStack extends TerraformStack {
 const app = new App();
 
 new LambdaStack(app, 'lambda', {
-  path: "../lambda/dist",
+  path: process.env.path,
   handler: "index.handler",
   runtime: "nodejs14.x",
   stageName: "lambda",
