@@ -1,51 +1,48 @@
-**CDK Module For Lambda**
+# CDK Module For Lambda
 
 We can use the Cloud Development Kit for Terraform (CDKTF) to define advanced deployment configurations.
 
 CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF application. They can save us from writing repetitive CDKTF code, while allowing us to independently manage the resources in each stack. we can also use the outputs of one stack as inputs for another.
 
-*Getting Started:*
+## Getting Started
 
-1. Create a dot env file.
+1. Create a dot env file:  
+  ```shell
+  touch .env
+  ```
 
-2. Configure these  keys in dot env
-    *region = "Aws region"*
-    *key  = "Your own key"* 
-    *bucketname = "bucket name"*
-    *bucketprefix = "bucket prefix"*
-    *apigateway = true or false*
-    *accessKey = "Your access key"*
-    *secretKey = "Your secret key"*
-    *allowedAccountIds = "Your role account id"*
-    *roleArn = "Your role arn"*
-    *path = "Path of the dist folder of lambda function"*
-
-    Note : If you want to use already created bucket then you have to provide it in a *bucketname* Otherwise leave *bucketname* as blank , the code will automatically create a new unique bucket for you  in S3.
-
-            e.g. : *bucketname = ""*
-
-    Note : If you also want to configure apigateway then in dot env file keep apigateway as true otherwise false.        
+3. Configure the following keys in the `.env` file:  
+  * **region**: *aws_region*  
+  * **key**: *aws_key*   
+  * **bucketName**: *bucket_name*  
+  * **bucketPrefix**: *bucket_prefix*
+  * **apiGateway**: *true* or *false*
+  * **accessKey**: *aws_access_key*
+  * **secretKey**: *aws_secret_key*
+  * **allowedAccountIds**: *allowed_account_ids*
+  * **roleArn**: *role_arn*
+  * **path**: *Path of the dist folder of lambda function*
+  * :exclamation: NOTE: If you want to use an existing bucket then you have to define it by setting the key *bucketName* in the dot env file, Otherwise leave *bucketName* as blank , the code will automatically create a new unique bucket for you in S3. :exclamation:  
+    e.g.: `bucketname = ""`
+  * :exclamation: NOTE: If you want to configure an apiGateway, set the value for the key *apiGateway* to `true` in the dot env file, otherwise set to `false`. :exclamation:    
 
 3. Run *npm install* to install the dependency packages for cdktf. Now you are ready to go with cdktf commands.
 
-
-*How to Run:*
-
-1. This module gives us several commands for the aws lambda function.
-
- -> *cdktf get* : To generate the random provider. This configuration uses the random         provider to ensure the IAM role name is unique.
-
- -> *cdktf list* : List all the stacks defined in your CDKTF application. 
-
- -> *cdktf deploy lambda* : To deploy the lambda stack on aws and remember to confirm the deploy with a yes.
-
- -> *cdktf destroy lambda* : To destroy the Infrastructure that you deployed on aws.
-
-
-
-
-
-
-
-
-
+## How to Run
+This module gives us several commands for the aws lambda function.  
+* To generate the random provider. This configuration uses the random provider to ensure the IAM role name is unique.  
+  ```shell
+  cdktf get 
+  ```
+* List all the stacks defined in your CDKTF application.  
+  ```shell
+  cdktf list
+  ``` 
+* To deploy the lambda stack on aws and remember to confirm the deploy with a yes.  
+  ```shell
+  cdktf deploy lambda
+  ```
+* To destroy the Infrastructure that you deployed on aws.  
+  ```shell
+  cdktf destroy lambda
+  ```

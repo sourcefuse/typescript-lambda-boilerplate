@@ -22,7 +22,8 @@
   "dependencies": {
     "@cdktf/provider-aws": "^8.0.13",
     "cdktf": "^0.11.2",
-    "constructs": "^10.1.42"
+    "constructs": "^10.1.42",
+    "dotenv": "^16.0.1"
   },
   "devDependencies": {
     "@types/jest": "^28.1.3",

@@ -56,16 +56,16 @@ class LambdaStack extends TerraformStack {
 
     // Create unique S3 bucket that hosts Lambda executable
 
-    let bucketname = process.env.bucketname ? process.env.bucketname:"nobucket";
-    if (bucketname === "nobucket") {
+    let bucketName = process.env.bucketName ? process.env.bucketName : "nobucket";
+    if (bucketName === "nobucket") {
       const bucket = new aws.s3.S3Bucket(this, "bucket", {
-        bucketPrefix: process.env.bucketprefix,
+        bucketPrefix: process.env.bucketPrefix,
       });
-      bucketname = bucket.bucket;
+      bucketName = bucket.bucket;
     }
     // Upload Lambda zip file to newly created S3 bucket
     const lambdaArchive = new aws.s3.S3Object(this, "lambda-archive", {
-      bucket: bucketname,
+      bucket: bucketName,
       key: `${config.version}/${asset.fileName}`,
       source: asset.path, // returns a posix path
     });
@@ -89,14 +89,14 @@ class LambdaStack extends TerraformStack {
       "cdktf-lambda",
       {
         functionName: `cdktf-${name}`,
-        s3Bucket: bucketname,
+        s3Bucket: bucketName,
         s3Key: lambdaArchive.key,
         handler: config.handler,
         runtime: config.runtime,
         role: role.arn,
       }
     );
-     const apiGw = process.env.apigateway;
+     const apiGw = process.env.apiGateway;
 
     // Create and configure API gateway
     if(apiGw === "true"){
