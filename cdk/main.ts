@@ -96,10 +96,10 @@ class LambdaStack extends TerraformStack {
         role: role.arn,
       }
     );
-     const apiGw = process.env.apiGateway;
+     const apiGateway = process.env.apiGateway;
 
     // Create and configure API gateway
-    if(apiGw === "true"){
+    if(apiGateway === "true"){
     const api = new aws.apigatewayv2.Apigatewayv2Api(this, "api-gw", {
       name: name,
       protocolType: "HTTP",
