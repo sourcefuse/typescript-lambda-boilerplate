@@ -6,4 +6,3 @@ describe('example describe', () => {
 		expect(true).to.be.true;
 	});
 });
-
