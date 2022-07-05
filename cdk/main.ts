@@ -72,7 +72,7 @@ class LambdaStack extends TerraformStack {
 
     // Create Lambda role
     const role = new aws.iam.IamRole(this, "lambda-role", {
-      name: `cdktf-role-${name}`,
+      name: `lambda-role-${name}`,
       assumeRolePolicy: JSON.stringify(lambdaRolePolicy),
     });
 
@@ -84,7 +84,7 @@ class LambdaStack extends TerraformStack {
     });
 
     // Create Lambda function
-    const Function = new aws.lambdafunction.LambdaFunction(
+    const lambdaFunction = new aws.lambdafunction.LambdaFunction(
       this,
       "cdktf-lambda",
       {
@@ -96,18 +96,18 @@ class LambdaStack extends TerraformStack {
         role: role.arn,
       }
     );
-     const APIGW = process.env.apigateway;
+     const apiGw = process.env.apigateway;
 
     // Create and configure API gateway
-    if(APIGW === "true"){
+    if(apiGw === "true"){
     const api = new aws.apigatewayv2.Apigatewayv2Api(this, "api-gw", {
       name: name,
       protocolType: "HTTP",
-      target: Function.arn,
+      target: lambdaFunction.arn,
     });
 
     new aws.lambdafunction.LambdaPermission(this, "apigw-lambda", {
-      functionName: Function.functionName,
+      functionName: lambdaFunction.functionName,
       action: "lambda:InvokeFunction",
       principal: "apigateway.amazonaws.com",
       sourceArn: `${api.executionArn}/*/*`,
