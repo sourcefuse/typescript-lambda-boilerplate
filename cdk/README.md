@@ -11,12 +11,20 @@ CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF a
 2. Configure these  keys in dot env
     *region = "Aws region"*
     *key  = "Your own key"* 
-    *bucket = "Bucket name"*
+    *bucketname = "bucket name"*
+    *bucketprefix = "bucket prefix"*
+    *apigateway = true or false*
     *accessKey = "Your access key"*
     *secretKey = "Your secret key"*
     *allowedAccountIds = "Your role account id"*
     *roleArn = "Your role arn"*
     *path = "Path of the dist folder of lambda function"*
+
+    Note : If you want to use already created bucket then you have to provide it in a *bucketname* Otherwise leave *bucketname* as blank , the code will automatically create a new unique bucket for you  in S3.
+
+            e.g. : *bucketname = ""*
+
+    Note : If you also want to configure apigateway then in dot env file keep apigateway as true otherwise false.        
 
 3. Run *npm install* to install the dependency packages for cdktf. Now you are ready to go with cdktf commands.
 
