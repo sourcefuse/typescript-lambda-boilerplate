@@ -3,11 +3,25 @@
     "esModuleInterop": true,
     "lib": ["es2020", "dom"],
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "module": "commonJS",
     "outDir": "./dist",
     "strict": true,
     "target": "es2020",
-    "typeRoots": ["src/@types", "node_modules/@types", "../node_modules/@types"]
+    "typeRoots": [
+      "src/@types",
+      "node_modules/@types",
+      "../node_modules/@types"
+    ],
+    "preserveConstEnums": true,
+    "sourceMap": false,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true
   },
-  "include": ["./src/**/*", "./tests/**/*"]
+  "include": [
+    "./src/**/*",
+    "./tests/**/*",
+    "./__tests__/**/*"
+  ]
 }

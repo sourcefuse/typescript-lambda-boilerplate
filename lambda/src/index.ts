@@ -1,18 +1,22 @@
-import {Response} from './common';
-/**
- * Lambda entry point.
- */
-const handler = async(): Promise<Response> => {
+import {APIGatewayEvent, APIGatewayProxyResult, Context} from 'aws-lambda';
+import {LambdaLog} from 'lambda-log';
+import {LambdaFunction} from './main';
+import {STATUS_CODES} from './common/constants';
+
+const logger = new LambdaLog();
+
+export const handler = (event: APIGatewayEvent, context: Context): APIGatewayProxyResult => {
+	const lambdaFunction = new LambdaFunction(event, context);
 	try {
-		console.info('Hit lambda handler');
-		await Promise.resolve();
-		return {
-			status: 200
-		};
+		return lambdaFunction.main();
 	} catch (error) {
-		console.error(error);
-		return { status: 500 };
+		const message = error.message as string;
+		logger.error(message);
+		return {
+			statusCode: STATUS_CODES.INTERNAL_SERVER,
+			body: JSON.stringify({
+				message,
+			}),
+		};
 	}
 };
-
-export { handler };
