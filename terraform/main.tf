@@ -32,11 +32,14 @@ module "tags" {
 module "lambda" {
   source = "./lambda-boilerplate"
 
-  environment    = var.environment
+  environment = var.environment
+  region      = "us-east-1"
+
+  lambda_runtime = "nodejs16.x"
   lambda_memory  = 128
-  lambda_runtime = "nodejs14.x"
   lambda_timeout = 120
-  region         = "us-east-1"
+
+  kms_key_admin_arns = var.kms_key_admin_arns
 
   tags = module.tags.tags
 }

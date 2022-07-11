@@ -17,3 +17,9 @@ variable "profile" {
   description = "Name of the AWS Profile configured on your workstation."
   type        = string
 }
+
+variable "kms_key_admin_arns" {
+  description = "Additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE."
+  type        = list(string)
+  default     = []
+}

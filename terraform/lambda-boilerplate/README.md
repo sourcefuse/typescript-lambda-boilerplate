@@ -1,4 +1,4 @@
-# Terraform 
+# Terraform Module: Lambda Boilerplate 
 
 ## Overview
 
@@ -7,16 +7,20 @@ Terraform module that manages the infrastructure dependencies for the Lambda Boi
 ## Usage
 
 ```hcl
-module "lambda-boilerplate" {
-  source              = "./lambda-boilerplate"
-  environment         = "sandbox"
-  lambda_memory       = 128
-  lambda_runtime      = "nodejs14.x"
-  lambda_timeout      = 300
-  bucket_name         = "lambda-boilerplate-example"
-  region              = "us-east-1"
-  lambda_secret_name   = var.lambda_secret_name
-  lambda_domain        = var.lambda_domain
+module "lambda" {
+  source = "./lambda-boilerplate"
+
+  environment = "dev"
+  region      = "us-east-1"
+
+  lambda_runtime = "nodejs16.x"
+  lambda_memory  = 128
+  lambda_timeout = 120
+
+  tags = {
+    Name    = "lambda-boilerplate"
+    Example = "True"
+  }
 }
 ```
 
