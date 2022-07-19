@@ -1,47 +1,46 @@
 import {AssetType, TerraformAsset, TerraformOutput, TerraformStack} from 'cdktf';
 import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
-import * as random from '../../.gen/providers/random';
 import {lambdaAction, lambdaPolicyArn, lambdaPrincipal, lambdaRolePolicy} from '../constants';
 import {ApiGatewayLambdaFunctionConfig} from '../interfaces';
 
-export class ApiGatewayLambdaStack extends TerraformStack {
+export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: ApiGatewayLambdaFunctionConfig) {
     super(scope, name);
 
     new aws.AwsProvider(this, 'aws', {
-      region: process.env.AWS_REGION,
-      profile: process.env.AWS_PROFILE,
-    });
-
-    new random.RandomProvider(this, 'random');
-
-    // Create random value
-    const pet = new random.Pet(this, 'random-name', {
-      length: 2,
+      region: process.env.region,
+      accessKey: process.env.accessKey,
+      secretKey: process.env.secretKey,
+      allowedAccountIds: [
+        process.env.allowedAccountIds ?? "accountId"
+      ],
+      assumeRole: {
+       roleArn: process.env.roleArn,
+      }
     });
 
     // Create Lambda executable
-    const asset = new TerraformAsset(this, 'lambda-asset', {
+    new TerraformAsset(this, 'lambda-asset', {
       path: config.path,
       type: AssetType.ARCHIVE, // if left empty it infers directory and file
     });
 
     // Create unique S3 bucket that hosts Lambda executable
-    const bucket = new aws.s3.S3Bucket(this, 'bucket', {
-      bucketPrefix: `${name}-asset`,
-    });
+    // const bucket = new aws.s3.S3Bucket(this, 'bucket', {
+    //   bucketPrefix: `${name}-asset`,
+    // });
 
     // Upload Lambda zip file to newly created S3 bucket
-    const lambdaArchive = new aws.s3.S3Object(this, 'lambda-archive', {
-      bucket: bucket.bucket,
-      key: `${config.version}/${asset.fileName}`,
-      source: asset.path, // returns a posix path
-    });
+    // const lambdaArchive = new aws.s3.S3Object(this, 'lambda-archive', {
+    //   bucket: bucket.bucket,
+    //   key: `${config.version}/${asset.fileName}`,
+    //   source: asset.path, // returns a posix path
+    // });
 
     // Create Lambda role
     const role = new aws.iam.IamRole(this, 'lambda-exec', {
-      name: `${name}-${pet.id}`,
+      name: `lambda-role-${name}`,
       assumeRolePolicy: JSON.stringify(lambdaRolePolicy),
     });
 
@@ -57,9 +56,9 @@ export class ApiGatewayLambdaStack extends TerraformStack {
     });
     // Create Lambda function
     const lambdaFunc = new aws.lambdafunction.LambdaFunction(this, 'lambda-function', {
-      functionName: `${name}-${pet.id}`,
-      s3Bucket: bucket.bucket,
-      s3Key: lambdaArchive.key,
+      functionName: `cdktf-${name}`,
+      //s3Bucket: bucket.bucket,
+      //s3Key: lambdaArchive.key,
       handler: config.handler,
       runtime: config.runtime,
       role: role.arn,
