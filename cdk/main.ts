@@ -16,11 +16,12 @@ dotenvExt.load({
 const app = new App();
 
 new LambdaStack(app, 'lambda', {
-  path: resolve(__dirname,'../lambda/dist/'),
+  path: resolve(__dirname,'../lambda/dist/src'),
   handler: 'index.handler',
   runtime: 'nodejs16.x',
   version: 'v0.0.1',
-  layerPath: resolve(__dirname,'../lambda/dist/layers/layers.zip')
+  layerPath: resolve(__dirname,'../lambda/dist/layers'),
+  isApiRequired: true
 });
 
 

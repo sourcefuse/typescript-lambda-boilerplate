@@ -1,7 +1,8 @@
-export interface ApiGatewayLambdaFunctionConfig {
+export interface LambdaFunctionConfig {
   path: string,
   handler: string,
   runtime: string,
   version: string,
-  layerPath: string
+  layerPath?: string,
+  isApiRequired?: boolean
 }

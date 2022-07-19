@@ -2,45 +2,50 @@ import {AssetType, TerraformAsset, TerraformOutput, TerraformStack} from 'cdktf'
 import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
 import {lambdaAction, lambdaPolicyArn, lambdaPrincipal, lambdaRolePolicy} from '../constants';
-import {ApiGatewayLambdaFunctionConfig} from '../interfaces';
+import {LambdaFunctionConfig} from '../interfaces';
+
+import * as random from '../../.gen/providers/random';
 
 export class LambdaStack extends TerraformStack {
-  constructor(scope: Construct, name: string, config: ApiGatewayLambdaFunctionConfig) {
+  constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
 
     new aws.AwsProvider(this, 'aws', {
       region: process.env.region,
-      accessKey: process.env.accessKey,
-      secretKey: process.env.secretKey,
-      allowedAccountIds: [
-        process.env.allowedAccountIds ?? "accountId"
-      ],
-      assumeRole: {
-       roleArn: process.env.roleArn,
-      }
+      profile: process.env.profile,
+    });
+    new random.RandomProvider(this, 'random');
+
+    // Create random value
+    const pet = new random.Pet(this, 'random-name', {
+      length: 2,
     });
 
-    // Create Lambda executable
-    new TerraformAsset(this, 'lambda-asset', {
+    // Creating Archive of Lambda
+    const asset = new TerraformAsset(this, 'lambda-asset', {
       path: config.path,
       type: AssetType.ARCHIVE, // if left empty it infers directory and file
     });
 
-    // Create unique S3 bucket that hosts Lambda executable
-    // const bucket = new aws.s3.S3Bucket(this, 'bucket', {
-    //   bucketPrefix: `${name}-asset`,
-    // });
+    const layers = [];
+    if (config.layerPath) {
+      // Creating Archive of Lambda Layer
+      const layerAsset = new TerraformAsset(this, 'lambda-layer-asset', {
+        path: config.layerPath,
+        type: AssetType.ARCHIVE, // if left empty it infers directory and file
+      });
+      // Create Lambda Layer for function
+      const lambdaLayers = new aws.lambdafunction.LambdaLayerVersion(this, 'lambda-layer', {
+        filename: layerAsset.path,
+        layerName: `${name}-layers-${pet.id}`,
+      });
 
-    // Upload Lambda zip file to newly created S3 bucket
-    // const lambdaArchive = new aws.s3.S3Object(this, 'lambda-archive', {
-    //   bucket: bucket.bucket,
-    //   key: `${config.version}/${asset.fileName}`,
-    //   source: asset.path, // returns a posix path
-    // });
+      layers.push(lambdaLayers.arn);
+    }
 
     // Create Lambda role
     const role = new aws.iam.IamRole(this, 'lambda-exec', {
-      name: `lambda-role-${name}`,
+      name: `lambda-role-${name}-${pet.id}`,
       assumeRolePolicy: JSON.stringify(lambdaRolePolicy),
     });
 
@@ -50,37 +55,38 @@ export class LambdaStack extends TerraformStack {
       role: role.name,
     });
 
-    const lambdaLayers = new aws.lambdafunction.LambdaLayerVersion(this, 'lambda-layer', {
-      filename: config.layerPath,
-      layerName: `${name}-layers`,
-    });
     // Create Lambda function
     const lambdaFunc = new aws.lambdafunction.LambdaFunction(this, 'lambda-function', {
-      functionName: `cdktf-${name}`,
-      //s3Bucket: bucket.bucket,
-      //s3Key: lambdaArchive.key,
+      functionName: `cdktf-${name}-${pet.id}`,
+      filename: asset.path,
       handler: config.handler,
       runtime: config.runtime,
       role: role.arn,
-      layers: [lambdaLayers.arn],
+      layers,
     });
 
-    // Create and configure API gateway
-    const api = new aws.apigatewayv2.Apigatewayv2Api(this, 'api-gw', {
-      name,
-      protocolType: 'HTTP',
-      target: lambdaFunc.arn,
-    });
+    if(config.isApiRequired) {
+      // Create and configure API gateway
+      const api = new aws.apigatewayv2.Apigatewayv2Api(this, 'api-gw', {
+        name,
+        protocolType: 'HTTP',
+        target: lambdaFunc.arn,
+      });
 
-    new aws.lambdafunction.LambdaPermission(this, 'apigw-lambda-permission', {
-      functionName: lambdaFunc.functionName,
-      action: lambdaAction,
-      principal: lambdaPrincipal,
-      sourceArn: `${api.executionArn}/*/*`,
-    });
+      new aws.lambdafunction.LambdaPermission(this, 'apigw-lambda-permission', {
+        functionName: lambdaFunc.functionName,
+        action: lambdaAction,
+        principal: lambdaPrincipal,
+        sourceArn: `${api.executionArn}/*/*`,
+      });
 
-    new TerraformOutput(this, 'url', {
-      value: api.apiEndpoint,
+      new TerraformOutput(this, 'url', {
+        value: api.apiEndpoint,
+      });
+    }
+
+    new TerraformOutput(this, 'function', {
+      value: lambdaFunc.arn,
     });
   }
 }
