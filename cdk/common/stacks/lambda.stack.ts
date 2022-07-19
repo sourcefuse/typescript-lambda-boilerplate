@@ -3,7 +3,6 @@ import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
 import {lambdaAction, lambdaPolicyArn, lambdaPrincipal, lambdaRolePolicy} from '../constants';
 import {LambdaFunctionConfig} from '../interfaces';
-
 import * as random from '../../.gen/providers/random';
 
 export class LambdaStack extends TerraformStack {
@@ -11,8 +10,12 @@ export class LambdaStack extends TerraformStack {
     super(scope, name);
 
     new aws.AwsProvider(this, 'aws', {
-      region: process.env.region,
-      profile: process.env.profile,
+      region: process.env.AWS_REGION,
+      accessKey: process.env.AWS_ACCESS_KEY_ID,
+      secretKey: process.env.AWS_SECRET_ACCESS_KEY,
+      assumeRole: {
+       roleArn: process.env.AWS_ROLE_ARN,
+      }
     });
     new random.RandomProvider(this, 'random');
 
