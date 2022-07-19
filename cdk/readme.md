@@ -12,14 +12,15 @@ CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF a
   ```
 
 3. Configure the following keys in the `.env` file:  
-  * **region**: *aws_region*  
-  * **key**: *aws_key*   
-  * **encrypt**: *true*
-  * **accessKey**: *aws_access_key*
-  * **secretKey**: *aws_secret_key*
-  * **allowedAccountIds**: *allowed_account_ids*
-  * **roleArn**: *role_arn*
-  * **path**: *Path of the dist folder of lambda function*
+  * **AWS_REGION**: *aws_region*  
+  * **AWS_KEY**: *aws_key*   
+  * **AWS_ACCESS_KEY_ID**: *aws_access_key*
+  * **AWS_SECRET_ACCESS_KEY**: *aws_secret_key*
+  * **AWS_ROLE_ARN**: *role_arn*
+  * **AWS_PROFILE**: *Path of the dist folder of lambda function*
+
+  Note: if You want to use * **AWS_ACCESS_KEY_ID** and * **AWS_SECRET_ACCESS_KEY** then keep 
+  * **AWS_PROFILE** as blank.
 
 3. Run *npm install* to install the dependency packages for cdktf. Now you are ready to go with cdktf commands.
 
