@@ -1,6 +1,7 @@
 # Typescript Lambda Boilerplate
 
-:exclamation: **Contributors:** See [Development](#dev)
+| :exclamation: **Contributors:** See [Development](#dev)  |  
+|----------------------------------------------------------|
 
 ## <a id="prereqs"></a> Pre-Requisites 
 - [node.js](https://nodejs.dev/download/)
