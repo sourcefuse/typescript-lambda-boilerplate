@@ -1,2 +1,2 @@
-const cdktf = require("api-gw-lambda/cdk/cdktf.json");
+const cdktf = require("cdktf");
 cdktf.Testing.setupJest();
