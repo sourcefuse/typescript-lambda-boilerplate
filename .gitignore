@@ -152,3 +152,6 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Mac make this file
+.DS_Store
