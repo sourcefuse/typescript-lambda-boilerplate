@@ -25,7 +25,7 @@ For more information on how to configure an AWS Profile on your workstation, ple
    ```
 
 ## Terraform
-Once you have completed the steps in (Getting Started)[#getting_started], you will need to configure 
+Once you have completed the steps in [Getting Started](#getting_started), you will need to configure 
 the `terraform` dependencies.  
 
 :warning: This does not have a backend configured. See [Backend configuration](#backend_config) for more information.  
