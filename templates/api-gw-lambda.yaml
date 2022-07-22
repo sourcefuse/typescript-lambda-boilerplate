@@ -1,0 +1,77 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: sourcefuse-api-gw-lambda-boilerplate
+  title: sourcefuse-api-gw-lambda-boilerplate
+  description: sourcefuse-api-gw-lambda-boilerplate
+  tags:
+    - lambda
+    - api-gateway
+spec:
+  owner: sourcefuse.com
+  type: api
+  parameters:
+    - title: Provide some simple information
+      required:
+        - function_id
+        - owner
+      properties:
+        function_id:
+          title: Name
+          type: string
+          description: Unique name of the lambda function
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this function is for.
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+  steps:
+    - id: template
+      name: Fetch Template
+      action: fetch:template
+      input:
+        url: ../api-gw-lambda
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          function_id: ${{ parameters.function_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
+
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ["github.com"]
+        description: This is ${{ parameters.function_id }}
+        repoUrl: ${{ parameters.repoUrl }}
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
+
+  output:
+    remoteUrl: ${{ steps.publish.output.remoteUrl }}
+    entityRef: ${{ steps.register.output.entityRef }}
