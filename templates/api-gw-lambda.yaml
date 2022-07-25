@@ -14,7 +14,6 @@ spec:
     - title: Provide some simple information
       required:
         - function_id
-        - owner
       properties:
         function_id:
           title: Name
@@ -24,14 +23,6 @@ spec:
           title: Description
           type: string
           description: Help others understand what this function is for.
-        owner:
-          title: Owner
-          type: string
-          description: Owner of the component
-          ui:field: OwnerPicker
-          ui:options:
-            allowedKinds:
-              - Group
     - title: Choose a location
       required:
         - repoUrl
@@ -55,7 +46,6 @@ spec:
           function_id: ${{ parameters.function_id }}
           description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
-          owner: ${{ parameters.owner }}
 
     - id: publish
       name: Publish

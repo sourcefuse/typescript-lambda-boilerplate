@@ -9,4 +9,4 @@ metadata:
 spec:
   type: api
   lifecycle: experimental
-  owner: ${{values.owner | dump}}
+  owner: sourcefuse
