@@ -4,15 +4,15 @@
 data "aws_caller_identity" "current_caller" {}
 
 data "archive_file" "function_archive" {
-  type        = "zip"
-  source_dir  = "${path.module}/dist/src/"
-  output_path = "${path.module}/dist/function.zip"
+  type        = var.lambda_function_archive_type
+  source_dir  = local.lambda_function_archive_source_dir
+  output_path = local.lambda_function_archive_output_path
 }
 
 data "archive_file" "layer_archive" {
-  type        = "zip"
-  source_dir  = "${path.module}/dist/layers"
-  output_path = "${path.module}/dist/layers.zip"
+  type        = var.lambda_layer_archive_type
+  source_dir  = local.lambda_layer_archive_source_dir
+  output_path = local.lambda_layer_archive_output_path
 }
 
 ################################################################################
@@ -30,7 +30,7 @@ resource "aws_lambda_function" "this" {
   source_code_hash = data.archive_file.function_archive.output_base64sha256
   function_name    = var.lambda_name
   role             = aws_iam_role.lambda_role.arn
-  handler          = "index.handler"
+  handler          = var.lambda_handler
   runtime          = var.lambda_runtime
   timeout          = var.lambda_timeout
   memory_size      = var.lambda_memory

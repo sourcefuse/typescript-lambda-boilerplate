@@ -19,6 +19,48 @@ variable "tags" {
 ################################################################################
 ## lambda
 ################################################################################
+variable "lambda_function_archive_type" {
+  description = "The type of archive to generate."
+  type        = string
+  default     = "zip"
+}
+
+variable "lambda_function_archive_source_dir" {
+  description = "Package entire contents of this directory into the archive. Default is {path.module}/dist/src unless overridden."
+  type        = string
+  default     = null
+}
+
+variable "lambda_function_archive_output_path" {
+  description = "The output of the archive file. Default is {path.module}/dist/function.zip unless overridden."
+  type        = string
+  default     = null
+}
+
+variable "lambda_layer_archive_type" {
+  description = "The type of archive to generate."
+  type        = string
+  default     = "zip"
+}
+
+variable "lambda_layer_archive_source_dir" {
+  description = "Package entire contents of this directory into the archive. Default is {path.module}/dist/layers unless overridden."
+  type        = string
+  default     = null
+}
+
+variable "lambda_layer_archive_output_path" {
+  description = "The output of the archive file. Default is {path.module}/dist/layers.zip unless overridden."
+  type        = string
+  default     = null
+}
+
+variable "lambda_handler" {
+  description = "Function entrypoint in your code. For more information see https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-awscli.html"
+  type        = string
+  default     = "index.handler"
+}
+
 variable "lambda_runtime" {
   description = "Lambda runtime"
   type        = string
