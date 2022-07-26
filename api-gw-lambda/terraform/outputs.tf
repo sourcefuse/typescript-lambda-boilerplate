@@ -1,11 +1,11 @@
-output "lambda_arn" {
-  value = module.lambda.lambda_arn
+output "lambda_boilerplate_arn" {
+  value = module.boilerplate.lambda_arn
 }
 
-output "lambda_name" {
-  value = module.lambda.lambda_function_name
+output "lambda_boilerplate_name" {
+  value = module.boilerplate.lambda_function_name
 }
 
-output "lambda_version" {
-  value = module.lambda.lambda_version
+output "lambda_boilerplate_version" {
+  value = module.boilerplate.lambda_version
 }
