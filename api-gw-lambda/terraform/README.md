@@ -17,7 +17,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda"></a> [lambda](#module\_lambda) | ./lambda-boilerplate | n/a |
+| <a name="module_boilerplate"></a> [boilerplate](#module\_boilerplate) | ./lambda | n/a |
 | <a name="module_tags"></a> [tags](#module\_tags) | git::https://github.com/sourcefuse/terraform-aws-refarch-tags | 1.0.1 |
 
 ## Resources
@@ -37,7 +37,7 @@ No resources.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | n/a |
-| <a name="output_lambda_name"></a> [lambda\_name](#output\_lambda\_name) | n/a |
-| <a name="output_lambda_version"></a> [lambda\_version](#output\_lambda\_version) | n/a |
+| <a name="output_lambda_boilerplate_arn"></a> [lambda\_boilerplate\_arn](#output\_lambda\_boilerplate\_arn) | n/a |
+| <a name="output_lambda_boilerplate_name"></a> [lambda\_boilerplate\_name](#output\_lambda\_boilerplate\_name) | n/a |
+| <a name="output_lambda_boilerplate_version"></a> [lambda\_boilerplate\_version](#output\_lambda\_boilerplate\_version) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

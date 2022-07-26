@@ -67,6 +67,10 @@ the `terraform` dependencies.
    terraform apply
    ```
 
+### Creating additional Lambdas
+In the Lambda module's README, there is a [usage](./api-gw-lambda/terraform/lambda/README.md#usage) example you can reference to create additional resources in the 
+terraform root's configuration.  
+
 ### <a id="backend_config"></a> Backend configuration  
 Since the code contained in this repo is only intended to serve as a boilerplate, the [local](https://www.terraform.io/language/settings/backends/local) backend is being used.  
 * The `local` backend keeps the state local. These files are ignored in the repo's [.gitignore](.gitignore). **DO NOT**
@@ -74,7 +78,7 @@ Since the code contained in this repo is only intended to serve as a boilerplate
 
 For more information on backends, see the [Terraform docs](https://www.terraform.io/language/settings/backends/configuration) list of available backends.   
 
-## <a id="dev"></a> Development
+## <a id="dev"></a> Devel1opment
 [Quality Control](#qc) **MUST** be configured prior to making any commits.
 
 Preferred workstation setup can be found in [Confluence](https://sourcefuse.atlassian.net/wiki/spaces/SOURCEFUSE/pages/3311075411/Dev+Machine+Setup).  
