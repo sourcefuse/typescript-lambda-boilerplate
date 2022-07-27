@@ -23,3 +23,9 @@ variable "kms_key_admin_arns" {
   type        = list(string)
   default     = []
 }
+
+variable "sns-topic" {
+  description = "Name of the topic"
+  type = string
+  default = "sns-with-lambda"
+}
