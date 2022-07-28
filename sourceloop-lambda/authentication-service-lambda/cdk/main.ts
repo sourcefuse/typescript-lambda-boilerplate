@@ -17,7 +17,7 @@ const app = new App();
 
 new LambdaStack(app, 'lambda', {
   path: resolve(__dirname,'../dist'),
-  handler: 'index.handler',
+  handler: 'lambda.handler',
   runtime: 'nodejs16.x',
   version: 'v0.0.1',
   layerPath: resolve(__dirname,'../layers'),

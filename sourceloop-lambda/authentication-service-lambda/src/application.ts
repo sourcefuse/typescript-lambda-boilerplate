@@ -1,14 +1,14 @@
+import * as dotenv from 'dotenv';
+import * as dotenvExt from 'dotenv-extended';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
-import {
-  RestExplorerBindings,
-  RestExplorerComponent,
-} from '@loopback/rest-explorer';
+import {RestExplorerBindings, RestExplorerComponent} from '@loopback/rest-explorer';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {MySequence} from './sequence';
+import {AuthenticationServiceComponent} from '@sourceloop/authentication-service';
 
 export {ApplicationConfig};
 
@@ -16,6 +16,13 @@ export class AuthenticationServiceApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
   constructor(options: ApplicationConfig = {}) {
+    dotenv.config();
+    dotenvExt.load({
+      schema: '.env.example',
+      errorOnMissing: true,
+      includeProcessEnv: true,
+    });
+
     super(options);
 
     // Set up the custom sequence
@@ -29,7 +36,7 @@ export class AuthenticationServiceApplication extends BootMixin(
       path: '/explorer',
     });
     this.component(RestExplorerComponent);
-
+    this.component(AuthenticationServiceComponent);
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
     this.bootOptions = {

@@ -56,7 +56,11 @@
     "@loopback/rest": "^12.0.1",
     "@loopback/rest-explorer": "^5.0.1",
     "@loopback/service-proxy": "^5.0.1",
+    "@sourceloop/authentication-service": "^7.0.5",
     "@vendia/serverless-express": "^4.10.1",
+    "dotenv": "^16.0.1",
+    "dotenv-extended": "^2.9.0",
+    "loopback-connector-postgresql": "^5.5.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
