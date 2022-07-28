@@ -78,7 +78,7 @@ Since the code contained in this repo is only intended to serve as a boilerplate
 
 For more information on backends, see the [Terraform docs](https://www.terraform.io/language/settings/backends/configuration) list of available backends.   
 
-## <a id="dev"></a> Devel1opment
+## <a id="dev"></a> Development
 [Quality Control](#qc) **MUST** be configured prior to making any commits.
 
 Preferred workstation setup can be found in [Confluence](https://sourcefuse.atlassian.net/wiki/spaces/SOURCEFUSE/pages/3311075411/Dev+Machine+Setup).  
