@@ -21,3 +21,15 @@ output "lambda_sns_name" {
 output "lambda_sns_version" {
   value = module.sns.lambda_version
 }
+
+output "lambda_sqs_arn" {
+  value = module.sqs.lambda_arn
+}
+
+output "lambda_sqs_name" {
+  value = module.sqs.lambda_function_name
+}
+
+output "lambda_sqs_version" {
+  value = module.sqs.lambda_version
+}
