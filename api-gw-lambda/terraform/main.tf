@@ -50,9 +50,6 @@ module "boilerplate" {
   tags = module.tags.tags
 }
 
-################################################################################
-## sns
-################################################################################
 module "sns" {
   source         = "./lambda"
   environment    = var.environment
@@ -73,27 +70,6 @@ module "sns" {
   tags = module.tags.tags
 }
 
-resource "aws_sns_topic" "topic" {
-  name = var.sns-topic
-}
-
-resource "aws_sns_topic_subscription" "topic_lambda" {
-  topic_arn = aws_sns_topic.topic.arn
-  protocol  = "lambda"
-  endpoint  = module.sns.lambda_arn
-}
-
-resource "aws_lambda_permission" "with_sns" {
-  statement_id  = "AllowExecutionFromSNS"
-  action        = "lambda:InvokeFunction"
-  function_name = module.sns.lambda_function_name
-  principal     = "sns.amazonaws.com"
-  source_arn    = aws_sns_topic.topic.arn
-}
-
-################################################################################
-## sqs
-################################################################################
 module "sqs" {
   source         = "./lambda"
   environment    = var.environment
@@ -114,6 +90,32 @@ module "sqs" {
   tags = module.tags.tags
 }
 
+################################################################################
+## sns
+################################################################################
+resource "aws_sns_topic" "topic" {
+  name = var.sns-topic
+
+  tags = module.tags.tags
+}
+
+resource "aws_sns_topic_subscription" "topic_lambda" {
+  topic_arn = aws_sns_topic.topic.arn
+  protocol  = "lambda"
+  endpoint  = module.sns.lambda_arn
+}
+
+resource "aws_lambda_permission" "with_sns" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = module.sns.lambda_function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.topic.arn
+}
+
+################################################################################
+## sqs
+################################################################################
 resource "aws_sqs_queue" "results_updates_queue" {
   name                       = "results-updates-queue"
   redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.results_updates_dl_queue.arn}\",\"maxReceiveCount\":5}"
@@ -128,6 +130,8 @@ resource "aws_sqs_queue" "results_updates_queue" {
 
 resource "aws_sqs_queue" "results_updates_dl_queue" {
   name = "results-updates-dl-queue"
+
+  tags = module.tags.tags
 }
 
 resource "aws_iam_role_policy" "lambda_role_sqs_policy" {
