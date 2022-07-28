@@ -1,0 +1,72 @@
+{
+  "name": "authentication-service-lambda",
+  "version": "0.0.1",
+  "description": "Sourceloop Authentication service deployed on lambda",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": "14 || 16 || 17 || 18"
+  },
+  "scripts": {
+    "build:layers": "rm -rf layers && mkdir layers && cd layers && mkdir nodejs && cp -a ../node_modules/. nodejs/node_modules",
+    "build": "lb-tsc && yarn run build:layers",
+    "build:watch": "lb-tsc --watch",
+    "lint": "yarn run eslint && yarn run prettier:check",
+    "lint:fix": "yarn run eslint:fix && yarn run prettier:fix",
+    "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
+    "prettier:check": "yarn run prettier:cli -l",
+    "prettier:fix": "yarn run prettier:cli --write",
+    "eslint": "lb-eslint --report-unused-disable-directives .",
+    "eslint:fix": "yarn run eslint --fix",
+    "pretest": "yarn run rebuild",
+    "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
+    "posttest": "yarn run lint",
+    "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && yarn run posttest",
+    "docker:build": "docker build -t authentication-service-lambda .",
+    "docker:run": "docker run -p 3000:3000 -d authentication-service-lambda",
+    "premigrate": "yarn run build",
+    "migrate": "node ./dist/migrate",
+    "preopenapi-spec": "yarn run build",
+    "openapi-spec": "node ./dist/openapi-spec",
+    "prestart": "yarn run rebuild",
+    "start": "node -r source-map-support/register .",
+    "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
+    "rebuild": "yarn run clean && yarn run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "",
+  "files": [
+    "README.md",
+    "dist",
+    "src",
+    "!*/__tests__"
+  ],
+  "dependencies": {
+    "@loopback/boot": "^5.0.1",
+    "@loopback/core": "^4.0.1",
+    "@loopback/repository": "^5.0.1",
+    "@loopback/rest": "^12.0.1",
+    "@loopback/rest-explorer": "^5.0.1",
+    "@loopback/service-proxy": "^5.0.1",
+    "@vendia/serverless-express": "^4.10.1",
+    "tslib": "^2.0.0"
+  },
+  "devDependencies": {
+    "@loopback/build": "^9.0.1",
+    "@loopback/eslint-config": "^13.0.1",
+    "@loopback/testlab": "^5.0.1",
+    "@types/aws-lambda": "^8.10.101",
+    "@types/node": "^14.18.21",
+    "eslint": "^8.17.0",
+    "source-map-support": "^0.5.21",
+    "typescript": "~4.7.3"
+  }
+}
