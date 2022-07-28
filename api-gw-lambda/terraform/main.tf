@@ -54,10 +54,10 @@ module "boilerplate" {
 ## sns
 ################################################################################
 module "sns" {
-  source = "./lambda"
-  environment = var.environment
-  region      = "us-east-1"
-  lambda_name = "sns-boilerplate"
+  source         = "./lambda"
+  environment    = var.environment
+  region         = "us-east-1"
+  lambda_name    = "sns-boilerplate"
   lambda_runtime = "nodejs16.x"
   lambda_handler = "sns.handler"
   lambda_memory  = 128
@@ -95,9 +95,9 @@ resource "aws_lambda_permission" "with_sns" {
 ## sqs
 ################################################################################
 module "sqs" {
-  source = "./lambda"
-  environment = var.environment
-  region      = "us-east-1"
+  source         = "./lambda"
+  environment    = var.environment
+  region         = "us-east-1"
   lambda_name    = "sqs-boilerplate"
   lambda_runtime = "nodejs16.x"
   lambda_handler = "sqs.handler"
@@ -131,8 +131,8 @@ resource "aws_sqs_queue" "results_updates_dl_queue" {
 }
 
 resource "aws_iam_role_policy" "lambda_role_sqs_policy" {
-  name   = "lambdaSqs"
-  role   = module.sqs.lambda_role_arn
+  name   = "lambda-sqs"
+  role   = module.sqs.lambda_role_name
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -151,4 +151,3 @@ resource "aws_iam_role_policy" "lambda_role_sqs_policy" {
 }
 EOF
 }
-
