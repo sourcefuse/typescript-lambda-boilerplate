@@ -33,9 +33,9 @@ module "boilerplate" {
   source = "./lambda"
 
   environment = var.environment
-  region      = "us-east-1"
+  region      = var.region
 
-  lambda_runtime = "nodejs16.x"
+  lambda_runtime = var.lambda_runtime
   lambda_handler = "index.handler"
   lambda_memory  = 128
   lambda_timeout = 120
@@ -53,9 +53,9 @@ module "boilerplate" {
 module "sns" {
   source         = "./lambda"
   environment    = var.environment
-  region         = "us-east-1"
+  region         = var.region
   lambda_name    = "sns-boilerplate"
-  lambda_runtime = "nodejs16.x"
+  lambda_runtime = var.lambda_runtime
   lambda_handler = "sns.handler"
   lambda_memory  = 128
   lambda_timeout = 120
@@ -73,9 +73,9 @@ module "sns" {
 module "sqs" {
   source         = "./lambda"
   environment    = var.environment
-  region         = "us-east-1"
+  region         = var.region
   lambda_name    = "sqs-boilerplate"
-  lambda_runtime = "nodejs16.x"
+  lambda_runtime = var.lambda_runtime
   lambda_handler = "sqs.handler"
   lambda_memory  = 128
   lambda_timeout = 120
@@ -93,14 +93,14 @@ module "sqs" {
 ################################################################################
 ## sns
 ################################################################################
-resource "aws_sns_topic" "topic" {
-  name = var.sns-topic
+resource "aws_sns_topic" "this" {
+  name = var.sns_topic_name
 
   tags = module.tags.tags
 }
 
 resource "aws_sns_topic_subscription" "topic_lambda" {
-  topic_arn = aws_sns_topic.topic.arn
+  topic_arn = aws_sns_topic.this.arn
   protocol  = "lambda"
   endpoint  = module.sns.lambda_arn
 }
@@ -110,14 +110,14 @@ resource "aws_lambda_permission" "with_sns" {
   action        = "lambda:InvokeFunction"
   function_name = module.sns.lambda_function_name
   principal     = "sns.amazonaws.com"
-  source_arn    = aws_sns_topic.topic.arn
+  source_arn    = aws_sns_topic.this.arn
 }
 
 ################################################################################
 ## sqs
 ################################################################################
-resource "aws_sqs_queue" "results_updates_queue" {
-  name                       = "results-updates-queue"
+resource "aws_sqs_queue" "results_updates" {
+  name                       = var.sqs_results_updates
   redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.results_updates_dl_queue.arn}\",\"maxReceiveCount\":5}"
   visibility_timeout_seconds = 300
   delay_seconds              = 90
@@ -157,7 +157,7 @@ EOF
 }
 
 resource "aws_lambda_event_source_mapping" "event_source_mapping" {
-  event_source_arn = aws_sqs_queue.results_updates_queue.arn
+  event_source_arn = aws_sqs_queue.results_updates.arn
   enabled          = true
   function_name    = module.sqs.lambda_function_name
   batch_size       = 10

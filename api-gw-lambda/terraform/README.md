@@ -29,11 +29,12 @@ See the [README](../../README.md) in the repo's root for more information.
 | Name | Type |
 |------|------|
 | [aws_iam_role_policy.lambda_role_sqs_policy](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_role_policy) | resource |
+| [aws_lambda_event_source_mapping.event_source_mapping](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/lambda_event_source_mapping) | resource |
 | [aws_lambda_permission.with_sns](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/lambda_permission) | resource |
-| [aws_sns_topic.topic](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sns_topic) | resource |
+| [aws_sns_topic.this](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sns_topic) | resource |
 | [aws_sns_topic_subscription.topic_lambda](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sns_topic_subscription) | resource |
+| [aws_sqs_queue.results_updates](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 | [aws_sqs_queue.results_updates_dl_queue](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
-| [aws_sqs_queue.results_updates_queue](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 
 ## Inputs
 
@@ -41,9 +42,11 @@ See the [README](../../README.md) in the repo's root for more information.
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | Name of the environment resources will be created in. | `string` | `"dev"` | no |
 | <a name="input_kms_key_admin_arns"></a> [kms\_key\_admin\_arns](#input\_kms\_key\_admin\_arns) | Additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE. | `list(string)` | `[]` | no |
+| <a name="input_lambda_runtime"></a> [lambda\_runtime](#input\_lambda\_runtime) | Lambda runtime | `string` | `"nodejs16.x"` | no |
 | <a name="input_profile"></a> [profile](#input\_profile) | Name of the AWS Profile configured on your workstation. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | Name of the region resources will be created in. | `string` | `"us-east-1"` | no |
-| <a name="input_sns-topic"></a> [sns-topic](#input\_sns-topic) | Name of the topic | `string` | `"sns-with-lambda"` | no |
+| <a name="input_sns_topic_name"></a> [sns\_topic\_name](#input\_sns\_topic\_name) | Name to assign the SNS Topic. | `string` | n/a | yes |
+| <a name="input_sqs_results_updates"></a> [sqs\_results\_updates](#input\_sqs\_results\_updates) | Name to assign the SQS Results Updates Queue. | `string` | `"results-updates-queue"` | no |
 
 ## Outputs
 

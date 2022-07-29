@@ -24,8 +24,29 @@ variable "kms_key_admin_arns" {
   default     = []
 }
 
-variable "sns-topic" {
-  description = "Name of the topic"
+
+################################################################################
+## lambda
+################################################################################
+variable "lambda_runtime" {
+  description = "Lambda runtime"
   type        = string
-  default     = "sns-with-lambda"
+  default     = "nodejs16.x"
+}
+
+################################################################################
+## sns
+################################################################################
+variable "sns_topic_name" {
+  description = "Name to assign the SNS Topic."
+  type        = string
+}
+
+################################################################################
+## sqs
+################################################################################
+variable "sqs_results_updates" {
+  description = "Name to assign the SQS Results Updates Queue."
+  type        = string
+  default     = "results-updates-queue"
 }
