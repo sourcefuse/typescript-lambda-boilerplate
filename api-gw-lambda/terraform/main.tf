@@ -117,8 +117,14 @@ resource "aws_lambda_permission" "with_sns" {
 ## sqs
 ################################################################################
 resource "aws_sqs_queue" "results_updates" {
-  name                       = var.sqs_results_updates
-  redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.results_updates_dl_queue.arn}\",\"maxReceiveCount\":5}"
+  name = var.sqs_results_updates
+
+  redrive_policy = jsonencode(
+    {
+      "deadLetterTargetArn" : aws_sqs_queue.results_updates_dl_queue.arn,
+      "maxReceiveCount" : 5
+    }
+  )
   visibility_timeout_seconds = 300
   delay_seconds              = 90
   max_message_size           = 2048
@@ -129,36 +135,44 @@ resource "aws_sqs_queue" "results_updates" {
 }
 
 resource "aws_sqs_queue" "results_updates_dl_queue" {
-  name = "results-updates-dl-queue"
+  name = var.sqs_results_updates_dlq
 
   tags = module.tags.tags
 }
 
-resource "aws_iam_role_policy" "lambda_role_sqs_policy" {
-  name   = "lambda-sqs"
-  role   = module.sqs.lambda_role_name
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": [
-        "sqs:ChangeMessageVisibility",
-        "sqs:DeleteMessage",
-        "sqs:GetQueueAttributes",
-        "sqs:ReceiveMessage"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
+data "aws_iam_policy_document" "sqs" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sqs:ChangeMessageVisibility",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:ReceiveMessage"
+    ]
+
+    resources = [
+      aws_sqs_queue.results_updates.arn
+    ]
+  }
 }
-EOF
+
+resource "aws_iam_policy" "sqs" {
+  policy = data.aws_iam_policy_document.sqs.json
+
+  tags = module.tags.tags
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_sqs" {
+  role       = module.sqs.lambda_role_name
+  policy_arn = aws_iam_policy.sqs.arn
 }
 
 resource "aws_lambda_event_source_mapping" "event_source_mapping" {
   event_source_arn = aws_sqs_queue.results_updates.arn
-  enabled          = true
+  enabled          = var.lambda_event_source_mapping_enabled
   function_name    = module.sqs.lambda_function_name
-  batch_size       = 10
+  batch_size       = var.lambda_event_source_mapping_batch_size
 }
