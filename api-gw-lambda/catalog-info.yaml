@@ -1,5 +1,5 @@
 apiVersion: backstage.io/v1alpha1
-kind: Component
+kind: Template
 metadata:
   name: ${{values.function_id | dump}}
   description: ${{values.description | dump}}
@@ -7,6 +7,6 @@ metadata:
     github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
     backstage.io/techdocs-ref: dir:.
 spec:
-  type: api
-  lifecycle: experimental
+  type: iac
+  lifecycle: development
   owner: sourcefuse
