@@ -1,6 +1,6 @@
 # Terraform: Lambda Boilerplate
 
-See the [README](../../README.md) in the repo's root for more information.  
+See the [README](../../../README.md) in the repo's root for more information.  
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements

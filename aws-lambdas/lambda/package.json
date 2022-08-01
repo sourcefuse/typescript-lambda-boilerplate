@@ -5,9 +5,9 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts,.tsx src ./__tests__/",
     "lint:fix": "eslint --fix --ext .js,.ts,.tsx src ./__tests__/",
-    "script:build-dependency-layer": "yarn install --prod && ../scripts/build-dependency-layer.sh && yarn install;",
-    "build": "tsc && yarn script:build-dependency-layer && cp -a dist/. ../terraform/dist/  && yarn test ",
-    "cleanup": "rm -rf dist/* && cd ../terraform && rm -rf dist/*",
+    "script:build-dependency-layer": "yarn install --prod && scripts/build-dependency-layer.sh && yarn install;",
+    "build": "tsc && yarn script:build-dependency-layer && cp -a dist/. ../iac/terraform/dist/  && yarn test ",
+    "cleanup": "rm -rf dist/* && cd ../iac/terraform && rm -rf dist/*",
     "test": "jest"
   },
   "repository": "https://github.com/sourcefuse/typescript-lambda-boilerplate",
