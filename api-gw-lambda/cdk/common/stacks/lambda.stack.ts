@@ -4,7 +4,6 @@ import * as aws from '@cdktf/provider-aws';
 import {lambdaAction, lambdaPolicyArn, lambdaPrincipal, lambdaRolePolicy} from '../constants';
 import {LambdaFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
-
 export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
@@ -87,6 +86,25 @@ export class LambdaStack extends TerraformStack {
       new TerraformOutput(this, 'url', {
         value: api.apiEndpoint,
       });
+    }
+
+    // Create SqsQueue if required
+    if(config.isSqsRequired)
+    {
+       new aws.sqs.SqsQueue(this,'sqs-queue',{
+        delaySeconds: 90,
+        maxMessageSize: 2048,
+        name: `sqs-queue-${name}-${pet.id}`
+      })
+    }
+
+    //Create SnsTopic if required
+    if(config.isSnsTopicRequired){
+      new aws.sns.SnsTopic(this,'sns-topic',{
+        displayName: 'sns-topic',
+        name: `sns-topic-${name}-${pet.id}`
+      })
+
     }
 
     new TerraformOutput(this, 'function', {

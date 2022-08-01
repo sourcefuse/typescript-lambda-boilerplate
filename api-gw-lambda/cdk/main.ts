@@ -21,7 +21,9 @@ new LambdaStack(app, 'lambda', {
   runtime: 'nodejs16.x',
   version: 'v0.0.1',
   layerPath: resolve(__dirname,'../lambda/dist/layers'),
-  isApiRequired: true
+  isApiRequired: true,
+  isSqsRequired: true,
+  isSnsTopicRequired: true
 });
 
 

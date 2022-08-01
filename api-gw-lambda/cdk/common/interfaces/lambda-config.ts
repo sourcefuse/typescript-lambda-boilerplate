@@ -5,4 +5,6 @@ export interface LambdaFunctionConfig {
   version: string,
   layerPath?: string,
   isApiRequired?: boolean
+  isSqsRequired?: boolean
+  isSnsTopicRequired?: boolean
 }
