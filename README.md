@@ -68,7 +68,7 @@ the `terraform` dependencies.
    ```
 
 ### Creating additional Lambdas
-In the Lambda module's README, there is a [usage](aws-lambdas/IaC/terraform/lambda/README.md#usage) example you can reference to create additional resources in the 
+In the Lambda module's README, there is a [usage](aws-lambdas/iac/terraform/lambda/README.md#usage) example you can reference to create additional resources in the 
 terraform root's configuration.  
 
 ### <a id="backend_config"></a> Backend configuration  

@@ -3,7 +3,7 @@ bootstrap-lambda:
 
 bootstrap:
 	@cd aws-lambdas/lambda && yarn install
-	@cd aws-lambdas/IaC/terraform && terraform init
+	@cd aws-lambdas/iac/terraform && terraform init
 
 build:
 	@cd aws-lambdas/lambda && yarn build
@@ -16,7 +16,7 @@ test:
 
 clean:
 	@cd aws-lambdas/lambda && yarn cleanup && rm -rf node_modules && rm -rf dist
-	@cd aws-lambdas/IaC/terraform && rm -rf /.terraform
+	@cd aws-lambdas/iac/terraform && rm -rf /.terraform
 
 make pre-commit:
 	@pre-commit run -a
