@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: sourcefuse-api-gw-lambda-boilerplate
-  title: sourcefuse-api-gw-lambda-boilerplate
-  description: sourcefuse-api-gw-lambda-boilerplate
+  name: sourcefuse-aws-lambdas-boilerplate
+  title: sourcefuse-aws-lambdas-boilerplate
+  description: sourcefuse-aws-lambdas-boilerplate
   tags:
     - lambda
     - api-gateway
@@ -39,7 +39,7 @@ spec:
       name: Fetch Template
       action: fetch:template
       input:
-        url: ../api-gw-lambda
+        url: ../aws-lambdas
         copyWithoutRender:
           - .github/workflows/*
         values:

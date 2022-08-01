@@ -5,7 +5,7 @@
 Terraform module that manages the infrastructure dependencies for the Lambda Boilerplate utilities
 
 ## <a id="usage"></a> Usage
-Here is an example of what a new lambda would look like, using the default values defined in [variables.tf](./variables.tf).  
+Here is an example of what a new lambda would look like, using the default values defined in [variables.tf](variables.tf).  
 
 Since All Lambda code is contained within the same `src` folder, you can keep the `lambda_function_archive_*` and `lambda_layer_archive_*` 
 as the default values. The important variable to override is going to be `lambda_handler`.  

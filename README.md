@@ -32,7 +32,7 @@ the `terraform` dependencies.
 
 1. Navigate to `api-gw-lambda/terraform`:  
    ```shell
-   cd api-gw-lambda/terraform
+   cd aws-lambdas/terraform
    ```
 2. Set your AWS Profile environment variable:
    ```shell
@@ -68,7 +68,7 @@ the `terraform` dependencies.
    ```
 
 ### Creating additional Lambdas
-In the Lambda module's README, there is a [usage](./api-gw-lambda/terraform/lambda/README.md#usage) example you can reference to create additional resources in the 
+In the Lambda module's README, there is a [usage](aws-lambdas/IaC/terraform/lambda/README.md#usage) example you can reference to create additional resources in the 
 terraform root's configuration.  
 
 ### <a id="backend_config"></a> Backend configuration  
