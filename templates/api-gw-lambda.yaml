@@ -50,6 +50,7 @@ spec:
           function_id: ${{ parameters.function_id }}
           description: ${{ parameters.description }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          backstage_namespace: ${{ parameters.backstage_namespace }}
 
     - id: publish
       name: Publish
