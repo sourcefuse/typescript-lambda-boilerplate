@@ -8,7 +8,7 @@ metadata:
     - lambda
     - api-gateway
 spec:
-  owner: sourcefuse.com
+  owner: sourcefuse
   type: api
   parameters:
     - title: Provide some simple information
