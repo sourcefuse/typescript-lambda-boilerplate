@@ -16,6 +16,11 @@ provider "aws" {
   profile = var.profile
 }
 
+##Random-UUID
+resource "random_id" "this" {
+  byte_length = 8
+}
+
 ################################################################################
 ## tags
 ################################################################################
@@ -54,7 +59,7 @@ module "sns" {
   source         = "./lambda"
   environment    = var.environment
   region         = var.region
-  lambda_name    = "sns-boilerplate"
+  lambda_name    = local.sns_lambda_name
   lambda_runtime = var.lambda_runtime
   lambda_handler = "sns.handler"
   lambda_memory  = 128
@@ -74,7 +79,7 @@ module "sqs" {
   source         = "./lambda"
   environment    = var.environment
   region         = var.region
-  lambda_name    = "sqs-boilerplate"
+  lambda_name    = local.sqs_lambda_name
   lambda_runtime = var.lambda_runtime
   lambda_handler = "sqs.handler"
   lambda_memory  = 128
