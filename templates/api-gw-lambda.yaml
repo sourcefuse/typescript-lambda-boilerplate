@@ -19,10 +19,15 @@ spec:
           title: Name
           type: string
           description: Unique name of the lambda function
+        backstage_namespace:
+          title: Backstage namespace
+          type: string
+          description: Backstage namespace for the output component
         description:
           title: Description
           type: string
           description: Help others understand what this function is for.
+        ow
     - title: Choose a location
       required:
         - repoUrl
