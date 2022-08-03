@@ -15,7 +15,7 @@ This assumes you have the [pre-requisites](#prereqs) already configured, an AWS 
 For more information on how to configure an AWS Profile on your workstation, please see [Adding a profile by editing the shared AWS credentials file
 ](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/keys-profiles-credentials.html#adding-a-profile-to-the-aws-credentials-profile-file)
 
-Build out the lambda from the CDK. Navigate to the root of the repo to run the following commands.  
+Compile and build the Typescript Lambda code. Navigate to the root of the repo to run the following commands.  
 
 1. Install Lambda packages:  
    ```shell
