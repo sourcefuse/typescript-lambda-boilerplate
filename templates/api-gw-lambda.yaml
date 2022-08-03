@@ -8,7 +8,7 @@ metadata:
     - lambda
     - api-gateway
 spec:
-  owner: sourcefuse.com
+  owner: sourcefuse
   type: api
   parameters:
     - title: Provide some simple information
@@ -19,6 +19,10 @@ spec:
           title: Name
           type: string
           description: Unique name of the lambda function
+        backstage_namespace:
+          title: Backstage namespace
+          type: string
+          description: Backstage namespace for the output component
         description:
           title: Description
           type: string
