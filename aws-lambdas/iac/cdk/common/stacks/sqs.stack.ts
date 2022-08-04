@@ -1,13 +1,13 @@
-import {AssetType, TerraformAsset, TerraformOutput, TerraformStack} from 'cdktf';
+import {TerraformStack,AssetType, TerraformAsset} from 'cdktf';
 import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
-import {lambdaAction, lambdaPolicyArn, lambdaPrincipal, lambdaRolePolicy} from '../constants';
-import {LambdaFunctionConfig} from '../interfaces';
+import {batchSize, delay, maxMessageSize, sqsRoleArn,sqsRolePolicy} from '../constants';
+import {SqsFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
-export class LambdaStack extends TerraformStack {
-  constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
+export class SqsStack extends TerraformStack {
+  constructor(scope: Construct, name: string, config: SqsFunctionConfig) {
     super(scope, name);
-
+    console.log(config.path)
     new aws.AwsProvider(this, 'aws', {
       region: process.env.AWS_REGION,
       accessKey: process.env.AWS_ACCESS_KEY_ID,
@@ -24,7 +24,28 @@ export class LambdaStack extends TerraformStack {
       length: 2,
     });
 
-    // Creating Archive of Lambda
+    const role = new aws.iam.IamRole(this, 'sqs-exec', {
+      name: `sqs-role-${name}-${pet.id}`,
+       assumeRolePolicy: JSON.stringify(sqsRolePolicy),
+    });
+ 
+ 
+     // Add execution role for lambda to write to CloudWatch logs
+    new aws.iam.IamRolePolicyAttachment(this, 'sqs-managed-policy', {
+           policyArn: sqsRoleArn,
+           role: role.name,
+      });
+
+   // Create SqsQueue
+   const awsSqsQueue = new aws.sqs.SqsQueue(this,'sqs-queue',{
+    delaySeconds: delay,
+    maxMessageSize: maxMessageSize,
+    name: `sqs-queue-${name}-${pet.id}`,
+    policy: JSON.stringify(sqsRolePolicy)
+  });
+
+
+ // Creating Archive of Lambda
     const asset = new TerraformAsset(this, 'lambda-asset', {
       path: config.path,
       type: AssetType.ARCHIVE, // if left empty it infers directory and file
@@ -46,50 +67,20 @@ export class LambdaStack extends TerraformStack {
       layers.push(lambdaLayers.arn);
     }
 
-    // Create Lambda role
-    const role = new aws.iam.IamRole(this, 'lambda-exec', {
-      name: `lambda-role-${name}-${pet.id}`,
-      assumeRolePolicy: JSON.stringify(lambdaRolePolicy),
-    });
-
-    // Add execution role for lambda to write to CloudWatch logs
-    new aws.iam.IamRolePolicyAttachment(this, 'lambda-managed-policy', {
-      policyArn: lambdaPolicyArn,
-      role: role.name,
-    });
-
-    // Create Lambda function
     const lambdaFunc = new aws.lambdafunction.LambdaFunction(this, 'lambda-function', {
-      functionName: `cdktf-${name}-${pet.id}`,
+      functionName: `cdktf-sqs-${name}-${pet.id}`,
       filename: asset.path,
       handler: config.handler,
       runtime: config.runtime,
       role: role.arn,
-      layers,
     });
 
-    if(config.isApiRequired) {
-      // Create and configure API gateway
-      const api = new aws.apigatewayv2.Apigatewayv2Api(this, 'api-gw', {
-        name,
-        protocolType: 'HTTP',
-        target: lambdaFunc.arn,
-      });
+    new aws.lambdafunction.LambdaEventSourceMapping(this,"event-source-mapping",{
+        eventSourceArn: awsSqsQueue.arn,
+        enabled: true,
+        functionName: lambdaFunc.arn,
+        batchSize: batchSize
+    })
 
-      new aws.lambdafunction.LambdaPermission(this, 'apigw-lambda-permission', {
-        functionName: lambdaFunc.functionName,
-        action: lambdaAction,
-        principal: lambdaPrincipal,
-        sourceArn: `${api.executionArn}/*/*`,
-      });
-
-      new TerraformOutput(this, 'url', {
-        value: api.apiEndpoint,
-      });
-    }
-
-    new TerraformOutput(this, 'function', {
-      value: lambdaFunc.arn,
-    });
   }
 }
