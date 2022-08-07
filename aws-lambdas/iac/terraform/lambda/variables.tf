@@ -82,6 +82,15 @@ variable "lambda_name" {
   default     = "lambda-boilerplate"
 }
 
+variable "vpc_config" {
+  description = "Optional VPC configuation parameters"
+  type = object({
+    security_group_ids = list(string)
+    subnet_ids         = list(string)
+  })
+  default = null
+}
+
 ################################################################################
 ## cloudwatch
 ################################################################################
