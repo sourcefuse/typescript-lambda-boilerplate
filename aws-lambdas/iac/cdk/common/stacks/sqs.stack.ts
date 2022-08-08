@@ -1,7 +1,7 @@
-import {TerraformStack,AssetType, TerraformAsset} from 'cdktf';
+import {TerraformStack,AssetType, TerraformAsset, TerraformOutput} from 'cdktf';
 import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
-import {batchSize, delay, maxMessageSize, sqsRoleArn,sqsRolePolicy} from '../constants';
+import {batchSize, delay, maxMessageSize, messageRetentionSeconds, receiveWaitTimeSeconds, redriveMaxCount, sqsRoleArn,sqsRolePolicy} from '../constants';
 import {SqsFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
 export class SqsStack extends TerraformStack {
@@ -26,7 +26,7 @@ export class SqsStack extends TerraformStack {
 
     const role = new aws.iam.IamRole(this, 'sqs-exec', {
       name: `sqs-role-${name}-${pet.id}`,
-       assumeRolePolicy: JSON.stringify(sqsRolePolicy),
+      assumeRolePolicy: JSON.stringify(sqsRolePolicy),
     });
  
  
@@ -36,12 +36,25 @@ export class SqsStack extends TerraformStack {
            role: role.name,
       });
 
-   // Create SqsQueue
+  //Creating DLQueue
+  const resultsUpdatesDlQueue = new aws.sqs.SqsQueue(this,'dl-queue',{
+    name: `sqs-dl-queue-${name}-${pet.id}`,
+  });
+   
+   const redrivePolicy = {
+    "deadLetterTargetArn" : resultsUpdatesDlQueue.arn,
+    "maxReceiveCount" : redriveMaxCount
+  }
+
+  // Create SqsQueue
    const awsSqsQueue = new aws.sqs.SqsQueue(this,'sqs-queue',{
     delaySeconds: delay,
     maxMessageSize: maxMessageSize,
+    messageRetentionSeconds: messageRetentionSeconds,
+    receiveWaitTimeSeconds: receiveWaitTimeSeconds,
     name: `sqs-queue-${name}-${pet.id}`,
-    policy: JSON.stringify(sqsRolePolicy)
+    policy: JSON.stringify(sqsRolePolicy),
+    redrivePolicy: JSON.stringify(redrivePolicy)
   });
 
 
@@ -73,6 +86,7 @@ export class SqsStack extends TerraformStack {
       handler: config.handler,
       runtime: config.runtime,
       role: role.arn,
+      layers
     });
 
     new aws.lambdafunction.LambdaEventSourceMapping(this,"event-source-mapping",{
@@ -81,6 +95,10 @@ export class SqsStack extends TerraformStack {
         functionName: lambdaFunc.arn,
         batchSize: batchSize
     })
+    
+    new TerraformOutput(this, 'function', {
+      value: lambdaFunc.arn,
+    });
 
   }
 }

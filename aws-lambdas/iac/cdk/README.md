@@ -34,7 +34,7 @@ This module gives us several commands for the aws lambda function.
   ```shell
   cdktf list
   ``` 
-* To deploy the any stack on aws and remember to confirm the deploy with a yes.  
+* To deploy the stack on aws and remember to confirm the deploy with a yes.  
   ```shell
   cdktf deploy <stack_name>
   ```
