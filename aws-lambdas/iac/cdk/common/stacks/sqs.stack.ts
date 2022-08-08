@@ -1,9 +1,9 @@
 import {TerraformStack,AssetType, TerraformAsset, TerraformOutput} from 'cdktf';
 import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
-import {batchSize, delay, maxMessageSize, messageRetentionSeconds, receiveWaitTimeSeconds, redriveMaxCount, sqsRoleArn,sqsRolePolicy} from '../constants';
 import {SqsFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
+import { sqsRoleArn, sqsRolePolicy } from '../constants';
 export class SqsStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: SqsFunctionConfig) {
     super(scope, name);
@@ -43,15 +43,15 @@ export class SqsStack extends TerraformStack {
    
    const redrivePolicy = {
     "deadLetterTargetArn" : resultsUpdatesDlQueue.arn,
-    "maxReceiveCount" : redriveMaxCount
+    "maxReceiveCount" : config.redriveMaxCount
   }
 
   // Create SqsQueue
    const awsSqsQueue = new aws.sqs.SqsQueue(this,'sqs-queue',{
-    delaySeconds: delay,
-    maxMessageSize: maxMessageSize,
-    messageRetentionSeconds: messageRetentionSeconds,
-    receiveWaitTimeSeconds: receiveWaitTimeSeconds,
+    delaySeconds: config.delay,
+    maxMessageSize: config.maxMessageSize,
+    messageRetentionSeconds: config.messageRetentionSeconds,
+    receiveWaitTimeSeconds: config.receiveWaitTimeSeconds,
     name: `sqs-queue-${name}-${pet.id}`,
     policy: JSON.stringify(sqsRolePolicy),
     redrivePolicy: JSON.stringify(redrivePolicy)
@@ -93,7 +93,7 @@ export class SqsStack extends TerraformStack {
         eventSourceArn: awsSqsQueue.arn,
         enabled: true,
         functionName: lambdaFunc.arn,
-        batchSize: batchSize
+        batchSize: config.batchSize
     })
     
     new TerraformOutput(this, 'function', {

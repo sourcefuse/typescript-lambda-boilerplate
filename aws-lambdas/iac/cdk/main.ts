@@ -30,6 +30,12 @@ new SqsStack(app, 'sqs', {
   runtime: 'nodejs16.x',
   version: 'v0.0.1',
   layerPath: resolve(__dirname,'../../lambda/dist/layers'),
+  delay: 90,
+  maxMessageSize: 2048,
+  batchSize: 10,
+  messageRetentionSeconds: 86400,
+  receiveWaitTimeSeconds: 10,
+  redriveMaxCount: 5
 });
 
 
