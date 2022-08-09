@@ -34,11 +34,11 @@ This module gives us several commands for the aws lambda function.
   ```shell
   cdktf list
   ``` 
-* To deploy the lambda stack on aws and remember to confirm the deploy with a yes.  
+* To deploy the stack on aws and remember to confirm the deploy with a yes.  
   ```shell
-  cdktf deploy lambda
+  cdktf deploy <stack_name>
   ```
 * To destroy the Infrastructure that you deployed on aws.  
   ```shell
-  cdktf destroy lambda
+  cdktf destroy <stack_name>
   ```

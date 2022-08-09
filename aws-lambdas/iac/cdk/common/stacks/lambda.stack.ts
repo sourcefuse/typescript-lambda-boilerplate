@@ -4,7 +4,6 @@ import * as aws from '@cdktf/provider-aws';
 import {lambdaAction, lambdaPolicyArn, lambdaPrincipal, lambdaRolePolicy} from '../constants';
 import {LambdaFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
-
 export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
