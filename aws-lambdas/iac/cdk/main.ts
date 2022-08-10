@@ -3,6 +3,7 @@ import * as dotenvExt from 'dotenv-extended';
 import {App} from 'cdktf';
 import {LambdaStack,SqsStack} from './common';
 import {resolve} from 'path';
+import { SnsStack } from './common/stacks/sns.stack';
 
 
 dotenv.config();
@@ -36,6 +37,18 @@ new SqsStack(app, 'sqs', {
   messageRetentionSeconds: 86400,
   receiveWaitTimeSeconds: 10,
   redriveMaxCount: 5
+});
+
+new SnsStack(app, 'sns', {
+  path: resolve(__dirname,'../../lambda/dist/src'),
+  handler: 'handlers/sns.handler',
+  runtime: 'nodejs16.x',
+  version: 'v0.0.1',
+  layerPath: resolve(__dirname,'../../lambda/dist/layers'),
+  snsTopicProtocol: "lambda",
+  lambdaStatementId: "AllowExecutionFromSNS",
+  lambdaAction: "lambda:InvokeFunction",
+  lambdaPrincipal: "sns.amazonaws.com"
 });
 
 
