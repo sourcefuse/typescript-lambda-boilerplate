@@ -52,7 +52,7 @@ module "boilerplate" {
 
   kms_key_admin_arns = var.kms_key_admin_arns
   vpc_config         = var.vpc_config
-  tags = module.tags.tags
+  tags               = module.tags.tags
 }
 
 module "sns" {

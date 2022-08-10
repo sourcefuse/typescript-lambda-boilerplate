@@ -84,8 +84,8 @@ variable "lambda_name" {
 
 variable "vpc_config" {
   description = "Optional VPC Configurations params"
-  type        = map
-  default = null
+  type        = map(any)
+  default     = null
 }
 
 ################################################################################

@@ -53,8 +53,8 @@ variable "lambda_event_source_mapping_batch_size" {
 
 variable "vpc_config" {
   description = "Optional VPC Configurations params"
-  type        = map
-  default = null
+  type        = map(any)
+  default     = null
 }
 
 ################################################################################
