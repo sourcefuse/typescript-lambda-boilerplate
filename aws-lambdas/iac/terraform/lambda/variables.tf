@@ -82,6 +82,12 @@ variable "lambda_name" {
   default     = "lambda-boilerplate"
 }
 
+variable "vpc_config" {
+  description = "Optional VPC Configurations params"
+  type        = map
+  default = null
+}
+
 ################################################################################
 ## cloudwatch
 ################################################################################
