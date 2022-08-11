@@ -51,8 +51,8 @@ module "boilerplate" {
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
   kms_key_admin_arns = var.kms_key_admin_arns
-
-  tags = module.tags.tags
+  vpc_config         = var.vpc_config
+  tags               = module.tags.tags
 }
 
 module "sns" {

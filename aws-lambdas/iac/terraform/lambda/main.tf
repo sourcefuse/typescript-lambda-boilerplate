@@ -46,6 +46,14 @@ resource "aws_lambda_function" "this" {
     }
   }
 
+  dynamic "vpc_config" {
+    for_each = var.vpc_config == null ? [] : [var.vpc_config]
+    content {
+      subnet_ids         = vpc_config.value.subnet_ids
+      security_group_ids = vpc_config.value.security_group_ids
+    }
+  }
+
   tags = var.tags
 }
 
@@ -149,6 +157,11 @@ resource "aws_iam_policy_attachment" "lambda_cw_logs_attachment" {
   roles = [
     aws_iam_role.lambda_role.name,
   ]
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_vpc_access_execution" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 ################################################################################

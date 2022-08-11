@@ -14,6 +14,7 @@ See the [README](../../../README.md) in the repo's root for more information.
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 4.20.1 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.3.2 |
 
 ## Modules
 
@@ -36,6 +37,7 @@ See the [README](../../../README.md) in the repo's root for more information.
 | [aws_sns_topic_subscription.topic_lambda](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sns_topic_subscription) | resource |
 | [aws_sqs_queue.results_updates](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 | [aws_sqs_queue.results_updates_dl_queue](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
+| [random_id.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [aws_iam_policy_document.sqs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
@@ -53,6 +55,7 @@ See the [README](../../../README.md) in the repo's root for more information.
 | <a name="input_sns_topic_name"></a> [sns\_topic\_name](#input\_sns\_topic\_name) | Name to assign the SNS Topic. | `string` | `"sns-with-lambda"` | no |
 | <a name="input_sqs_results_updates"></a> [sqs\_results\_updates](#input\_sqs\_results\_updates) | Name to assign the SQS Results Updates Queue. | `string` | `"results-updates-queue"` | no |
 | <a name="input_sqs_results_updates_dlq"></a> [sqs\_results\_updates\_dlq](#input\_sqs\_results\_updates\_dlq) | Name to assign the SQS Results Updates Dead Letter Queue. | `string` | `"results-updates-dl-queue"` | no |
+| <a name="input_vpc_config"></a> [vpc\_config](#input\_vpc\_config) | Optional VPC Configurations params | `map(any)` | `null` | no |
 
 ## Outputs
 
