@@ -1,9 +1,8 @@
 import * as dotenv from 'dotenv';
 import * as dotenvExt from 'dotenv-extended';
 import {App} from 'cdktf';
-import {LambdaStack,SqsStack} from './common';
+import {LambdaStack,SnsStack,SqsStack, VpcStack} from './common';
 import {resolve} from 'path';
-import { SnsStack } from './common/stacks/sns.stack';
 
 
 dotenv.config();
@@ -52,5 +51,37 @@ new SnsStack(app, 'sns', {
 });
 
 
+new VpcStack(app, 'vpc', {
+  path: resolve(__dirname,'../../lambda/dist/src'),
+  handler: 'handlers/vpc.handler',
+  runtime: 'nodejs16.x',
+  version: 'v0.0.1',
+  layerPath: resolve(__dirname,'../../lambda/dist/layers'),
+  vpcCidrBlock: "10.0.0.0/16",
+  subnetAvailabilityZone: 'us-east-1a',
+  privateSubnetCidrBlock: "10.0.1.0/24",
+  publicSubnetCidrBlock: "10.0.6.0/24",
+  privateDestinationCidrBlock: "0.0.0.0/0",
+  publicDestinationCidrBlock: "0.0.0.0/0",
+  aclIngressProtocol: "-1",
+  aclIngressRuleNo: 100,
+  aclIngressAction: "allow",
+  aclIngressCidrBlock: "0.0.0.0/0",
+  aclIngressFromPort: 0,
+  aclIngressToPort: 0,
+  aclEgressProtocol: "-1",
+  aclEgressRuleNo: 100,
+  aclEgressAction: "allow",
+  aclEgressCidrBlock: "0.0.0.0/0",
+  aclEgressFromPort: 0,
+  aclEgressToPort: 0,
+  securityGroupIngressProtocol: "-1",
+  securityGroupIngressFromPort: 0,
+  securityGroupIngressToPort: 0,
+  securityGroupEgressProtocol: "-1",
+  securityGroupEgressFromPort: 0,
+  securityGroupEgressToPort: 0,
+  securityGroupEgressCidrBlocks: ["0.0.0.0/0"]
+});
 
 app.synth();
