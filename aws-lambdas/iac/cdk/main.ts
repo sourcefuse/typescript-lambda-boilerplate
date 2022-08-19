@@ -57,31 +57,8 @@ new VpcStack(app, 'vpc', {
   runtime: 'nodejs16.x',
   version: 'v0.0.1',
   layerPath: resolve(__dirname,'../../lambda/dist/layers'),
-  vpcCidrBlock: "10.0.0.0/16",
-  subnetAvailabilityZone: 'us-east-1a',
-  privateSubnetCidrBlock: "10.0.1.0/24",
-  publicSubnetCidrBlock: "10.0.6.0/24",
-  privateDestinationCidrBlock: "0.0.0.0/0",
-  publicDestinationCidrBlock: "0.0.0.0/0",
-  aclIngressProtocol: "-1",
-  aclIngressRuleNo: 100,
-  aclIngressAction: "allow",
-  aclIngressCidrBlock: "0.0.0.0/0",
-  aclIngressFromPort: 0,
-  aclIngressToPort: 0,
-  aclEgressProtocol: "-1",
-  aclEgressRuleNo: 100,
-  aclEgressAction: "allow",
-  aclEgressCidrBlock: "0.0.0.0/0",
-  aclEgressFromPort: 0,
-  aclEgressToPort: 0,
-  securityGroupIngressProtocol: "-1",
-  securityGroupIngressFromPort: 0,
-  securityGroupIngressToPort: 0,
-  securityGroupEgressProtocol: "-1",
-  securityGroupEgressFromPort: 0,
-  securityGroupEgressToPort: 0,
-  securityGroupEgressCidrBlocks: ["0.0.0.0/0"]
+  securityGroupIds: ["sg-07f481ec2ced54878"],
+  subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"]
 });
 
 app.synth();

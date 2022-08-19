@@ -61,155 +61,8 @@ export class VpcStack extends TerraformStack {
       layers.push(lambdaLayers.arn);
     }
     
-      // Create VPC with Typescript and CKDTF
-    const newVpc = new aws.vpc.Vpc(this, "VPC", {
-      cidrBlock: config.vpcCidrBlock,
-      tags: {
-        Name: `CDKtf-${name}-${pet.id}-VPC`,
-      },
-    });
-
-    // Create a Private subnet for assigning to the private network
-    const privateSubnet = new aws.vpc.Subnet(this, "Private-Subnet", {
-      availabilityZone: config.subnetAvailabilityZone,
-      vpcId: newVpc.id,
-      mapPublicIpOnLaunch: false,
-      cidrBlock: config.privateSubnetCidrBlock,
-      tags: {
-        Name: `CDKtf-${name}-${pet.id}-Private-Subnet`,
-      },
-    });
-
-    // Create a Public subnet for assigning to the public network
-    const publicSubnet = new aws.vpc.Subnet(this, "Public-Subnet", {
-      availabilityZone: config.subnetAvailabilityZone,
-      vpcId: newVpc.id,
-      mapPublicIpOnLaunch: true,
-      cidrBlock: config.publicSubnetCidrBlock,
-      tags: {
-        Name: `CDKtf-${name}-${pet.id}-Public-Subnet`,
-      },
-    });
-
-    // Create Internet Gateway For communication VPC and Internet
-    const internetGateway = new aws.vpc.InternetGateway(this, "Internet-Gateway", {
-      vpcId: newVpc.id,
-      tags: {
-        Name: `CDKtf-${name}-${pet.id}-Internet-Gateway`,
-      },
-    });
-
-    // Create Two different Public IPs for assigning to the public network
-    const publicIp = new aws.ec2.Eip(this, "eip", {
-      vpc: true,
-      tags: {
-        Name: `CDKtf-${name}-${pet.id}-Public-eip`,
-      },
-    });
-
-    // Create Nat Gateway For communication Public and Private network
-    const natGateway = new aws.vpc.NatGateway(this, "Nat-Gateway", {
-      allocationId: publicIp.id,
-      subnetId: publicSubnet.id,
-      tags: {
-        Name: `CDKtf-${name}-${pet.id}-Public-NGs`,
-      },
-    });
-
-    // Create Routing Table For communication Public network with Route and Association route
-    const publicRouteTable = new aws.vpc.RouteTable(this, "Public-Route-Table", {
-      vpcId: newVpc.id,
-      tags: {
-        Name: `CDKtf-${name}-${pet.id}-Public-RT`,
-      },
-    });
-
-    new aws.vpc.Route(this, "public-route", {
-      destinationCidrBlock: config.publicDestinationCidrBlock,
-      routeTableId: publicRouteTable.id,
-      gatewayId: internetGateway.id,
-    });
-
-    new aws.vpc.RouteTableAssociation(this, "Route-Table-Association-PUB-SUB", {
-      routeTableId: publicRouteTable.id,
-      subnetId: publicSubnet.id,
-    });
-
-    // Create Routing Table For communication Private network with Route and Association route
-    const privateRouteTable = new aws.vpc.RouteTable(this, "Private-Route-Table", {
-      vpcId: newVpc.id,
-      tags: {
-        Name: `CDKtf-${name}-${pet.id}-Private-RT`,
-      },
-    });
-
-    new aws.vpc.Route(this, "Private-Route", {
-      destinationCidrBlock: config.privateDestinationCidrBlock,
-      routeTableId: privateRouteTable.id,
-      natGatewayId: natGateway.id,
-    });
-
-    new aws.vpc.RouteTableAssociation(this, "Route-Table-Association-Private-SUB", {
-      routeTableId: privateRouteTable.id,
-      subnetId: privateSubnet.id,
-    });
-   
-    new aws.vpc.DefaultNetworkAcl(this,"default_network_acl",{
-      defaultNetworkAclId: newVpc.defaultNetworkAclId,
-      subnetIds: [publicSubnet.id, privateSubnet.id],
-    
-      ingress: [
-        {
-        protocol: config.aclIngressProtocol,
-        ruleNo: config.aclIngressRuleNo,
-        action: config.aclIngressAction,
-        cidrBlock: config.aclIngressCidrBlock,
-        fromPort: config.aclIngressFromPort,
-        toPort: config.aclIngressToPort
-      }
-    ],
-    
-      egress: [
-        {
-        protocol: config.aclEgressProtocol,
-        ruleNo: config.aclEgressRuleNo,
-        action: config.aclEgressAction,
-        cidrBlock: config.aclEgressCidrBlock,
-        fromPort: config.aclEgressFromPort,
-        toPort: config.aclEgressToPort
-      }
-    ],
-    
-      tags: {
-        Name: `${name}-${pet.id}-default-network-acl`
-      }
-    });
-
-    const defaultSecurityGroup = new aws.vpc.DefaultSecurityGroup(this,"default-security-group",{
-      vpcId: newVpc.id,
-      ingress: [
-        {
-        protocol: config.securityGroupIngressProtocol,
-        fromPort: config.securityGroupIngressFromPort,
-        toPort: config.securityGroupIngressToPort
-      }
-    ],
-    
-      egress:[
-      {
-        fromPort: config.securityGroupEgressFromPort,
-        toPort: config.securityGroupEgressToPort,
-        protocol: config.securityGroupEgressProtocol,
-        cidrBlocks: config.securityGroupEgressCidrBlocks
-      }
-    ],
-    
-      tags: {
-        Name: `${name}-${pet.id}-default-security-group`
-      }
-    });
-
-   new aws.lambdafunction.LambdaFunction(this, 'lambda-function', {
+    //creating lambda function to run inside a VPC
+   const lambdaFun = new aws.lambdafunction.LambdaFunction(this, 'lambda-function', {
       functionName: `cdktf-vpc-${name}-${pet.id}`,
       filename: asset.path,
       handler: config.handler,
@@ -217,13 +70,13 @@ export class VpcStack extends TerraformStack {
       role: role.arn,
       layers,
       vpcConfig: {
-        subnetIds: [privateSubnet.id],
-        securityGroupIds: [defaultSecurityGroup.id]
+        subnetIds: config.subnetIds,
+        securityGroupIds: config.securityGroupIds
       }
     });
 
-    new TerraformOutput(this, "Vpc id", {
-      value: newVpc.id,
+    new TerraformOutput(this, "output", {
+      value: lambdaFun.arn,
     });
   }
 
