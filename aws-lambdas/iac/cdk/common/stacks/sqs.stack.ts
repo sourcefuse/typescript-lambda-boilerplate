@@ -4,6 +4,7 @@ import * as aws from '@cdktf/provider-aws';
 import {SqsFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
 import { sqsRoleArn, sqsRolePolicy } from '../constants';
+import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambdafunction';
 export class SqsStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: SqsFunctionConfig) {
     super(scope, name);
@@ -28,7 +29,6 @@ export class SqsStack extends TerraformStack {
       name: `sqs-role-${name}-${pet.id}`,
       assumeRolePolicy: JSON.stringify(sqsRolePolicy),
     });
- 
  
      // Add execution role for lambda to write to CloudWatch logs
     new aws.iam.IamRolePolicyAttachment(this, 'sqs-managed-policy', {
@@ -88,6 +88,18 @@ export class SqsStack extends TerraformStack {
       role: role.arn,
       layers
     });
+
+      //Putting VPC config to lambda function if subnetIds and securityGroupIds exist
+
+      if(config.subnetIds && config.securityGroupIds){
+        const vpcConfig:LambdaFunctionVpcConfig =  {
+         subnetIds: config.subnetIds,
+         securityGroupIds: config.securityGroupIds
+       }
+       lambdaFunc.putVpcConfig(vpcConfig)
+       
+   }
+ 
 
     new aws.lambdafunction.LambdaEventSourceMapping(this,"event-source-mapping",{
         eventSourceArn: awsSqsQueue.arn,

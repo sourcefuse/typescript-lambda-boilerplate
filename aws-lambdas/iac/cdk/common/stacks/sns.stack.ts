@@ -4,6 +4,7 @@ import * as aws from '@cdktf/provider-aws';
 import {SnsFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
 import { snsRoleArn, snsRolePolicy } from '../constants';
+import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambdafunction';
 export class SnsStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: SnsFunctionConfig) {
     super(scope, name);
@@ -72,6 +73,17 @@ export class SnsStack extends TerraformStack {
         role: role.arn,
         layers
       });
+
+      //Putting VPC config to lambda function if subnetIds and securityGroupIds exist
+
+    if(config.subnetIds && config.securityGroupIds){
+      const vpcConfig:LambdaFunctionVpcConfig =  {
+       subnetIds: config.subnetIds,
+       securityGroupIds: config.securityGroupIds
+     }
+     lambdaFunc.putVpcConfig(vpcConfig)
+     
+ }
 
     new aws.sns.SnsTopicSubscription(this,'sns-topic-subscription',{
         topicArn: awsSnsTopic.arn,
