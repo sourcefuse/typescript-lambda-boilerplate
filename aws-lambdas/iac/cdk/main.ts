@@ -1,9 +1,8 @@
 import * as dotenv from 'dotenv';
 import * as dotenvExt from 'dotenv-extended';
 import {App} from 'cdktf';
-import {LambdaStack,SqsStack} from './common';
+import {LambdaStack,SnsStack,SqsStack} from './common';
 import {resolve} from 'path';
-import { SnsStack } from './common/stacks/sns.stack';
 
 
 dotenv.config();
@@ -22,7 +21,9 @@ new LambdaStack(app, 'lambda', {
   runtime: 'nodejs16.x',
   version: 'v0.0.1',
   layerPath: resolve(__dirname,'../../lambda/dist/layers'),
-  isApiRequired: true
+  isApiRequired: true,
+  securityGroupIds: ["sg-07f481ec2ced54878"],
+  subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"]
 });
 
 new SqsStack(app, 'sqs', {
@@ -36,7 +37,9 @@ new SqsStack(app, 'sqs', {
   batchSize: 10,
   messageRetentionSeconds: 86400,
   receiveWaitTimeSeconds: 10,
-  redriveMaxCount: 5
+  redriveMaxCount: 5,
+  securityGroupIds: ["sg-07f481ec2ced54878"],
+  subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"]
 });
 
 new SnsStack(app, 'sns', {
@@ -48,9 +51,9 @@ new SnsStack(app, 'sns', {
   snsTopicProtocol: "lambda",
   lambdaStatementId: "AllowExecutionFromSNS",
   lambdaAction: "lambda:InvokeFunction",
-  lambdaPrincipal: "sns.amazonaws.com"
+  lambdaPrincipal: "sns.amazonaws.com",
+  securityGroupIds: ["sg-07f481ec2ced54878"],
+  subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"]
 });
-
-
 
 app.synth();

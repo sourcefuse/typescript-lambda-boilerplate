@@ -9,5 +9,7 @@ export interface SqsFunctionConfig {
     batchSize: number,
     messageRetentionSeconds: number,
     receiveWaitTimeSeconds: number,
-    redriveMaxCount: number
+    redriveMaxCount: number,
+    securityGroupIds?: string[],
+    subnetIds?: string[],
   }

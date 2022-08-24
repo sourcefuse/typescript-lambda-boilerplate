@@ -3,7 +3,8 @@ import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
 import {SnsFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
-import { sqsRoleArn, sqsRolePolicy } from '../constants';
+import { snsRoleArn, snsRolePolicy } from '../constants';
+import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambdafunction';
 export class SnsStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: SnsFunctionConfig) {
     super(scope, name);
@@ -34,13 +35,13 @@ export class SnsStack extends TerraformStack {
 
       const role = new aws.iam.IamRole(this, 'sns-exec', {
         name: `sqs-role-${name}-${pet.id}`,
-        assumeRolePolicy: JSON.stringify(sqsRolePolicy),
+        assumeRolePolicy: JSON.stringify(snsRolePolicy),
       });
    
    
        // Add execution role for lambda to write to CloudWatch logs
       new aws.iam.IamRolePolicyAttachment(this, 'sns-managed-policy', {
-             policyArn: sqsRoleArn,
+             policyArn: snsRoleArn,
              role: role.name,
         });
 
@@ -72,6 +73,17 @@ export class SnsStack extends TerraformStack {
         role: role.arn,
         layers
       });
+
+      //Putting VPC config to lambda function if subnetIds and securityGroupIds exist
+
+    if(config.subnetIds && config.securityGroupIds){
+      const vpcConfig:LambdaFunctionVpcConfig =  {
+       subnetIds: config.subnetIds,
+       securityGroupIds: config.securityGroupIds
+     }
+     lambdaFunc.putVpcConfig(vpcConfig)
+     
+ }
 
     new aws.sns.SnsTopicSubscription(this,'sns-topic-subscription',{
         topicArn: awsSnsTopic.arn,

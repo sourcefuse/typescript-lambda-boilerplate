@@ -13,4 +13,4 @@ export const sqsRolePolicy = {
 };
 
 
-export const sqsRoleArn = 'arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole'
+export const sqsRoleArn = "arn:aws:iam::757583164619:policy/lambda-boilerplate-vpc-sqs-execution-role"

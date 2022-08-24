@@ -8,5 +8,7 @@ export interface SnsFunctionConfig {
     lambdaStatementId: string,
     lambdaAction: string,
     lambdaPrincipal: string,
+    securityGroupIds?: string[],
+    subnetIds?: string[],
   }
   
