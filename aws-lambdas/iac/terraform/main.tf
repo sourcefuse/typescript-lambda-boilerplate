@@ -52,7 +52,7 @@ module "boilerplate" {
 
   kms_key_admin_arns = var.kms_key_admin_arns
   vpc_config         = var.vpc_config
-  tags               = module.tags.tags
+  tags               = module.tags.extra_tags
 }
 
 module "sns" {
@@ -72,7 +72,7 @@ module "sns" {
 
   kms_key_admin_arns = var.kms_key_admin_arns
 
-  tags = module.tags.tags
+  tags = module.tags.extra_tags
 }
 
 module "sqs" {
@@ -92,7 +92,7 @@ module "sqs" {
 
   kms_key_admin_arns = var.kms_key_admin_arns
 
-  tags = module.tags.tags
+  tags = module.tags.extra_tags
 }
 
 ################################################################################
@@ -100,7 +100,6 @@ module "sqs" {
 ################################################################################
 resource "aws_sns_topic" "this" {
   name = var.sns_topic_name
-
   tags = module.tags.tags
 }
 
@@ -136,13 +135,16 @@ resource "aws_sqs_queue" "results_updates" {
   message_retention_seconds  = 86400
   receive_wait_time_seconds  = 10
 
-  tags = module.tags.tags
+  tags                              = module.tags.tags
+  kms_master_key_id                 = local.kms_master_key_id
+  kms_data_key_reuse_period_seconds = local.kms_data_key_reuse_period_seconds
 }
 
 resource "aws_sqs_queue" "results_updates_dl_queue" {
-  name = var.sqs_results_updates_dlq
-
-  tags = module.tags.tags
+  name                              = var.sqs_results_updates_dlq
+  tags                              = module.tags.tags
+  kms_master_key_id                 = local.kms_master_key_id
+  kms_data_key_reuse_period_seconds = local.kms_data_key_reuse_period_seconds
 }
 
 data "aws_iam_policy_document" "sqs" {
