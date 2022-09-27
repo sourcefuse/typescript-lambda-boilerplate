@@ -80,3 +80,15 @@ variable "sqs_results_updates_dlq" {
   type        = string
   default     = "results-updates-dl-queue"
 }
+
+variable "kms_master_key_id_override" {
+  description = "KMS key id for sqs encryption"
+  type        = string
+  default     = null
+}
+
+variable "kms_data_key_reuse_period_seconds" {
+  description = ""
+  type        = number
+  default     = 300
+}
