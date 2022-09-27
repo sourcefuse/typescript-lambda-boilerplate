@@ -137,14 +137,14 @@ resource "aws_sqs_queue" "results_updates" {
   receive_wait_time_seconds  = 10
 
   tags                              = module.tags.tags
-  kms_master_key_id                 = var.kms_master_key_id_override == null ? "alias/aws/sqs" : var.kms_master_key_id_override
+  kms_master_key_id                 = local.kms_master_key_id
   kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
 }
 
 resource "aws_sqs_queue" "results_updates_dl_queue" {
   name                              = var.sqs_results_updates_dlq
   tags                              = module.tags.tags
-  kms_master_key_id                 = var.kms_master_key_id_override == null ? "alias/aws/sqs" : var.kms_master_key_id_override
+  kms_master_key_id                 = local.kms_master_key_id
   kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
 }
 
