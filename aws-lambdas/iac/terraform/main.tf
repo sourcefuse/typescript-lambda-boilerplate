@@ -101,7 +101,7 @@ module "sqs" {
 resource "aws_sns_topic" "this" {
   name              = var.sns_topic_name
   tags              = module.tags.tags
-  kms_master_key_id = var.kms_master_key_id             
+  kms_master_key_id = local.sns_kms_master_key_id            
 }
 
 resource "aws_sns_topic_subscription" "topic_lambda" {

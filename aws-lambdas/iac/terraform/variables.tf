@@ -66,10 +66,10 @@ variable "sns_topic_name" {
   default     = "sns-with-lambda"
 }
 
-variable "kms_master_key_id" {
+variable "sns_kms_master_key_id" {
   description = "The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK"
   type        = string
-  default     = "alias/aws/sns"
+  default     = null
 }
 
 ################################################################################
