@@ -39,7 +39,9 @@ new SqsStack(app, 'sqs', {
   receiveWaitTimeSeconds: 10,
   redriveMaxCount: 5,
   securityGroupIds: ["sg-07f481ec2ced54878"],
-  subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"]
+  subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"],
+  kmsMasterKeyId: 'alias/aws/sqs',
+  kmsDataKeyReusePeriodSeconds: 300
 });
 
 new SnsStack(app, 'sns', {

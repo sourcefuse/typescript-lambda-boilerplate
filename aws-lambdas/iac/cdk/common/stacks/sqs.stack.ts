@@ -39,6 +39,8 @@ export class SqsStack extends TerraformStack {
   //Creating DLQueue
   const resultsUpdatesDlQueue = new aws.sqs.SqsQueue(this,'dl-queue',{
     name: `sqs-dl-queue-${name}-${pet.id}`,
+    kmsMasterKeyId: config.kmsMasterKeyId,
+    kmsDataKeyReusePeriodSeconds: config.kmsDataKeyReusePeriodSeconds
   });
    
    const redrivePolicy = {
@@ -54,7 +56,9 @@ export class SqsStack extends TerraformStack {
     receiveWaitTimeSeconds: config.receiveWaitTimeSeconds,
     name: `sqs-queue-${name}-${pet.id}`,
     policy: JSON.stringify(sqsRolePolicy),
-    redrivePolicy: JSON.stringify(redrivePolicy)
+    redrivePolicy: JSON.stringify(redrivePolicy),
+    kmsMasterKeyId: config.kmsMasterKeyId,
+    kmsDataKeyReusePeriodSeconds: config.kmsDataKeyReusePeriodSeconds
   });
 
 
