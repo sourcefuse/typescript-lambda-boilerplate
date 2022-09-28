@@ -12,4 +12,6 @@ export interface SqsFunctionConfig {
     redriveMaxCount: number,
     securityGroupIds?: string[],
     subnetIds?: string[],
+    kmsMasterKeyId: string,
+    kmsDataKeyReusePeriodSeconds: number
   }
