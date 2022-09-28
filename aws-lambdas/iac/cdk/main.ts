@@ -53,7 +53,8 @@ new SnsStack(app, 'sns', {
   lambdaAction: "lambda:InvokeFunction",
   lambdaPrincipal: "sns.amazonaws.com",
   securityGroupIds: ["sg-07f481ec2ced54878"],
-  subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"]
+  subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"],
+  kmsMasterKeyId: 'alias/aws/sns'
 });
 
 app.synth();

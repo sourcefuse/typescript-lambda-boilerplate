@@ -63,6 +63,7 @@ export class SnsStack extends TerraformStack {
 
     const awsSnsTopic = new aws.sns.SnsTopic(this,'sns-topic',{
         name: `sns-topic-${name}-${pet.id}`,
+        kmsMasterKeyId: config.kmsMasterKeyId
     });
 
     const lambdaFunc = new aws.lambdafunction.LambdaFunction(this, 'lambda-function', {

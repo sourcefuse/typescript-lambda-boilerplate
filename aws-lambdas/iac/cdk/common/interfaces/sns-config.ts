@@ -10,5 +10,6 @@ export interface SnsFunctionConfig {
     lambdaPrincipal: string,
     securityGroupIds?: string[],
     subnetIds?: string[],
+    kmsMasterKeyId: string
   }
   
