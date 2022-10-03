@@ -5,7 +5,7 @@
 Terraform module that manages the infrastructure dependencies for the Lambda Boilerplate utilities
 
 ## <a id="usage"></a> Usage
-Here is an example of what a new lambda would look like, using the default values defined in [variables.tf](./variables.tf).  
+Here is an example of what a new lambda would look like, using the default values defined in [variables.tf](variables.tf).  
 
 Since All Lambda code is contained within the same `src` folder, you can keep the `lambda_function_archive_*` and `lambda_layer_archive_*` 
 as the default values. The important variable to override is going to be `lambda_handler`.  
@@ -60,6 +60,8 @@ No modules.
 | [aws_iam_policy.lambda_cw_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy_attachment.lambda_cw_logs_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
 | [aws_iam_role.lambda_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+
+| [aws_iam_role_policy_attachment.lambda_vpc_access_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_kms_alias.cw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
 | [aws_kms_key.cw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_lambda_function.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
@@ -93,6 +95,9 @@ No modules.
 | <a name="input_region"></a> [region](#input\_region) | AWS region | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Set of tags to apply to resources | `map(string)` | n/a | yes |
 
+| <a name="input_vpc_config"></a> [vpc\_config](#input\_vpc\_config) | Optional VPC Configurations params | `map(any)` | `null` | no |
+
+
 ## Outputs
 
 | Name | Description |
@@ -100,5 +105,8 @@ No modules.
 | <a name="output_lambda_arn"></a> [lambda\_arn](#output\_lambda\_arn) | n/a |
 | <a name="output_lambda_function_name"></a> [lambda\_function\_name](#output\_lambda\_function\_name) | n/a |
 | <a name="output_lambda_role_arn"></a> [lambda\_role\_arn](#output\_lambda\_role\_arn) | n/a |
+
+| <a name="output_lambda_role_name"></a> [lambda\_role\_name](#output\_lambda\_role\_name) | n/a |
+
 | <a name="output_lambda_version"></a> [lambda\_version](#output\_lambda\_version) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

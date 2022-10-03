@@ -32,7 +32,9 @@ the `terraform` dependencies.
 
 1. Navigate to `api-gw-lambda/terraform`:
    ```shell
-   cd api-gw-lambda/terraform
+   
+   cd aws-lambdas/terraform
+
    ```
 2. Set your AWS Profile environment variable:
    ```shell

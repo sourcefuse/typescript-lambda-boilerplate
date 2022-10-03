@@ -10,29 +10,31 @@
 - [terraform-docs](https://github.com/segmentio/terraform-docs)
 - [pre-commit](https://pre-commit.com/#install)
 
-## <a id="getting_started"></a> Getting Started 
+## <a id="getting_started"></a> Getting Started: Build out Lambda 
 This assumes you have the [pre-requisites](#prereqs) already configured, an AWS Profile configured, and a KMS Key admin role.  
 For more information on how to configure an AWS Profile on your workstation, please see [Adding a profile by editing the shared AWS credentials file
-](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/keys-profiles-credentials.html#adding-a-profile-to-the-aws-credentials-profile-file).  
+](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/keys-profiles-credentials.html#adding-a-profile-to-the-aws-credentials-profile-file)
+
+Compile and build the Typescript Lambda code. Navigate to the root of the repo to run the following commands.  
 
 1. Install Lambda packages:  
    ```shell
    make bootstrap-lambda
    ```
-4. Build the Lambda:  
+2. Build the Lambda:  
    ```shell
    make build
    ```
 
-## Terraform
+## Terraform to deploy your Lambda
 Once you have completed the steps in [Getting Started](#getting_started), you will need to configure 
 the `terraform` dependencies.  
 
 :warning: This does not have a backend configured. See [Backend configuration](#backend_config) for more information.  
 
-1. Navigate to `api-gw-lambda/terraform`:  
+1. Navigate to `aws-lambdas/terraform`:  
    ```shell
-   cd api-gw-lambda/terraform
+   cd aws-lambdas/terraform
    ```
 2. Set your AWS Profile environment variable:
    ```shell
@@ -56,19 +58,19 @@ the `terraform` dependencies.
      * The `kms_key_admin_arns` variable override. This is for additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE.
 4. Initialize:  
    ```shell
-   terraform init
+   terraform init -var-file=example.tfvars
    ```
 5. Plan:  
    ```shell
-   terraform plan
+   terraform plan -var-file=example.tfvars
    ```
 6. If the plan looks good, run apply:  
    ```shell
-   terraform apply
+   terraform apply -var-file=example.tfvars
    ```
 
 ### Creating additional Lambdas
-In the Lambda module's README, there is a [usage](./api-gw-lambda/terraform/lambda/README.md#usage) example you can reference to create additional resources in the 
+In the Lambda module's README, there is a [usage](aws-lambdas/iac/terraform/lambda/README.md#usage) example you can reference to create additional resources in the 
 terraform root's configuration.  
 
 ### <a id="backend_config"></a> Backend configuration  
@@ -78,7 +80,7 @@ Since the code contained in this repo is only intended to serve as a boilerplate
 
 For more information on backends, see the [Terraform docs](https://www.terraform.io/language/settings/backends/configuration) list of available backends.   
 
-## <a id="dev"></a> Devel1opment
+## <a id="dev"></a> Development
 [Quality Control](#qc) **MUST** be configured prior to making any commits.
 
 Preferred workstation setup can be found in [Confluence](https://sourcefuse.atlassian.net/wiki/spaces/SOURCEFUSE/pages/3311075411/Dev+Machine+Setup).  

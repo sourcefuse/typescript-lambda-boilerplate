@@ -16,6 +16,11 @@ provider "aws" {
   profile = var.profile
 }
 
+##Random-PET
+resource "random_pet" "this" {
+  length = 2
+}
+
 ################################################################################
 ## tags
 ################################################################################
@@ -33,9 +38,9 @@ module "boilerplate" {
   source = "./lambda"
 
   environment = var.environment
-  region      = "us-east-1"
+  region      = var.region
 
-  lambda_runtime = "nodejs16.x"
+  lambda_runtime = var.lambda_runtime
   lambda_handler = "index.handler"
   lambda_memory  = 128
   lambda_timeout = 120
@@ -46,6 +51,136 @@ module "boilerplate" {
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
   kms_key_admin_arns = var.kms_key_admin_arns
+  vpc_config         = var.vpc_config
+  tags               = module.tags.extra_tags
+}
+
+module "sns" {
+  source         = "./lambda"
+  environment    = var.environment
+  region         = var.region
+  lambda_name    = local.sns_lambda_name
+  lambda_runtime = var.lambda_runtime
+  lambda_handler = "sns.handler"
+  lambda_memory  = 128
+  lambda_timeout = 120
+
+  lambda_function_archive_source_dir  = "${path.root}/dist/src"
+  lambda_function_archive_output_path = "${path.root}/dist/function.zip"
+  lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
+  lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
+
+  kms_key_admin_arns = var.kms_key_admin_arns
+
+  tags = module.tags.extra_tags
+}
+
+module "sqs" {
+  source         = "./lambda"
+  environment    = var.environment
+  region         = var.region
+  lambda_name    = local.sqs_lambda_name
+  lambda_runtime = var.lambda_runtime
+  lambda_handler = "sqs.handler"
+  lambda_memory  = 128
+  lambda_timeout = 120
+
+  lambda_function_archive_source_dir  = "${path.root}/dist/src"
+  lambda_function_archive_output_path = "${path.root}/dist/function.zip"
+  lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
+  lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
+
+  kms_key_admin_arns = var.kms_key_admin_arns
+
+  tags = module.tags.extra_tags
+}
+
+################################################################################
+## sns
+################################################################################
+resource "aws_sns_topic" "this" {
+  name              = var.sns_topic_name
+  tags              = module.tags.tags
+  kms_master_key_id = local.sns_kms_master_key_id            
+}
+
+resource "aws_sns_topic_subscription" "topic_lambda" {
+  topic_arn = aws_sns_topic.this.arn
+  protocol  = "lambda"
+  endpoint  = module.sns.lambda_arn
+}
+
+resource "aws_lambda_permission" "with_sns" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = module.sns.lambda_function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = aws_sns_topic.this.arn
+}
+
+################################################################################
+## sqs
+################################################################################
+resource "aws_sqs_queue" "results_updates" {
+  name = var.sqs_results_updates
+
+  redrive_policy = jsonencode(
+    {
+      "deadLetterTargetArn" : aws_sqs_queue.results_updates_dl_queue.arn,
+      "maxReceiveCount" : 5
+    }
+  )
+  visibility_timeout_seconds = 300
+  delay_seconds              = 90
+  max_message_size           = 2048
+  message_retention_seconds  = 86400
+  receive_wait_time_seconds  = 10
+
+  tags                              = module.tags.tags
+  kms_master_key_id                 = local.kms_master_key_id
+  kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
+}
+
+resource "aws_sqs_queue" "results_updates_dl_queue" {
+  name                              = var.sqs_results_updates_dlq
+  tags                              = module.tags.tags
+  kms_master_key_id                 = local.kms_master_key_id
+  kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
+}
+
+data "aws_iam_policy_document" "sqs" {
+  version = "2012-10-17"
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "sqs:ChangeMessageVisibility",
+      "sqs:DeleteMessage",
+      "sqs:GetQueueAttributes",
+      "sqs:ReceiveMessage"
+    ]
+
+    resources = [
+      aws_sqs_queue.results_updates.arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "sqs" {
+  policy = data.aws_iam_policy_document.sqs.json
 
   tags = module.tags.tags
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_sqs" {
+  role       = module.sqs.lambda_role_name
+  policy_arn = aws_iam_policy.sqs.arn
+}
+
+resource "aws_lambda_event_source_mapping" "event_source_mapping" {
+  event_source_arn = aws_sqs_queue.results_updates.arn
+  enabled          = var.lambda_event_source_mapping_enabled
+  function_name    = module.sqs.lambda_function_name
+  batch_size       = var.lambda_event_source_mapping_batch_size
 }

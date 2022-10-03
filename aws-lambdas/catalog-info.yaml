@@ -3,10 +3,11 @@ kind: Component
 metadata:
   name: ${{values.function_id | dump}}
   description: ${{values.description | dump}}
+  namespace: ${{values.backstage_namespace | dump}}
   annotations:
     github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
     backstage.io/techdocs-ref: dir:.
 spec:
-  type: api
-  lifecycle: experimental
-  owner: sourcefuse
+  type: service
+  lifecycle: development
+  owner: ${{values.destination.owner}}

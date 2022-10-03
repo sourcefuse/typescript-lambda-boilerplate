@@ -12,7 +12,10 @@ export  const lambdaRolePolicy = {
   ],
 };
 
+
 export const lambdaPolicyArn = 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole';
+export const lambdaPolicyArn = '"arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"';
+
 
 export const lambdaAction = 'lambda:InvokeFunction';
 

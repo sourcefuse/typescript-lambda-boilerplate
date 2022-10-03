@@ -1,4 +1,4 @@
-import {LambdaFunction} from '../../src/main';
+import {LambdaFunction} from '../../src/handlers/api-gateway';
 import {SampleEvents} from '../events';
 
 describe('Lambda function test', () => {
