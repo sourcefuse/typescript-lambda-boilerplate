@@ -101,7 +101,7 @@ module "sqs" {
 resource "aws_sns_topic" "this" {
   name              = var.sns_topic_name
   tags              = module.tags.tags
-  kms_master_key_id = local.sns_kms_master_key_id            
+  kms_master_key_id = local.sns_kms_master_key_id
 }
 
 resource "aws_sns_topic_subscription" "topic_lambda" {
@@ -183,4 +183,73 @@ resource "aws_lambda_event_source_mapping" "event_source_mapping" {
   enabled          = var.lambda_event_source_mapping_enabled
   function_name    = module.sqs.lambda_function_name
   batch_size       = var.lambda_event_source_mapping_batch_size
+}
+
+resource "aws_iam_policy" "Policy-for-all-resources" {
+  name = "admin_policy"
+  # Policy for all resources used in lambda boilerplate
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "sns:*"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "sqs:*"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:*"
+        ],
+        Resource = ["*"]
+      },
+      # lambda-vpc-execution-role
+      {
+        Effect = "Allow",
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "ec2:CreateNetworkInterface",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DeleteNetworkInterface",
+          "ec2:AssignPrivateIpAddresses",
+          "ec2:UnassignPrivateIpAddresses"
+        ],
+        Resource = "*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role" "lambda_role" {
+  name = "lambda_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      },
+    ]
+  })
+}
+
+resource "aws_iam_policy_attachment" "lambda_policy_role" {
+  name       = "lambda_attachment"
+  roles      = [aws_iam_role.lambda_role.name]
+  policy_arn = aws_iam_policy.Policy-for-all-resources.arn
 }
