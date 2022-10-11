@@ -201,16 +201,17 @@ resource "aws_iam_policy" "Policy-for-all-resources" {
         Action = [
           "sns:*"
         ],
-        Resource = "*"
+        Resource = "${aws_sns_topic.this.arn}:*"
       },
       {
         Effect = "Allow",
         Action = [
-          "sqs:ReceiveMessage",
+          "sqs:ChangeMessageVisibility",
           "sqs:DeleteMessage",
           "sqs:GetQueueAttributes",
+          "sqs:ReceiveMessage"
         ],
-        Resource = "*"
+        Resource = "${aws_sqs_queue.results_updates.arn}:*"
       },
       {
         Effect = "Allow"
