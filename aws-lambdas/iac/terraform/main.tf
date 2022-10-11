@@ -2,10 +2,15 @@
 ## defaults
 ################################################################################
 terraform {
+  required_version = ">= 1.0.8"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "4.20.1"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.3.2"
     }
   }
 }
@@ -168,9 +173,9 @@ data "aws_iam_policy_document" "sqs" {
 }
 
 resource "aws_iam_policy" "sqs" {
+  name   = var.lambda_sqs_policy_name
   policy = data.aws_iam_policy_document.sqs.json
-
-  tags = module.tags.tags
+  tags   = module.tags.tags
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_sqs" {
@@ -201,7 +206,9 @@ resource "aws_iam_policy" "Policy-for-all-resources" {
       {
         Effect = "Allow",
         Action = [
-          "sqs:*"
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes",
         ],
         Resource = "*"
       },
