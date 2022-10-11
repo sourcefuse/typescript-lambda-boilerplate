@@ -3,7 +3,7 @@ import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
 import {SqsFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
-import { sqsRoleArn, sqsRolePolicy } from '../constants';
+import { iamRolePolicy, sqsRolePolicy } from '../constants';
 import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambdafunction';
 export class SqsStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: SqsFunctionConfig) {
@@ -27,12 +27,17 @@ export class SqsStack extends TerraformStack {
 
     const role = new aws.iam.IamRole(this, 'sqs-exec', {
       name: `sqs-role-${name}-${pet.id}`,
-      assumeRolePolicy: JSON.stringify(sqsRolePolicy),
+      assumeRolePolicy: JSON.stringify(iamRolePolicy),
     });
+
+    const sqsRole = new aws.iam.IamPolicy(this,"sqs-policy",{
+      policy: JSON.stringify(sqsRolePolicy)
+  })
+
  
      // Add execution role for lambda to write to CloudWatch logs
     new aws.iam.IamRolePolicyAttachment(this, 'sqs-managed-policy', {
-           policyArn: sqsRoleArn,
+           policyArn: sqsRole.arn,
            role: role.name,
       });
 
