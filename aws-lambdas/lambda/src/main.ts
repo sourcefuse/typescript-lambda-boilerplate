@@ -13,7 +13,7 @@ export class LambdaFunction {
 		this.event = event;
 	}
 
-	main() {
+	async main() {
 		logger.info(`Event: ${JSON.stringify(this.event, null, 2)}`);
 		logger.info(`Context: ${JSON.stringify(this.context, null, 2)}`);
 

@@ -4,5 +4,8 @@ export interface LambdaFunctionConfig {
   runtime: string,
   version: string,
   layerPath?: string,
-  isApiRequired?: boolean
+  isApiRequired?: boolean,
+  securityGroupIds?: string[],
+  subnetIds?: string[],
 }
+

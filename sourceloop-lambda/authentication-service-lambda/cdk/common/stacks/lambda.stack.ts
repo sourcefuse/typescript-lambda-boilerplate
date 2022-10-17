@@ -4,6 +4,7 @@ import * as aws from '@cdktf/provider-aws';
 import {lambdaAction, lambdaPolicyArn, lambdaPrincipal, lambdaRolePolicy} from '../constants';
 import {LambdaFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
+import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambdafunction';
 
 export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
@@ -68,6 +69,18 @@ export class LambdaStack extends TerraformStack {
       role: role.arn,
       layers,
     });
+
+
+    //Putting VPC config to lambda function if subnetIds and securityGroupIds exist
+
+    if(config.subnetIds && config.securityGroupIds){
+       const vpcConfig:LambdaFunctionVpcConfig =  {
+        subnetIds: config.subnetIds,
+        securityGroupIds: config.securityGroupIds
+      }
+      lambdaFunc.putVpcConfig(vpcConfig)
+      
+  }
 
     if(config.isApiRequired) {
       // Create and configure API gateway
