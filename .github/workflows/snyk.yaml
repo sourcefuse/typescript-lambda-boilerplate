@@ -24,7 +24,8 @@ jobs:
          with:
            command: monitor
            args: --severity-threshold=low
-           
+       - name: snyk Auth
+         run: snyk auth ${{ secrets.ARC_SNYK_TOKEN }}   
        - uses: actions/checkout@master
        - name: Run Snyk to check for vulnerabilities
          uses: snyk/actions/node@master
