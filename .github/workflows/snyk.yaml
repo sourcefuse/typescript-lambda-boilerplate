@@ -12,7 +12,7 @@ on:
 
 jobs:
   security:
-    runs-on: 
+    runs-on:
       - self-hosted
       - refarch
     name: snyk
@@ -24,7 +24,7 @@ jobs:
          with:
            command: monitor
            args: --severity-threshold=low
-            
+
        - name: Set up Node 16
          uses: actions/setup-node@v3
          with:
@@ -32,15 +32,11 @@ jobs:
        - name: install Snyk CLI
          run: npm install -g snyk
        - name: snyk monitor
-         run: snyk iac test --report  
+         run: snyk iac test --report
          env:
-           SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}    
-       - uses: actions/checkout@master   
+           SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}
+       - uses: actions/checkout@master
        - name: snyk cdktf monitor
          run: snyk test --report aws-lambdas/iac/cdk
          env:
-           SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}  
-         
-
-
-  
+           SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}
