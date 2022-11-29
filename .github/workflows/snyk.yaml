@@ -24,13 +24,6 @@ jobs:
          with:
            command: monitor
            args: --severity-threshold=low
-       - name: snyk Auth
-         run: snyk auth ${{ secrets.ARC_SNYK_TOKEN }}   
-       - uses: actions/checkout@master
-       - name: Run Snyk to check for vulnerabilities
-         uses: snyk/actions/node@master
-         with:
-           command: monitor
             
        - name: Set up Node 16
          uses: actions/setup-node@v3
@@ -42,6 +35,13 @@ jobs:
          run: snyk iac test --report  
          env:
            SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}  
+       - name: snyk Auth
+         run: snyk auth ${{ secrets.ARC_SNYK_TOKEN }}   
+       - uses: actions/checkout@master
+       - name: Run Snyk to check for vulnerabilities
+         uses: snyk/actions/node@master
+         with:
+           command: monitor    
        - name: snyk cdktf monitor
          run: snyk test --report aws-lambdas/iac/cdk
          env:
