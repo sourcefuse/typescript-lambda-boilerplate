@@ -34,10 +34,10 @@ jobs:
        - name: snyk monitor
          run: snyk iac test --report  
          env:
-           SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}  
-       - name: snyk Auth
-         run: snyk auth ${{ secrets.ARC_SNYK_TOKEN }}   
+           SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}    
        - uses: actions/checkout@master
+       - name: snyk Auth
+         run: snyk auth ${{ secrets.ARC_SNYK_TOKEN }} 
        - name: Run Snyk to check for vulnerabilities
          uses: snyk/actions/node@master
          with:
