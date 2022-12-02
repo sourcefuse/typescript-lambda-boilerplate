@@ -32,9 +32,9 @@ the `terraform` dependencies.
 
 :warning: This does not have a backend configured. See [Backend configuration](#backend_config) for more information.  
 
-1. Navigate to `aws-lambdas/terraform`:  
+1. Navigate to `aws-lambdas/iac/terraform`:  
    ```shell
-   cd aws-lambdas/terraform
+   cd aws-lambdas/iac/terraform
    ```
 2. Set your AWS Profile environment variable:
    ```shell

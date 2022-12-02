@@ -30,9 +30,9 @@ the `terraform` dependencies.
 
 :warning: This does not have a backend configured. See [Backend configuration](#backend_config) for more information.
 
-1. Navigate to `api-gw-lambda/terraform`:
+1. Navigate to `aws-lambdas/iac/terraform`:
    ```shell
-   cd aws-lambdas/terraform
+   cd aws-lambdas/iac/terraform
    ```
 2. Set your AWS Profile environment variable:
    ```shell
@@ -56,15 +56,15 @@ the `terraform` dependencies.
   * The `kms_key_admin_arns` variable override. This is for additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE.
 4. Initialize:
    ```shell
-   terraform init
+   terraform init -var-file=example.tfvars
    ```
 5. Plan:
    ```shell
-   terraform plan
+   terraform plan -var-file=example.tfvars
    ```
 6. If the plan looks good, run apply:
    ```shell
-   terraform apply
+   terraform apply -var-file=example.tfvars
    ```
 
 ### <a id="backend_config"></a> Backend configuration

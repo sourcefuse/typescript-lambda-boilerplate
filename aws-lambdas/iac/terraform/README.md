@@ -39,6 +39,9 @@ See the [README](../../../README.md) in the repo's root for more information.
 | [aws_sqs_queue.results_updates_dl_queue](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 | [random_id.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [aws_iam_policy_document.sqs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy.Policy-for-all-resources](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_policy) | resource |
+| [aws_iam_role.lambda_role](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_role) | resource |
+| [aws_iam_policy_attachment.lambda_policy_role](https://registry.terraform.io/providers/aaronfeng/aws/latest/docs/resources/iam_policy_attachment) | resource |
 
 ## Inputs
 
@@ -53,8 +56,10 @@ See the [README](../../../README.md) in the repo's root for more information.
 | <a name="input_profile"></a> [profile](#input\_profile) | Name of the AWS Profile configured on your workstation. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | Name of the region resources will be created in. | `string` | `"us-east-1"` | no |
 | <a name="input_sns_topic_name"></a> [sns\_topic\_name](#input\_sns\_topic\_name) | Name to assign the SNS Topic. | `string` | `"sns-with-lambda"` | no |
+| <a name="input_sns_kms_master_key_id"></a> [sns\_kms\_master\_key\_id](#input\_sns\_kms\_master\_key\_id) | Name to assign the name of SNS KMS MASTER KEY ID. | `string` | `"alias/aws/sns"` | yes |
 | <a name="input_sqs_results_updates"></a> [sqs\_results\_updates](#input\_sqs\_results\_updates) | Name to assign the SQS Results Updates Queue. | `string` | `"results-updates-queue"` | no |
 | <a name="input_sqs_results_updates_dlq"></a> [sqs\_results\_updates\_dlq](#input\_sqs\_results\_updates\_dlq) | Name to assign the SQS Results Updates Dead Letter Queue. | `string` | `"results-updates-dl-queue"` | no |
+| <a name="input_sqs_kms_master_key_id"></a> [sqs\_kms\_master\_key\_id](#input\_sqs\_kms\_master\_key\_id) | Name to assign the name of SQS KMS MASTER KEY ID. | `string` | `"alias/aws/sqs"` | yes |
 | <a name="input_vpc_config"></a> [vpc\_config](#input\_vpc\_config) | Optional VPC Configurations params | `map(any)` | `null` | no |
 
 ## Outputs
