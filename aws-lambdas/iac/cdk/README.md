@@ -42,3 +42,38 @@ This module gives us several commands for the aws lambda function.
   ```shell
   cdktf destroy <stack_name>
   ```
+
+## Stacks
+
+| Name | Version |
+|------|--------|
+| <a name="LambdaStack"></a> [LambdaStack](#LambdaStack) | 0.0.1 |
+| <a name="SqsStack"></a> [sqs](#SqsStack) | 0.0.1 |
+| <a name="SnsStack"></a> [sns](#SnsStack) | 0.0.1 |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_LambdaStack_path"></a> [LambdaStack_path](#input\_LambdaStack\_path) | Give the path of the lambda from where the stack will be created. | `string` | `"../../lambda/dist/src"` | yes |
+| <a name="input_LambdaStack_handler"></a> [LambdaStack_handler](#input\_LambdaStack\_handler) | Give the handler name from where the stack will be created. | `string` | `"handlers/api-gateway.handler"` | yes |
+| <a name="input_LambdaStack_runtime"></a> [LambdaStack_runtime](#input\_LambdaStack\_runtime) | Give the runtime version of the lambda | `string` | `"nodejs16.x"` | yes |
+| <a name="input_LambdaStack_version"></a> [LambdaStack_version](#input\_LambdaStack\_version) | Give the version of the stack | `string` | `"v0.0.1"` | yes |
+| <a name="input_LambdaStack_layerPath"></a> [LambdaStack_layerPath](#input\_LambdaStack\_layerPath) | Give the layer path of the lambda | `string` | `"../../lambda/dist/layers"` | no |
+| <a name="input_LambdaStack_securityGroupIds"></a> [LambdaStack_securityGroupIds](#input\_LambdaStack\_securityGroupIds) | Give the security group id to the lambda | `string` | `"n/a"` | no |
+| <a name="input_LambdaStack_subnetIds"></a> [LambdaStack_subnetIds](#input\_LambdaStack\_subnetIds) | Give the subnet Ids to the lambda | `string` | `"n/a"` | no |
+| <a name="input_ SqsStack_path"></a> [ SqsStack_subnetIds](#input\_ SqsStack\_path) | Give the path of the lambda from where the stack will be created | `string` | `"../../lambda/dist/src"` | yes |
+| <a name="input_ SqsStack_handler"></a> [ SqsStack_handler](#input\_ SqsStack\_handler) | Give the handler name from where the stack will be created. | `string` | `"handlers/sqs.handler"` | yes |
+| <a name="input_SqsStack_runtime"></a> [SqsStack_runtime](#input\_SqsStack\_runtime) | Give the runtime version of the lambda | `string` | `"nodejs16.x"` | yes |
+| <a name="input_SqsStack_version"></a> [SqsStack_version](#input\_SqsStack\_version) | Give the version of the stack | `string` | `"v0.0.1"` | yes |
+| <a name="input_SqsStack_layerPath"></a> [SqsStack_layerPath](#input\_LambdaStack\_layerPath) | Give the layer path of the lambda | `string` | `"../../lambda/dist/layers"` | no |
+| <a name="input_SqsStack_delay"></a> [SqsStack_delay](#input\_LambdaStack\_delay) | The time in seconds that the delivery of all messages in the queue will be delayed | `number` | `90` | no |
+| <a name="input_SqsStack_ maxMessageSize"></a> [SqsStack_maxMessageSize](#input\_LambdaStack\_maxMessageSize) | The limit of how many bytes a message can contain before Amazon SQS rejects it | `number` | `2048` | no |
+| <a name="input_SqsStack_ batchSize"></a> [SqsStack_batchSize](#input\_LambdaStack\_batchSize) | The largest number of records that Lambda will retrieve from your event source at the time of invocation | `number` | `10` | no |
+| <a name="input_SqsStack_messageRetentionSeconds "></a> [SqsStack_messageRetentionSeconds](#input\_LambdaStack\_messageRetentionSeconds) | The number of seconds Amazon SQS retains a message. | `number` | `86400` | no |
+| <a name="input_SqsStack_receiveWaitTimeSeconds "></a> [SqsStack_receiveWaitTimeSeconds](#input\_LambdaStack\_receiveWaitTimeSeconds) | The time for which a ReceiveMessage call will wait for a message to arrive (long polling) before returning. | `number` | `10` | no |
+| <a name="input_SqsStack_redriveMaxCount "></a> [SqsStack_redriveMaxCount](#input\_LambdaStack\_redriveMaxCount) | he JSON redrive policy for the SQS queue. Accepts two key/val pairs: deadLetterTargetArn and maxReceiveCount | `number` | `5` | no |
+| <a name="input_SqsStack_securityGroupIds"></a> [SqsStack_securityGroupIds](#input\_SqsStack\_securityGroupIds) | Give the security group id to the lambda | `string` | `"n/a"` | no |
+| <a name="input_SqsStack_subnetIds"></a> [SqsStack_subnetIds](#input\_SqsStack\_subnetIds) | Give the subnet Ids to the lambda | `string` | `"n/a"` | no |
+| <a name="input_SqsStack_kmsMasterKeyId"></a> [SqsStack_kmsMasterKeyId](#input\_SqsStack\_kmsMasterKeyId) | Name to assign the name of SQS KMS MASTER KEY ID. | `string` | `"alias/aws/sqs"` | no |
+| <a name="input_SqsStack_kmsDataKeyReusePeriodSeconds"></a> [SqsStack_kmsDataKeyReusePeriodSeconds](#input\_SqsStack\_kmsDataKeyReusePeriodSeconds) | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. | `number` | `300` | no |
