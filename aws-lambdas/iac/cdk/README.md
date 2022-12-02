@@ -46,7 +46,7 @@ This module gives us several commands for the aws lambda function.
 ## Stacks
 
 | Name | Version |
-|------|--------|---------|
+|------|--------|
 | <a name="LambdaStack"></a> [LambdaStack](#LambdaStack) | 0.0.1 |
 | <a name="SqsStack"></a> [sqs](#SqsStack) | 0.0.1 |
 | <a name="SnsStack"></a> [sns](#SnsStack) | 0.0.1 |
