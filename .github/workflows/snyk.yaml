@@ -38,6 +38,5 @@ jobs:
        - uses: actions/checkout@master
        - name: snyk cdktf monitor
          run: snyk test --report aws-lambdas/iac/cdk
-         continue-on-error: true
          env:
            SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}
