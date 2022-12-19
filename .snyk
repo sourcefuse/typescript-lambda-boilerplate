@@ -1,0 +1,9 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-CC-TF-133:
+    - aws-lambdas/iac/terraform/lambda/main.tf > resource > aws_lambda_function[this] > tracing_config:
+        reason: X-ray tracing is disabled for Lambda function
+        expires: 2024-04-01T00:00:00.000Z
+        created: 2022-11-28T18:20:39.256Z
