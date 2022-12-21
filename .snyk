@@ -8,13 +8,11 @@ ignore:
         expires: 2024-04-01T00:00:00.000Z
         created: 2022-11-28T18:20:39.256Z
 
-ignore:
   'snyk:lic:npm:cdktf:MPL-2.0':
     - '*':
         reason: None Given
         expires: 2024-11-07T11:38:28.614Z
 
-ignore:
   'snyk:lic:npm:cdktf:provider-aws:MPL-2.0':
     - '*':
         reason: None Given
