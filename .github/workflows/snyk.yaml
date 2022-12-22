@@ -12,10 +12,7 @@ on:
 
 jobs:
   security:
-    runs-on:
-      - self-hosted
-      - refarch
-      - ubuntu-latest
+    runs-on: ubuntu-latest
     name: snyk
     steps:
        - name: checkout
