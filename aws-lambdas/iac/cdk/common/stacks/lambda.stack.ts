@@ -1,7 +1,7 @@
 import {AssetType, TerraformAsset, TerraformOutput, TerraformStack} from 'cdktf';
 import {Construct} from 'constructs';
 import * as aws from '@cdktf/provider-aws';
-import {lambdaAction, lambdaPolicyArn, lambdaPrincipal, lambdaRolePolicy} from '../constants';
+import {lambdaAction, lambdaRolePolicy, lambdaPrincipal, iamRolePolicy} from '../constants';
 import {LambdaFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
 import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambdafunction';
@@ -51,12 +51,16 @@ export class LambdaStack extends TerraformStack {
     // Create Lambda role
     const role = new aws.iam.IamRole(this, 'lambda-exec', {
       name: `lambda-role-${name}-${pet.id}`,
-      assumeRolePolicy: JSON.stringify(lambdaRolePolicy),
+      assumeRolePolicy: JSON.stringify(iamRolePolicy),
     });
+
+    const lambdaRole = new aws.iam.IamPolicy(this,"lambda-policy",{
+      policy: JSON.stringify(lambdaRolePolicy)
+  })
 
     // Add execution role for lambda to write to CloudWatch logs
     new aws.iam.IamRolePolicyAttachment(this, 'lambda-managed-policy', {
-      policyArn: lambdaPolicyArn,
+      policyArn: lambdaRole.arn,
       role: role.name,
     });
 

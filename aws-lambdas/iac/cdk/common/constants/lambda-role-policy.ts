@@ -1,20 +1,22 @@
-export  const lambdaRolePolicy = {
-  'Version': '2012-10-17',
-  'Statement': [
+export const lambdaRolePolicy = {
+  "Version": "2012-10-17",
+  "Statement": [
     {
-      'Action': 'sts:AssumeRole',
-      'Principal': {
-        'Service': 'lambda.amazonaws.com',
-      },
-      'Effect': 'Allow',
-      'Sid': '',
-    },
-  ],
-};
-
-
-export const lambdaPolicyArn = '"arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"';
-
+       "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "ec2:CreateNetworkInterface",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DeleteNetworkInterface",
+          "ec2:AssignPrivateIpAddresses",
+          "ec2:UnassignPrivateIpAddresses"
+        ],
+        "Resource": "*"
+    }
+  ]
+}
 
 export const lambdaAction = 'lambda:InvokeFunction';
 

@@ -7,7 +7,9 @@ See the [README](../../../README.md) in the repo's root for more information.
 
 | Name | Version |
 |------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.8 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | 4.20.1 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | 3.3.2 |
 
 ## Providers
 
@@ -29,7 +31,10 @@ See the [README](../../../README.md) in the repo's root for more information.
 
 | Name | Type |
 |------|------|
+| [aws_iam_policy.Policy-for-all-resources](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.sqs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_policy) | resource |
+| [aws_iam_policy_attachment.lambda_policy_role](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_policy_attachment) | resource |
+| [aws_iam_role.lambda_role](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.lambda_sqs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lambda_event_source_mapping.event_source_mapping](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/lambda_event_source_mapping) | resource |
 | [aws_lambda_permission.with_sns](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/lambda_permission) | resource |
@@ -37,7 +42,7 @@ See the [README](../../../README.md) in the repo's root for more information.
 | [aws_sns_topic_subscription.topic_lambda](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sns_topic_subscription) | resource |
 | [aws_sqs_queue.results_updates](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 | [aws_sqs_queue.results_updates_dl_queue](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
-| [random_id.this](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [random_pet.this](https://registry.terraform.io/providers/hashicorp/random/3.3.2/docs/resources/pet) | resource |
 | [aws_iam_policy_document.sqs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
@@ -45,13 +50,16 @@ See the [README](../../../README.md) in the repo's root for more information.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_environment"></a> [environment](#input\_environment) | Name of the environment resources will be created in. | `string` | `"dev"` | no |
+| <a name="input_kms_data_key_reuse_period_seconds"></a> [kms\_data\_key\_reuse\_period\_seconds](#input\_kms\_data\_key\_reuse\_period\_seconds) | n/a | `number` | `300` | no |
 | <a name="input_kms_key_admin_arns"></a> [kms\_key\_admin\_arns](#input\_kms\_key\_admin\_arns) | Additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE. | `list(string)` | `[]` | no |
+| <a name="input_kms_master_key_id_override"></a> [kms\_master\_key\_id\_override](#input\_kms\_master\_key\_id\_override) | KMS key id for sqs encryption | `string` | `null` | no |
 | <a name="input_lambda_event_source_mapping_batch_size"></a> [lambda\_event\_source\_mapping\_batch\_size](#input\_lambda\_event\_source\_mapping\_batch\_size) | The largest number of records that Lambda will retrieve from your event source at the time of invocation. Defaults to 100 for DynamoDB, Kinesis, MQ and MSK, 10 for SQS. | `number` | `10` | no |
 | <a name="input_lambda_event_source_mapping_enabled"></a> [lambda\_event\_source\_mapping\_enabled](#input\_lambda\_event\_source\_mapping\_enabled) | Determines if the mapping will be enabled on creation. | `bool` | `true` | no |
 | <a name="input_lambda_runtime"></a> [lambda\_runtime](#input\_lambda\_runtime) | Lambda runtime | `string` | `"nodejs16.x"` | no |
 | <a name="input_lambda_sqs_policy_name"></a> [lambda\_sqs\_policy\_name](#input\_lambda\_sqs\_policy\_name) | Name to assign the Lambda SQS Policy | `string` | `"lambda-sqs"` | no |
 | <a name="input_profile"></a> [profile](#input\_profile) | Name of the AWS Profile configured on your workstation. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | Name of the region resources will be created in. | `string` | `"us-east-1"` | no |
+| <a name="input_sns_kms_master_key_id"></a> [sns\_kms\_master\_key\_id](#input\_sns\_kms\_master\_key\_id) | The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK | `string` | `null` | no |
 | <a name="input_sns_topic_name"></a> [sns\_topic\_name](#input\_sns\_topic\_name) | Name to assign the SNS Topic. | `string` | `"sns-with-lambda"` | no |
 | <a name="input_sqs_results_updates"></a> [sqs\_results\_updates](#input\_sqs\_results\_updates) | Name to assign the SQS Results Updates Queue. | `string` | `"results-updates-queue"` | no |
 | <a name="input_sqs_results_updates_dlq"></a> [sqs\_results\_updates\_dlq](#input\_sqs\_results\_updates\_dlq) | Name to assign the SQS Results Updates Dead Letter Queue. | `string` | `"results-updates-dl-queue"` | no |
