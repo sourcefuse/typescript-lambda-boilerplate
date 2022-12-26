@@ -32,7 +32,7 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "3.223.0",
+    "@aws-sdk/client-secrets-manager": "3.224.0",
     "lambda-log": "^3.1.0"
   }
 }
