@@ -1,3 +1,4 @@
+[[Known Vulnerabilities](https://snyk.io/test/github/sourcefuse/typescript-lambda-boilerplate/badge.svg?targetFile=aws-lambdas/iac/cdk/package.json)](https://snyk.io/test/github/sourcefuse/typescript-lambda-boilerplate?targetFile=aws-lambdas/iac/cdk/package.json)
 # Typescript Lambda Boilerplate
 
 | :exclamation: **Contributors:** See [Development](#dev)  |  
