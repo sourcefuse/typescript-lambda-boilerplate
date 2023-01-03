@@ -6,17 +6,24 @@ import {
   response,
   ResponseObject,
 } from '@loopback/rest';
+import {STATUS_CODE} from '@sourceloop/core';
+import {authorize} from 'loopback4-authorization';
+import {
+  AuthCacheSourceName,
+  AuthDbSourceName,
+} from '@sourceloop/authentication-service';
+import {PgdbDataSource, RedisDataSource} from '../datasources';
 
 /**
  * OpenAPI response for ping()
  */
 const PING_RESPONSE: ResponseObject = {
-  description: 'Ping Response',
+  description: 'Ping DB Response',
   content: {
     'application/json': {
       schema: {
         type: 'object',
-        title: 'PingResponse',
+        title: 'PingDbResponse',
         properties: {
           greeting: {type: 'string'},
           date: {type: 'string'},
@@ -38,12 +45,24 @@ const PING_RESPONSE: ResponseObject = {
  * A simple controller to bounce back http requests
  */
 export class PingController {
-  constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
+  constructor(
+    @inject(RestBindings.Http.REQUEST) private req: Request,
+    @inject(`datasources.${AuthDbSourceName}`)
+    private readonly dataSource: PgdbDataSource,
+    @inject(`datasources.${AuthCacheSourceName}`)
+    private readonly redisDataSource: RedisDataSource,
+  ) {}
 
   // Map to `GET /ping`
-  @get('/ping')
-  @response(200, PING_RESPONSE)
-  ping(): object {
+  @authorize({permissions: ['*']})
+  @get('/ping-db', {
+    responses: {
+      [STATUS_CODE.OK]: PING_RESPONSE,
+    },
+  })
+  async pingDB() {
+    await this.dataSource.ping();
+    await this.redisDataSource.ping();
     // Reply with a greeting, the current time, the url, and request headers
     return {
       greeting: 'Hello from LoopBack',
