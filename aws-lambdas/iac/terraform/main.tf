@@ -288,20 +288,20 @@ resource "aws_iam_policy_attachment" "lambda_policy_role" {
 ################################################################################
 
 resource "aws_cloudwatch_event_rule" "lambda_cron" {
-  name = "${local.cron_lambda_name}-cron"
+  name                = "${local.cron_lambda_name}-cron"
   schedule_expression = local.cron_lambda_schedule
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_invoke" {
   function_name = module.cron.lambda_function_name
-  statement_id = "CloudWatchInvoke"
-  action = "lambda:InvokeFunction"
+  statement_id  = "CloudWatchInvoke"
+  action        = "lambda:InvokeFunction"
 
   source_arn = aws_cloudwatch_event_rule.lambda_cron.arn
-  principal = "events.amazonaws.com"
+  principal  = "events.amazonaws.com"
 }
 
 resource "aws_cloudwatch_event_target" "invoke_lambda" {
   rule = aws_cloudwatch_event_rule.lambda_cron.name
-  arn =  module.cron.lambda_arn
+  arn  = module.cron.lambda_arn
 }
