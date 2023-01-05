@@ -100,6 +100,26 @@ module "sqs" {
   tags = module.tags.extra_tags
 }
 
+module "cron" {
+  source         = "./lambda"
+  environment    = var.environment
+  region         = var.region
+  lambda_name    = local.cron_lambda_name
+  lambda_runtime = var.lambda_runtime
+  lambda_handler = "sqs.handler"
+  lambda_memory  = 128
+  lambda_timeout = 120
+
+  lambda_function_archive_source_dir  = "${path.root}/dist/src"
+  lambda_function_archive_output_path = "${path.root}/dist/function.zip"
+  lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
+  lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
+
+  kms_key_admin_arns = var.kms_key_admin_arns
+
+  tags = module.tags.extra_tags
+}
+
 ################################################################################
 ## sns
 ################################################################################
@@ -260,4 +280,28 @@ resource "aws_iam_policy_attachment" "lambda_policy_role" {
   name       = "lambda_attachment"
   roles      = [aws_iam_role.lambda_role.name]
   policy_arn = aws_iam_policy.Policy-for-all-resources.arn
+}
+
+
+################################################################################
+## cron
+################################################################################
+
+resource "aws_cloudwatch_event_rule" "lambda_cron" {
+  name = "${local.cron_lambda_name}-cron"
+  schedule_expression = local.cron_lambda_schedule
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_invoke" {
+  function_name = module.cron.lambda_function_name
+  statement_id = "CloudWatchInvoke"
+  action = "lambda:InvokeFunction"
+
+  source_arn = aws_cloudwatch_event_rule.lambda_cron.arn
+  principal = "events.amazonaws.com"
+}
+
+resource "aws_cloudwatch_event_target" "invoke_lambda" {
+  rule = aws_cloudwatch_event_rule.lambda_cron.name
+  arn =  module.cron.lambda_arn
 }
