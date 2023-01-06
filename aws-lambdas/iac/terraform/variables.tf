@@ -98,3 +98,13 @@ variable "kms_data_key_reuse_period_seconds" {
   type        = number
   default     = 300
 }
+
+################################################################################
+## cron
+################################################################################
+
+variable "cron_lambda_schedule" {
+  description = "The cron expression for the event bridge rule"
+  type        = string
+  default     = "rate(1 day)"
+}
