@@ -54,10 +54,10 @@ resource "aws_lambda_function" "this" {
   ]
 
   environment {
-    variables = {
-      ENVIRONMENT_NAME = var.environment
-      REGION           = var.region
-    }
+    variables = merge( tomap({
+      "ENVIRONMENT_NAME" = var.environment,
+      "REGION"           = var.region
+    }), var.custom_vars)
   }
 
   dynamic "vpc_config" {

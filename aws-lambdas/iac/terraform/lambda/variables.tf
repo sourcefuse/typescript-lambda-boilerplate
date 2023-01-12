@@ -82,6 +82,12 @@ variable "lambda_name" {
   default     = "lambda-boilerplate"
 }
 
+variable "custom_vars" {
+  description = "Custom environment variables for the lambda function"
+  type        = map
+  default     = {}
+}
+
 variable "vpc_config" {
   description = "Optional VPC Configurations params"
   type        = map(any)
