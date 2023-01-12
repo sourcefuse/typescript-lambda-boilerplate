@@ -24,9 +24,13 @@ See the [README](../../../README.md) in the repo's root for more information.
 |------|--------|---------|
 | <a name="module_boilerplate"></a> [boilerplate](#module\_boilerplate) | ./lambda | n/a |
 | <a name="module_cron"></a> [cron](#module\_cron) | ./lambda | n/a |
+| <a name="module_ec-subnets"></a> [ec-subnets](#module\_ec-subnets) | cloudposse/dynamic-subnets/aws | 2.0.4 |
+| <a name="module_elasticache-redis"></a> [elasticache-redis](#module\_elasticache-redis) | ./lambda | n/a |
+| <a name="module_redis"></a> [redis](#module\_redis) | cloudposse/elasticache-redis/aws | 0.49.0 |
 | <a name="module_sns"></a> [sns](#module\_sns) | ./lambda | n/a |
 | <a name="module_sqs"></a> [sqs](#module\_sqs) | ./lambda | n/a |
 | <a name="module_tags"></a> [tags](#module\_tags) | git::https://github.com/sourcefuse/terraform-aws-refarch-tags | 1.0.1 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | cloudposse/vpc/aws | 2.0.0 |
 
 ## Resources
 
@@ -54,6 +58,9 @@ See the [README](../../../README.md) in the repo's root for more information.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cron_lambda_schedule"></a> [cron\_lambda\_schedule](#input\_cron\_lambda\_schedule) | The cron expression for the event bridge rule | `string` | `"rate(1 day)"` | no |
+| <a name="input_custom_ec_vpc"></a> [custom\_ec\_vpc](#input\_custom\_ec\_vpc) | The pre created VPC to be used for elasticache.<br>Expects a map of the form:<br>{<br>  subnet\_ids=[list of subnets]<br>  security\_group\_ids=[list of security groups]<br>} <br>If this value is set then no elasticache cluster will<br>be created. The user will need to set custom\_redis\_endpoint too.<br>Leave this unchanged to create a new VPC and elasticache redis cluster. | `map(any)` | `{}` | no |
+| <a name="input_custom_redis_endpoint"></a> [custom\_redis\_endpoint](#input\_custom\_redis\_endpoint) | Provide a custom redis endpoint | `string` | `null` | no |
+| <a name="input_ec_availability_zones"></a> [ec\_availability\_zones](#input\_ec\_availability\_zones) | Availability zones for elasticache subnets | `list(string)` | <pre>[<br>  "us-east-1a",<br>  "us-east-1b"<br>]</pre> | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Name of the environment resources will be created in. | `string` | `"dev"` | no |
 | <a name="input_kms_data_key_reuse_period_seconds"></a> [kms\_data\_key\_reuse\_period\_seconds](#input\_kms\_data\_key\_reuse\_period\_seconds) | n/a | `number` | `300` | no |
 | <a name="input_kms_key_admin_arns"></a> [kms\_key\_admin\_arns](#input\_kms\_key\_admin\_arns) | Additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE. | `list(string)` | `[]` | no |

@@ -358,7 +358,7 @@ module "ec-subnets" {
   availability_zones   = var.ec_availability_zones
   vpc_id               = module.vpc[0].vpc_id
   igw_id               = module.vpc[0].igw_id
-  ipv4_cidr_block           = module.vpc[0].vpc_cidr_block
+  ipv4_cidr_block      = module.vpc[0].vpc_cidr_block
   nat_gateway_enabled  = true
   nat_instance_enabled = false
 

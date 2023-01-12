@@ -126,7 +126,7 @@ variable "custom_ec_vpc" {
     Leave this unchanged to create a new VPC and elasticache redis cluster.
     EOT
   type        = map(any)
-  default     = {}
+  default     = null
 }
 
 variable "custom_redis_endpoint" {

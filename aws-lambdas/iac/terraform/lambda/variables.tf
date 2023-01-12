@@ -84,7 +84,7 @@ variable "lambda_name" {
 
 variable "custom_vars" {
   description = "Custom environment variables for the lambda function"
-  type        = map
+  type        = map(any)
   default     = {}
 }
 
