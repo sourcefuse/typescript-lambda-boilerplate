@@ -41,16 +41,16 @@ module "lambda" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.8 |
-| <a name="requirement_archive"></a> [archive](#requirement\_archive) | 2.2.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | 4.20.1 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
+| <a name="requirement_archive"></a> [archive](#requirement\_archive) | ~> 2.2 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.20 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.2.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.20.1 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | ~> 2.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.20 |
 
 ## Modules
 
@@ -60,21 +60,21 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [aws_cloudwatch_log_group.lambda_cw_log_group](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/cloudwatch_log_group) | resource |
-| [aws_iam_policy.lambda_cw_logs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_policy) | resource |
-| [aws_iam_policy_attachment.lambda_cw_logs_attachment](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_policy_attachment) | resource |
-| [aws_iam_role.lambda_role](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_role) | resource |
-| [aws_iam_role_policy_attachment.lambda_vpc_access_execution](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/iam_role_policy_attachment) | resource |
-| [aws_kms_alias.cw](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/kms_alias) | resource |
-| [aws_kms_key.cw](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/kms_key) | resource |
-| [aws_lambda_function.this](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/lambda_function) | resource |
-| [aws_lambda_layer_version.dependency_layer](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/lambda_layer_version) | resource |
-| [archive_file.function_archive](https://registry.terraform.io/providers/hashicorp/archive/2.2.0/docs/data-sources/file) | data source |
-| [archive_file.layer_archive](https://registry.terraform.io/providers/hashicorp/archive/2.2.0/docs/data-sources/file) | data source |
-| [aws_caller_identity.current_caller](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/caller_identity) | data source |
-| [aws_iam_policy_document.cw_kms_key](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.lambda_assume_role_document](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.lambda_cw_logs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/iam_policy_document) | data source |
+| [aws_cloudwatch_log_group.lambda_cw_log_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_iam_policy.lambda_cw_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy_attachment.lambda_cw_logs_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
+| [aws_iam_role.lambda_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy_attachment.lambda_vpc_access_execution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_kms_alias.cw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
+| [aws_kms_key.cw](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
+| [aws_lambda_function.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
+| [aws_lambda_layer_version.dependency_layer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_layer_version) | resource |
+| [archive_file.function_archive](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
+| [archive_file.layer_archive](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
+| [aws_caller_identity.current_caller](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.cw_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.lambda_assume_role_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.lambda_cw_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
 
