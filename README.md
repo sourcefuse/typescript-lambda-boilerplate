@@ -1,4 +1,5 @@
-![Known Vulnerabilities](https://snyk.io/test/github/sourcefuse/typescript-lambda-boilerplate/badge.svg?targetFile=aws-lambdas/iac/cdk/package.json)  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_typescript-lambda-boilerplate&metric=alert_status&token=e3f829a84ea5000631ca5239aa6fa1c8853e539f)](https://sonarcloud.io/summary/new_code?id=sourcefuse_typescript-lambda-boilerplate)
+![Known Vulnerabilities](https://snyk.io/test/github/sourcefuse/typescript-lambda-boilerplate/badge.svg?targetFile=aws-lambdas/iac/cdk/package.json)  
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=sourcefuse_typescript-lambda-boilerplate&token=e3f829a84ea5000631ca5239aa6fa1c8853e539f)](https://sonarcloud.io/summary/new_code?id=sourcefuse_typescript-lambda-boilerplate)
 
 # Typescript Lambda Boilerplate
 
