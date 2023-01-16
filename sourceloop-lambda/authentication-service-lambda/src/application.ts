@@ -1,14 +1,17 @@
-import * as dotenv from 'dotenv';
-import * as dotenvExt from 'dotenv-extended';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig} from '@loopback/core';
-import {RestExplorerBindings, RestExplorerComponent} from '@loopback/rest-explorer';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';
+import {
+  RestExplorerBindings,
+  RestExplorerComponent,
+} from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
+import {AuthenticationServiceComponent} from '@sourceloop/authentication-service';
+import * as dotenv from 'dotenv';
+import * as dotenvExt from 'dotenv-extended';
 import path from 'path';
 import {MySequence} from './sequence';
-import {AuthenticationServiceComponent} from '@sourceloop/authentication-service';
 
 export {ApplicationConfig};
 

@@ -1,21 +1,21 @@
 import * as aws from '@cdktf/provider-aws';
-import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambda-function';
+import {LambdaFunctionVpcConfig} from '@cdktf/provider-aws/lib/lambda-function';
 import * as random from '@cdktf/provider-random';
-
 import {
   AssetType,
   TerraformAsset,
   TerraformOutput,
-  TerraformStack
+  TerraformStack,
 } from 'cdktf';
-import { Construct } from 'constructs';
+import {Construct} from 'constructs';
 import {
   iamRolePolicy,
   lambdaAction,
   lambdaPrincipal,
-  lambdaRolePolicy
+  lambdaRolePolicy,
 } from '../constants';
-import { LambdaFunctionConfig } from '../interfaces';
+import {LambdaFunctionConfig} from '../interfaces';
+
 export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
@@ -25,9 +25,11 @@ export class LambdaStack extends TerraformStack {
       accessKey: process.env.AWS_ACCESS_KEY_ID,
       secretKey: process.env.AWS_SECRET_ACCESS_KEY,
       profile: process.env.AWS_PROFILE,
-      assumeRole: {
-        roleArn: process.env.AWS_ROLE_ARN,
-      },
+      assumeRole: [
+        {
+          roleArn: process.env.AWS_ROLE_ARN,
+        },
+      ],
     });
     new random.provider.RandomProvider(this, 'random');
 
@@ -92,9 +94,23 @@ export class LambdaStack extends TerraformStack {
         handler: config.handler,
         runtime: config.runtime,
         role: role.arn,
-        layers,
+        memorySize: config.memorySize,
+        layers: layers.length ? layers : undefined,
+        environment: {variables: config.envVars},
+        timeout: config?.timeout,
       },
     );
+
+    if (config?.isMigration) {
+      new aws.dataAwsLambdaInvocation.DataAwsLambdaInvocation(
+        this,
+        'invocation',
+        {
+          functionName: lambdaFunc.functionName,
+          input: '',
+        },
+      );
+    }
 
     //Putting VPC config to lambda function if subnetIds and securityGroupIds exist
 

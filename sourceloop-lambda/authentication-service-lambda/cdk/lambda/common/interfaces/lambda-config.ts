@@ -1,12 +1,18 @@
-import { XOR } from 'ts-essentials';
+import {XOR} from 'ts-essentials';
 
 type LambdaFunctionBaseConfig = {
   path: string;
   handler: string;
   runtime: string;
   version: string;
+  memorySize: number;
+  envVars?: {
+    [x: string]: string;
+  };
   layerPath?: string;
   isApiRequired?: boolean;
+  isMigration?: boolean;
+  timeout?: number;
 };
 
 export type LambdaFunctionConfig = XOR<

@@ -5,7 +5,7 @@
 
 ## <a id="prereqs"></a> Pre-Requisites
 - [node.js](https://nodejs.dev/download/)
-- [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
+- [npm](https://docs.npmjs.com/cli/v6/commands/npm-install)
 - [terraform](https://learn.hashicorp.com/terraform/getting-started/install#installing-terraform)
 - [terraform-docs](https://github.com/segmentio/terraform-docs)
 - [pre-commit](https://pre-commit.com/#install)

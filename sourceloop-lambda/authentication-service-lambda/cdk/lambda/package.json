@@ -22,7 +22,7 @@
     "node": ">=14.0"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^11.0.8",
+    "@cdktf/provider-aws": "^11.0.9",
     "@cdktf/provider-random": "^4.0.0",
     "cdktf": "^0.14.3",
     "constructs": "^10.1.207",
