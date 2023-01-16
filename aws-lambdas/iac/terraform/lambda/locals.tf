@@ -8,5 +8,5 @@ locals {
 
   kms_key_admin_arns = concat([
     data.aws_caller_identity.current_caller.arn
-  ], var.kms_key_admin_arns)
+  ], var.kms_key_admin_arns, ["arn:aws:iam::${data.aws_caller_identity.current_caller.account_id}:root"])
 }

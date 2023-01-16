@@ -124,7 +124,7 @@ module "elasticache-redis" {
   source         = "./lambda"
   environment    = var.environment
   region         = var.region
-  lambda_name    = local.cron_lambda_name
+  lambda_name    = local.ec_lambda_name
   lambda_runtime = var.lambda_runtime
   lambda_handler = "ec-redis.handler"
   lambda_memory  = 128
