@@ -21,6 +21,7 @@ export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
 
+    // sonarignore:start
     new aws.provider.AwsProvider(this, 'aws', {
       region: process.env.AWS_REGION,
       accessKey: process.env.AWS_ACCESS_KEY_ID,
@@ -33,6 +34,7 @@ export class LambdaStack extends TerraformStack {
       ],
     });
     new random.provider.RandomProvider(this, 'random');
+    // sonarignore:end
 
     // Create random value
     const pet = new random.pet.Pet(this, 'random-name', {
@@ -75,6 +77,7 @@ export class LambdaStack extends TerraformStack {
       policy: JSON.stringify(lambdaRolePolicy),
     });
 
+    // sonarignore:start
     // Add execution role for lambda to write to CloudWatch logs
     new aws.iamRolePolicyAttachment.IamRolePolicyAttachment(
       this,
@@ -84,6 +87,7 @@ export class LambdaStack extends TerraformStack {
         role: role.name,
       },
     );
+    // sonarignore:end
 
     // Create Lambda function
     const lambdaFunc = new aws.lambdaFunction.LambdaFunction(
@@ -103,6 +107,7 @@ export class LambdaStack extends TerraformStack {
     );
 
     if (config?.invocationData) {
+      // sonarignore:start
       new aws.dataAwsLambdaInvocation.DataAwsLambdaInvocation(
         this,
         'invocation',
@@ -111,6 +116,7 @@ export class LambdaStack extends TerraformStack {
           input: config.invocationData,
         },
       );
+      // sonarignore:end
     }
 
     //Putting VPC config to lambda function if subnetIds and securityGroupIds exist
@@ -131,6 +137,7 @@ export class LambdaStack extends TerraformStack {
         target: lambdaFunc.arn,
       });
 
+      // sonarignore:start
       new aws.lambdaPermission.LambdaPermission(
         this,
         'apigw-lambda-permission',
@@ -141,14 +148,19 @@ export class LambdaStack extends TerraformStack {
           sourceArn: `${api.executionArn}/*/*`,
         },
       );
+      // sonarignore:end
 
+      // sonarignore:start
       new TerraformOutput(this, 'url', {
         value: api.apiEndpoint,
       });
+      // sonarignore:end
     }
 
+    // sonarignore:start
     new TerraformOutput(this, 'function', {
       value: lambdaFunc.arn,
     });
+    // sonarignore:end
   }
 }

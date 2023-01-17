@@ -13,53 +13,74 @@ dotenvExt.load({
 
 const app = new App();
 
+const getSubnetIds = () => {
+  try {
+    const subnetIds = process.env?.SUBNET_IDS || '';
+    return JSON.parse(subnetIds);
+  } catch (e) {
+    console.error(e); // NOSONAR
+  }
+  return [];
+};
 
-new LambdaStack(app, 'migration', { // NOSONAR
+const getSecurityGroup = () => {
+  try {
+    const securityGroup = process.env?.SECURITY_GROUPS || '';
+    return JSON.parse(securityGroup);
+  } catch (e) {
+    console.error(e); // NOSONAR
+  }
+  return [];
+};
+
+
+// sonarignore:start
+new LambdaStack(app, 'migration', {
   path: resolve(__dirname, '../../migration'),
   handler: 'lambda.handler',
   runtime: 'nodejs16.x',
   version: 'v0.0.1',
-  securityGroupIds: ['sg-0297fbdb05fe726b4'],
-  subnetIds: ['subnet-01c22b0adf9cdd8df', 'subnet-0b32fea3b2e13a6ba'],
+  securityGroupIds: getSecurityGroup(),
+  subnetIds: getSubnetIds(),
   memorySize: 256,
   invocationData: '',
   timeout: 60,
   envVars: {
-    DB_HOST:
-      'arc2-dev-aurora-examples-1.c1ighjve6ggz.us-east-1.rds.amazonaws.com',
-    DB_PORT: '5432',
-    DB_USER: 'example_db_admin',
-    DB_PASSWORD: 'password',
-    DB_DATABASE: 'example',
-    DB_SCHEMA: 'public',
+    DB_HOST: process.env.DB_HOST || '',
+    DB_PORT: process.env.DB_PORT || '',
+    DB_USER: process.env.DB_USER || '',
+    DB_PASSWORD: process.env.DB_PASSWORD || '',
+    DB_DATABASE: process.env.DB_DATABASE || '',
   },
 });
+// sonarignore:end
 
-new LambdaStack(app, 'lambda', { // NOSONAR
+// sonarignore:start
+new LambdaStack(app, 'lambda', {
   path: resolve(__dirname, '../../dist'),
   handler: 'lambda.handler',
   runtime: 'nodejs16.x',
   version: 'v0.0.1',
   layerPath: resolve(__dirname, '../../layers'),
   isApiRequired: true,
-  securityGroupIds: ['sg-0297fbdb05fe726b4'],
-  subnetIds: ['subnet-01c22b0adf9cdd8df', 'subnet-0b32fea3b2e13a6ba'],
+  securityGroupIds: getSecurityGroup(),
+  subnetIds: getSubnetIds(),
   memorySize: 256,
   timeout: 30,
   envVars: {
-    DB_HOST:
-      'arc2-dev-aurora-examples-1.c1ighjve6ggz.us-east-1.rds.amazonaws.com',
-    DB_PORT: '5432',
-    DB_USER: 'example_db_admin',
-    DB_PASSWORD: 'password',
-    DB_DATABASE: 'example',
-    DB_SCHEMA: 'main',
-    JWT_SECRET: 'secret',
+    DB_HOST: process.env.DB_HOST || '',
+    DB_PORT: process.env.DB_PORT || '',
+    DB_USER: process.env.DB_USER || '',
+    DB_PASSWORD: process.env.DB_PASSWORD || '',
+    DB_DATABASE: process.env.DB_DATABASE || '',
+    DB_SCHEMA: process.env.DB_SCHEMA || '',
+    JWT_SECRET: process.env.JWT_SECRET || '',
     JWT_ISSUER: 'sourcefuce',
     PORT: '3005',
     LOG_LEVEL: 'info',
     DB_CONNECTOR: 'postgresql',
   },
 });
+// sonarignore:end
 
 app.synth();

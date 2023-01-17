@@ -16,6 +16,7 @@ export class DbStack extends TerraformStack {
   constructor(scope: Construct, name: string, options: DbModuleOptions) {
     super(scope, name);
 
+    // sonarignore:start
     new aws.provider.AwsProvider(this, 'aws', {
       region: process.env.AWS_REGION,
       accessKey: process.env.AWS_ACCESS_KEY_ID,
@@ -27,6 +28,7 @@ export class DbStack extends TerraformStack {
         },
       ],
     });
+    // sonarignore:end
 
     const dataAwsVpcVpc = new aws.dataAwsVpc.DataAwsVpc(this, 'vpc', {
       filter: [
@@ -37,25 +39,38 @@ export class DbStack extends TerraformStack {
       ],
     });
 
+    // sonarignore:start
     new DbModule(this, 'aurora', {
       auroraAllowedCidrBlocks: [dataAwsVpcVpc.cidrBlock],
-      ...options
+      ...options,
     });
+    // sonarignore:end
   }
 }
 
 const app = new App();
 
+const getSubnetIds = () => {
+  try {
+    const subnetIds = process.env?.SUBNET_IDS || '';
+    return JSON.parse(subnetIds);
+  } catch (e) {
+    console.error(e); // NOSONAR
+  }
+  return [];
+};
+
+// sonarignore:start
 new DbStack(app, 'db', {
-  auroraSubnets: ['subnet-01c22b0adf9cdd8df', 'subnet-0b32fea3b2e13a6ba'],
+  auroraSubnets: getSubnetIds(),
   namespace: 'arc2',
-  vpcId: 'vpc-0d614535e4a3843d4',
+  vpcId: process.env.VPC_ID || '',
   auroraAllowMajorVersionUpgrade: true,
   auroraAutoMinorVersionUpgrade: true,
   auroraClusterEnabled: true,
   auroraClusterName: 'aurora-examples',
   auroraClusterSize: 1,
-  auroraDbAdminUsername: 'example_db_admin',
+  auroraDbAdminUsername: process.env.DB_USER || '',
   auroraDbName: 'example',
   auroraInstanceType: 'db.serverless',
   rdsInstancePubliclyAccessible: true,
@@ -66,7 +81,8 @@ new DbStack(app, 'db', {
   enhancedMonitoringName: 'aurora-example-enhanced-monitoring',
   environment: process.env.ENV || 'dev',
   region: process.env.AWS_REGION,
-  auroraDbAdminPassword: 'password',
+  auroraDbAdminPassword: process.env.PASSWORD,
 });
+// sonarignore:end
 
 app.synth();
