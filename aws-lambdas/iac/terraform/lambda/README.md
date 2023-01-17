@@ -39,14 +39,18 @@ module "lambda" {
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3 |
+| <a name="requirement_archive"></a> [archive](#requirement\_archive) | ~> 2.2 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.20 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | ~> 2.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.20 |
 
 ## Modules
 
