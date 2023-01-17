@@ -16,6 +16,7 @@ import {
 } from '../constants';
 import { LambdaFunctionConfig } from '../interfaces';
 
+const defaultLambdaMemory = 128;
 export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
@@ -94,20 +95,20 @@ export class LambdaStack extends TerraformStack {
         handler: config.handler,
         runtime: config.runtime,
         role: role.arn,
-        memorySize: config?.memorySize || 128,
+        memorySize: config?.memorySize || defaultLambdaMemory,
         layers: layers.length ? layers : undefined,
         environment: {variables: config.envVars},
         timeout: config?.timeout,
       },
     );
 
-    if (config?.isMigration) {
+    if (config?.invocationData) {
       new aws.dataAwsLambdaInvocation.DataAwsLambdaInvocation(
         this,
         'invocation',
         {
           functionName: lambdaFunc.functionName,
-          input: '',
+          input: config.invocationData,
         },
       );
     }

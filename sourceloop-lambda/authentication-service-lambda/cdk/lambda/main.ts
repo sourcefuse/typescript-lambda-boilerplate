@@ -13,8 +13,8 @@ dotenvExt.load({
 
 const app = new App();
 
-// NOSONAR
-new LambdaStack(app, 'migration', {
+
+new LambdaStack(app, 'migration', { // NOSONAR
   path: resolve(__dirname, '../../migration'),
   handler: 'lambda.handler',
   runtime: 'nodejs16.x',
@@ -22,7 +22,7 @@ new LambdaStack(app, 'migration', {
   securityGroupIds: ['sg-0297fbdb05fe726b4'],
   subnetIds: ['subnet-01c22b0adf9cdd8df', 'subnet-0b32fea3b2e13a6ba'],
   memorySize: 256,
-  isMigration: true,
+  invocationData: '',
   timeout: 60,
   envVars: {
     DB_HOST:
@@ -35,7 +35,7 @@ new LambdaStack(app, 'migration', {
   },
 });
 
-new LambdaStack(app, 'lambda', {
+new LambdaStack(app, 'lambda', { // NOSONAR
   path: resolve(__dirname, '../../dist'),
   handler: 'lambda.handler',
   runtime: 'nodejs16.x',

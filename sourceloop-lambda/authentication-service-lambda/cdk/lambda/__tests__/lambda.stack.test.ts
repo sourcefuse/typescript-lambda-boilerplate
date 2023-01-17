@@ -100,13 +100,13 @@ describe('My CDKTF Application with config change', () => {
         subnet_ids: subnetIds,
       },
     });
-    expect(stack).toHaveResource(IamRole);
+    expect(stack).toHaveResource(Apigatewayv2Api);
     expect(stack).toHaveResource(LambdaLayerVersion);
     expect(stack).toHaveResource(IamPolicy);
     expect(stack).toHaveResource(IamRolePolicyAttachment);
-    expect(stack).toHaveResource(Apigatewayv2Api);
     expect(stack).toHaveResource(LambdaPermission);
     expect(stack).toHaveResourceWithProperties(Pet, {length: 2});
+    expect(stack).toHaveResource(IamRole);
   });
 
   it('should not create api gateway if isApiRequired is false', () => {

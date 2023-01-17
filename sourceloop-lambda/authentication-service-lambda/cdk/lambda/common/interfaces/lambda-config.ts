@@ -11,7 +11,7 @@ type LambdaFunctionBaseConfig = {
   };
   layerPath?: string;
   isApiRequired?: boolean;
-  isMigration?: boolean;
+  invocationData?: string;
   timeout?: number;
 };
 
