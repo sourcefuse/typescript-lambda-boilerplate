@@ -16,6 +16,7 @@ dotenvExt.load({
 const app = new App();
 
 new LambdaStack(app, 'lambda', {
+
   path: resolve(__dirname,'../../lambda/dist/src'),
   handler: 'handlers/api-gateway.handler',
   runtime: 'nodejs16.x',
@@ -58,5 +59,6 @@ new SnsStack(app, 'sns', {
   subnetIds: ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"],
   kmsMasterKeyId: 'alias/aws/sns'
 });
+
 
 app.synth();

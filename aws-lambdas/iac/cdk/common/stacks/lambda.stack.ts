@@ -5,6 +5,7 @@ import {lambdaAction, lambdaRolePolicy, lambdaPrincipal, iamRolePolicy} from '..
 import {LambdaFunctionConfig} from '../interfaces';
 import * as random from '../../.gen/providers/random';
 import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambdafunction';
+
 export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
@@ -72,6 +73,7 @@ export class LambdaStack extends TerraformStack {
       role: role.arn,
       layers,
     });
+
 
     //Putting VPC config to lambda function if subnetIds and securityGroupIds exist
 
