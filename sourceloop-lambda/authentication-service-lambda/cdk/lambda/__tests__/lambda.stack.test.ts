@@ -54,8 +54,8 @@ describe('My CDKTF Application with all config set', () => {
   it('should create the expected number of resources', () => {
     expect(stack).toHaveResourceWithProperties(LambdaFunction, {
       vpc_config: {
-        security_group_ids: ['sg-123456'],
-        subnet_ids: ['subnet-123456'],
+        security_group_ids: securityGroupIds,
+        subnet_ids: subnetIds,
       },
     });
     expect(stack).toHaveResource(IamRole);
@@ -96,8 +96,8 @@ describe('My CDKTF Application with config change', () => {
     expect(stack).toHaveResource(LambdaFunction);
     expect(stack).not.toHaveResourceWithProperties(LambdaFunction, {
       vpc_config: {
-        security_group_ids: ['sg-123456'],
-        subnet_ids: ['subnet-123456'],
+        security_group_ids: securityGroupIds,
+        subnet_ids: subnetIds,
       },
     });
     expect(stack).toHaveResource(IamRole);

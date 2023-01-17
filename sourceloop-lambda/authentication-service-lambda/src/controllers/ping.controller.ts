@@ -58,7 +58,7 @@ export class PingController {
         date: new Date(),
       };
     } catch (e) {
-      console.log(e);
+      this.logger.error(e);
     }
     return {};
   }

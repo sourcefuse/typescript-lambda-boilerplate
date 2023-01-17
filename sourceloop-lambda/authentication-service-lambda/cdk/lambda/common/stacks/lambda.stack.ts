@@ -1,20 +1,20 @@
 import * as aws from '@cdktf/provider-aws';
-import {LambdaFunctionVpcConfig} from '@cdktf/provider-aws/lib/lambda-function';
+import { LambdaFunctionVpcConfig } from '@cdktf/provider-aws/lib/lambda-function';
 import * as random from '@cdktf/provider-random';
 import {
   AssetType,
   TerraformAsset,
   TerraformOutput,
-  TerraformStack,
+  TerraformStack
 } from 'cdktf';
-import {Construct} from 'constructs';
+import { Construct } from 'constructs';
 import {
   iamRolePolicy,
   lambdaAction,
   lambdaPrincipal,
-  lambdaRolePolicy,
+  lambdaRolePolicy
 } from '../constants';
-import {LambdaFunctionConfig} from '../interfaces';
+import { LambdaFunctionConfig } from '../interfaces';
 
 export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
@@ -94,7 +94,7 @@ export class LambdaStack extends TerraformStack {
         handler: config.handler,
         runtime: config.runtime,
         role: role.arn,
-        memorySize: config.memorySize,
+        memorySize: config?.memorySize || 128,
         layers: layers.length ? layers : undefined,
         environment: {variables: config.envVars},
         timeout: config?.timeout,

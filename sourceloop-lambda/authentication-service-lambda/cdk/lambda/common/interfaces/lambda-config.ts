@@ -5,7 +5,7 @@ type LambdaFunctionBaseConfig = {
   handler: string;
   runtime: string;
   version: string;
-  memorySize: number;
+  memorySize?: number;
   envVars?: {
     [x: string]: string;
   };

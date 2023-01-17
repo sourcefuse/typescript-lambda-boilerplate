@@ -1,8 +1,8 @@
-import {App} from 'cdktf';
+import { App } from 'cdktf';
 import * as dotenv from 'dotenv';
 import * as dotenvExt from 'dotenv-extended';
-import {resolve} from 'path';
-import {LambdaStack} from './common';
+import { resolve } from 'path';
+import { LambdaStack } from './common';
 
 dotenv.config();
 dotenvExt.load({
@@ -13,6 +13,7 @@ dotenvExt.load({
 
 const app = new App();
 
+// NOSONAR
 new LambdaStack(app, 'migration', {
   path: resolve(__dirname, '../../migration'),
   handler: 'lambda.handler',
