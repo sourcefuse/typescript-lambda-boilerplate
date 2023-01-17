@@ -1,15 +1,17 @@
 import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
-import {AuthCacheSourceName} from '@sourceloop/authentication-service';
+import {AuthDbSourceName} from '@sourceloop/authentication-service';
 
 const config = {
-  name: AuthCacheSourceName,
-  connector: 'kv-memory',
-  // url: '',
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD,
-  db: process.env.REDIS_DB,
+  name: 'auth',
+  connector: 'postgresql',
+  url: '',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  schema: process.env.DB_SCHEMA,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
 };
 
 // Observe application's life cycle to disconnect the datasource when
@@ -17,15 +19,16 @@ const config = {
 // gracefully. The `stop()` method is inherited from `juggler.DataSource`.
 // Learn more at https://loopback.io/doc/en/lb4/Life-cycle.html
 @lifeCycleObserver('datasource')
-export class AuthCacheDataSource
+export class AuthDataSource
   extends juggler.DataSource
   implements LifeCycleObserver
 {
-  static dataSourceName = AuthCacheSourceName;
+  static dataSourceName = AuthDbSourceName;
+
   static readonly defaultConfig = config;
 
   constructor(
-    @inject('datasources.config.AuthCache', {optional: true})
+    @inject('datasources.config.auth', {optional: true})
     dsConfig: object = config,
   ) {
     super(dsConfig);

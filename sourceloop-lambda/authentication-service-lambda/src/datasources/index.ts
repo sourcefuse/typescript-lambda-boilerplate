@@ -1,2 +1,2 @@
-export * from './pgdb.datasource';
+export * from './auth.datasource';
 export * from './redis.datasource';

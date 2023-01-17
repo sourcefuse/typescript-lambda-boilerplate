@@ -1,10 +1,13 @@
-import {ApplicationConfig, AuthenticationServiceApplication} from './application';
+import {
+  ApplicationConfig,
+  AuthenticationServiceApplication,
+} from './application';
 
 export * from './application';
 
-export async function main(
-  options: ApplicationConfig = {},
-): Promise<AuthenticationServiceApplication> {
+const PORT = 3000;
+
+export async function main(options: ApplicationConfig = {}) {
   const app = new AuthenticationServiceApplication(options);
   await app.boot();
   await app.start();
@@ -20,7 +23,7 @@ if (require.main === module) {
   // Run the application
   const config = {
     rest: {
-      port: +(process.env.PORT ?? 3000),
+      port: +(process.env.PORT ?? PORT),
       host: process.env.HOST,
       // The `gracePeriodForClose` provides a graceful close for http/https
       // servers with keep-alive clients. The default value is `Infinity`
