@@ -1,4 +1,4 @@
-import {XOR} from 'ts-essentials';
+import { XOR } from 'ts-essentials';
 
 type LambdaFunctionBaseConfig = {
   path: string;

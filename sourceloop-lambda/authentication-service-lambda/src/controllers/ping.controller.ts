@@ -1,9 +1,13 @@
-import {inject} from '@loopback/core';
-import {get, response, ResponseObject} from '@loopback/rest';
-import {authorize} from 'loopback4-authorization';
-// import {PostgresDataSource} from '../datasources';
-import {AuthDbSourceName} from '@sourceloop/authentication-service';
-import {AuthDataSource} from '../datasources';
+import { inject } from '@loopback/core';
+import { get, response, ResponseObject } from '@loopback/rest';
+import { AuthDbSourceName } from '@sourceloop/authentication-service';
+import {
+  ILogger,
+  LOGGER
+} from '@sourceloop/core';
+import { authorize } from 'loopback4-authorization';
+import { AuthDataSource } from '../datasources';
+import { STATUS_CODE } from '../enums/status-codes.enum';
 
 /**
  * OpenAPI response for ping()
@@ -38,13 +42,14 @@ const PING_RESPONSE: ResponseObject = {
 export class PingController {
   constructor(
     @inject(`datasources.${AuthDbSourceName}`)
-    private readonly authDataSource: AuthDataSource, // @inject('datasources.postgres') // private readonly postgresDataSource: PostgresDataSource,
+    private readonly authDataSource: AuthDataSource, 
+    @inject(LOGGER.LOGGER_INJECT) private readonly logger: ILogger,
   ) {}
 
   // Map to `GET /ping`
   @authorize({permissions: ['*']})
   @get('/health')
-  @response(200, PING_RESPONSE)
+  @response(STATUS_CODE.OK, PING_RESPONSE)
   async ping(): Promise<object> {
     try {
       await this.authDataSource.ping();
@@ -61,7 +66,7 @@ export class PingController {
   // Map to `GET /ping`
   @authorize({permissions: ['*']})
   @get('/ping')
-  @response(200, PING_RESPONSE)
+  @response(STATUS_CODE.OK, PING_RESPONSE)
   async pings(): Promise<object> {
     try {
       return {
@@ -69,7 +74,7 @@ export class PingController {
         date: new Date(),
       };
     } catch (e) {
-      console.log(e);
+      this.logger.error(e);
     }
     return {};
   }

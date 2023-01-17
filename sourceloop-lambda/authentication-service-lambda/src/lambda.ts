@@ -1,9 +1,9 @@
-import {AuthenticationServiceApplication} from './application';
-import {APIGatewayEvent, APIGatewayProxyEvent, Context} from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { AuthenticationServiceApplication } from './application';
 const serverlessExpress = require('@vendia/serverless-express');
 
 export * from './application';
-let serverlessApp: (arg0: APIGatewayProxyEvent, arg1: Context) => any;
+let serverlessApp: (arg0: APIGatewayProxyEvent, arg1: Context) => any; // NOSONAR
 
 export async function setup(event: APIGatewayEvent, context: Context) {
   const config = {
@@ -19,7 +19,6 @@ export async function setup(event: APIGatewayEvent, context: Context) {
   serverlessApp = serverlessExpress({app: requestHandler});
   return serverlessApp(event, context);
 }
-
 
 export const handler = (event: APIGatewayEvent, context: Context) => {
   if (serverlessApp) {

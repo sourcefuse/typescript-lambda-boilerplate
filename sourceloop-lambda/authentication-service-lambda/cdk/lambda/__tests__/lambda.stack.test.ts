@@ -22,6 +22,12 @@ expect.addSnapshotSerializer({
   },
 });
 
+const handler = 'lambda.handler';
+const runtime = 'nodejs16.x';
+const version= 'v0.0.1';
+const subnetIds =  ['subnet-123456'];
+const securityGroupIds= ['sg-123456'];
+
 describe('My CDKTF Application with all config set', () => {
   let config: LambdaFunctionConfig;
   let lambdaStack: LambdaStack;
@@ -31,12 +37,12 @@ describe('My CDKTF Application with all config set', () => {
     config = {
       // Set up test config
       path: __dirname,
-      handler: 'lambda.handler',
-      runtime: 'nodejs16.x',
-      version: 'v0.0.1',
+      handler,
+      runtime,
+      version,
       layerPath: __dirname,
-      subnetIds: ['subnet-123456'],
-      securityGroupIds: ['sg-123456'],
+      subnetIds,
+      securityGroupIds,
       isApiRequired: true,
     };
 
@@ -78,9 +84,9 @@ describe('My CDKTF Application with config change', () => {
   it('should not create vpc if subnetIds and securityGroupIds are not provided', () => {
     const config = {
       path: __dirname,
-      handler: 'lambda.handler',
-      runtime: 'nodejs16.x',
-      version: 'v0.0.1',
+      handler,
+      runtime,
+      version,
       layerPath: __dirname,
       isApiRequired: true,
     };
@@ -106,12 +112,12 @@ describe('My CDKTF Application with config change', () => {
   it('should not create api gateway if isApiRequired is false', () => {
     const config = {
       path: __dirname,
-      handler: 'lambda.handler',
-      runtime: 'nodejs16.x',
-      version: 'v0.0.1',
+      handler,
+      runtime,
+      version,
       layerPath: __dirname,
-      subnetIds: ['subnet-123456'],
-      securityGroupIds: ['sg-123456'],
+      subnetIds,
+      securityGroupIds,
       isApiRequired: false,
     };
     const app = Testing.app();
@@ -130,11 +136,11 @@ describe('My CDKTF Application with config change', () => {
   it('should not create lambda layer if layer path is not set', () => {
     const config = {
       path: __dirname,
-      handler: 'lambda.handler',
-      runtime: 'nodejs16.x',
-      version: 'v0.0.1',
-      subnetIds: ['subnet-123456'],
-      securityGroupIds: ['sg-123456'],
+      handler,
+      runtime,
+      version,
+      subnetIds,
+      securityGroupIds,
       isApiRequired: true,
     };
     const app = Testing.app();

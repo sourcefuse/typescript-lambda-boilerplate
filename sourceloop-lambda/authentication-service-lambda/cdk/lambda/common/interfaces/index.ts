@@ -1,1 +1,1 @@
-export * from './lambda-config'
+export * from './lambda-config';

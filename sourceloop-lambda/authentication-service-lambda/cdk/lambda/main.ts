@@ -52,7 +52,7 @@ new LambdaStack(app, 'lambda', {
     DB_USER: 'example_db_admin',
     DB_PASSWORD: 'password',
     DB_DATABASE: 'example',
-    DB_SCHEMA: 'public',
+    DB_SCHEMA: 'main',
     JWT_SECRET: 'secret',
     JWT_ISSUER: 'sourcefuce',
     PORT: '3005',
