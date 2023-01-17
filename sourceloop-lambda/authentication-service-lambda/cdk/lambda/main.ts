@@ -34,8 +34,7 @@ const getSecurityGroup = () => {
 };
 
 
-// sonarignore:start
-new LambdaStack(app, 'migration', {
+new LambdaStack(app, 'migration', {// NOSONAR
   path: resolve(__dirname, '../../migration'),
   handler: 'lambda.handler',
   runtime: 'nodejs16.x',
@@ -53,10 +52,8 @@ new LambdaStack(app, 'migration', {
     DB_DATABASE: process.env.DB_DATABASE || '',
   },
 });
-// sonarignore:end
 
-// sonarignore:start
-new LambdaStack(app, 'lambda', {
+new LambdaStack(app, 'lambda', {// NOSONAR
   path: resolve(__dirname, '../../dist'),
   handler: 'lambda.handler',
   runtime: 'nodejs16.x',
@@ -81,6 +78,5 @@ new LambdaStack(app, 'lambda', {
     DB_CONNECTOR: 'postgresql',
   },
 });
-// sonarignore:end
 
 app.synth();

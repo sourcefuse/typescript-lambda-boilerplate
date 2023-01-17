@@ -16,8 +16,7 @@ export class DbStack extends TerraformStack {
   constructor(scope: Construct, name: string, options: DbModuleOptions) {
     super(scope, name);
 
-    // sonarignore:start
-    new aws.provider.AwsProvider(this, 'aws', {
+    new aws.provider.AwsProvider(this, 'aws', {// NOSONAR
       region: process.env.AWS_REGION,
       accessKey: process.env.AWS_ACCESS_KEY_ID,
       secretKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -28,7 +27,6 @@ export class DbStack extends TerraformStack {
         },
       ],
     });
-    // sonarignore:end
 
     const dataAwsVpcVpc = new aws.dataAwsVpc.DataAwsVpc(this, 'vpc', {
       filter: [
@@ -39,12 +37,10 @@ export class DbStack extends TerraformStack {
       ],
     });
 
-    // sonarignore:start
-    new DbModule(this, 'aurora', {
+    new DbModule(this, 'aurora', {// NOSONAR
       auroraAllowedCidrBlocks: [dataAwsVpcVpc.cidrBlock],
       ...options,
     });
-    // sonarignore:end
   }
 }
 
@@ -60,8 +56,7 @@ const getSubnetIds = () => {
   return [];
 };
 
-// sonarignore:start
-new DbStack(app, 'db', {
+new DbStack(app, 'db', {// NOSONAR
   auroraSubnets: getSubnetIds(),
   namespace: 'arc2',
   vpcId: process.env.VPC_ID || '',
@@ -83,6 +78,5 @@ new DbStack(app, 'db', {
   region: process.env.AWS_REGION,
   auroraDbAdminPassword: process.env.PASSWORD,
 });
-// sonarignore:end
 
 app.synth();

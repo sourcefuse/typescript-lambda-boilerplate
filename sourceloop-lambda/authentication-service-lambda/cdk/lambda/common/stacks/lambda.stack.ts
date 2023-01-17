@@ -21,8 +21,7 @@ export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
 
-    // sonarignore:start
-    new aws.provider.AwsProvider(this, 'aws', {
+    new aws.provider.AwsProvider(this, 'aws', {// NOSONAR
       region: process.env.AWS_REGION,
       accessKey: process.env.AWS_ACCESS_KEY_ID,
       secretKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -33,8 +32,7 @@ export class LambdaStack extends TerraformStack {
         },
       ],
     });
-    new random.provider.RandomProvider(this, 'random');
-    // sonarignore:end
+    new random.provider.RandomProvider(this, 'random');// NOSONAR
 
     // Create random value
     const pet = new random.pet.Pet(this, 'random-name', {
@@ -77,9 +75,8 @@ export class LambdaStack extends TerraformStack {
       policy: JSON.stringify(lambdaRolePolicy),
     });
 
-    // sonarignore:start
     // Add execution role for lambda to write to CloudWatch logs
-    new aws.iamRolePolicyAttachment.IamRolePolicyAttachment(
+    new aws.iamRolePolicyAttachment.IamRolePolicyAttachment(// NOSONAR
       this,
       'lambda-managed-policy',
       {
@@ -87,7 +84,6 @@ export class LambdaStack extends TerraformStack {
         role: role.name,
       },
     );
-    // sonarignore:end
 
     // Create Lambda function
     const lambdaFunc = new aws.lambdaFunction.LambdaFunction(
@@ -107,8 +103,7 @@ export class LambdaStack extends TerraformStack {
     );
 
     if (config?.invocationData) {
-      // sonarignore:start
-      new aws.dataAwsLambdaInvocation.DataAwsLambdaInvocation(
+      new aws.dataAwsLambdaInvocation.DataAwsLambdaInvocation(// NOSONAR
         this,
         'invocation',
         {
@@ -116,7 +111,6 @@ export class LambdaStack extends TerraformStack {
           input: config.invocationData,
         },
       );
-      // sonarignore:end
     }
 
     //Putting VPC config to lambda function if subnetIds and securityGroupIds exist
@@ -137,8 +131,7 @@ export class LambdaStack extends TerraformStack {
         target: lambdaFunc.arn,
       });
 
-      // sonarignore:start
-      new aws.lambdaPermission.LambdaPermission(
+      new aws.lambdaPermission.LambdaPermission(// NOSONAR
         this,
         'apigw-lambda-permission',
         {
@@ -148,19 +141,14 @@ export class LambdaStack extends TerraformStack {
           sourceArn: `${api.executionArn}/*/*`,
         },
       );
-      // sonarignore:end
 
-      // sonarignore:start
-      new TerraformOutput(this, 'url', {
+      new TerraformOutput(this, 'url', {// NOSONAR
         value: api.apiEndpoint,
       });
-      // sonarignore:end
     }
 
-    // sonarignore:start
-    new TerraformOutput(this, 'function', {
+    new TerraformOutput(this, 'function', {// NOSONAR
       value: lambdaFunc.arn,
     });
-    // sonarignore:end
   }
 }
