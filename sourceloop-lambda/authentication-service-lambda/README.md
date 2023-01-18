@@ -64,18 +64,14 @@ npm run lint:fix
 ```sh
 npm test
 ```
-## Installation
- 
-1. Create a postgres database
-2. Provide redirect URL in auth client for the Frontend application
-3. Provide Redis and Postgres envs
-4. Provide JWT secret and issuer
-5. Setup Azure Account and in Azure AD create new App Registration
-6. Then give add below Azure Envs in your Environment
 
+## Installation
+
+1. Create a postgres database _(checkout README.md in /cdk/db)_
+2. Provide Redis and Postgres envs
+3. Provide JWT secret and issuer
 
 ## Environment
-
 
 - `DB_HOST`: Postgres Database host
 - `DB_PORT`: Postgres port
@@ -88,9 +84,9 @@ npm test
 - `REDIS_URL`: Redis connection string
 - `REDIS_PASSWORD`: Redis password if set
 - `REDIS_DATABASE`: Redis database if set
-- `JWT_SECRET`: For JWT token 
+- `JWT_SECRET`: For JWT token
 - `JWT_ISSUER`: For JWT token
-- `AZURE_AUTH_ENABLED`: keep it `true` 
+- `AZURE_AUTH_ENABLED`: keep it `true`
 - `AZURE_IDENTITY_METADATA`: this will be standard url `https://login.microsoftonline.com/common/.well-known/openid-configuration`
 - `AZURE_AUTH_CLIENT_ID`: this is client id of application created on azure
 - `AZURE_AUTH_CLIENT_SECRET`: this is secret of same client id
@@ -101,11 +97,37 @@ npm test
 - `AZURE_AUTH_VALIDATE_ISSUER`: keep it blank
 - `AZURE_AUTH_COOKIE_KEY`: 32 bit string key for encryption
 - `AZURE_AUTH_COOKIE_IV`: 12 bit string key for encryption
-
+-
 
 ## What's next
 
 Please check out [LoopBack 4 documentation](https://loopback.io/doc/en/lb4/) to
 understand how you can continue to add features to this application.
 
-[![LoopBack](https://github.com/loopbackio/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png)](http://loopback.io/)
+[![LoopBack](<https://github.com/loopbackio/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png>)](http://loopback.io/)
+
+# Service deployment in lambda
+
+## <a id="build_step"></a> Build Step
+
+Compile and build the Typescript Lambda code. Navigate to the root of the repo to run the following commands.
+
+1. Create loopback build:
+   ```shell
+   npm run build
+   ```
+2. create lambda layers build:
+   ```shell
+   npm run build:layers
+   ```
+3. create migrations lambda build:
+   ```shell
+   npm run build:migrations
+   ```
+
+## Terraform to deploy your Lambda
+
+Once you have completed the steps in [Build Step](#build_step), You can deploy your infrastructure.
+
+- For Postgres DB deployement checkout [README.md](https://github.com/sourcefuse/typescript-lambda-boilerplate/blob/main/sourceloop-lambda/authentication-service-lambda/cdk/db/README.md) in /cdk/db
+- For code and migration deployment checkout [README.md](https://github.com/sourcefuse/typescript-lambda-boilerplate/blob/main/sourceloop-lambda/authentication-service-lambda/cdk/lambda/README.md) in /cdk/lambda
