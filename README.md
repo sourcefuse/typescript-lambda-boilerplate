@@ -1,4 +1,6 @@
-![Known Vulnerabilities](https://snyk.io/test/github/sourcefuse/typescript-lambda-boilerplate/badge.svg?targetFile=aws-lambdas/iac/cdk/package.json)
+![Known Vulnerabilities](https://snyk.io/test/github/sourcefuse/typescript-lambda-boilerplate/badge.svg?targetFile=aws-lambdas/iac/cdk/package.json)  
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=sourcefuse_typescript-lambda-boilerplate&token=e3f829a84ea5000631ca5239aa6fa1c8853e539f)](https://sonarcloud.io/summary/new_code?id=sourcefuse_typescript-lambda-boilerplate)
 
 # Typescript Lambda Boilerplate
 
@@ -8,7 +10,7 @@
 ## <a id="prereqs"></a> Pre-Requisites
 
 - [node.js](https://nodejs.dev/download/)
-- [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
+- [npm](https://docs.npmjs.com/cli/v6/commands/npm-install)
 - [terraform](https://learn.hashicorp.com/terraform/getting-started/install#installing-terraform)
 - [terraform-docs](https://github.com/segmentio/terraform-docs)
 - [pre-commit](https://pre-commit.com/#install)

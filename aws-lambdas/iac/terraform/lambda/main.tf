@@ -60,6 +60,7 @@ resource "aws_lambda_function" "this" {
     }), var.custom_vars)
   }
 
+
   dynamic "vpc_config" {
     for_each = var.vpc_config == null ? [] : [var.vpc_config]
     content {
@@ -67,6 +68,7 @@ resource "aws_lambda_function" "this" {
       security_group_ids = vpc_config.value.security_group_ids
     }
   }
+
 
   tags = var.tags
 }
@@ -172,6 +174,7 @@ resource "aws_iam_policy_attachment" "lambda_cw_logs_attachment" {
     aws_iam_role.lambda_role.name,
   ]
 }
+
 
 resource "aws_iam_role_policy_attachment" "lambda_vpc_access_execution" {
   role       = aws_iam_role.lambda_role.name

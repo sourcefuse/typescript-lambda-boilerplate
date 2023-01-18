@@ -94,3 +94,4 @@ See the [README](../../../README.md) in the repo's root for more information.
 | <a name="output_lambda_sqs_name"></a> [lambda\_sqs\_name](#output\_lambda\_sqs\_name) | n/a |
 | <a name="output_lambda_sqs_version"></a> [lambda\_sqs\_version](#output\_lambda\_sqs\_version) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
