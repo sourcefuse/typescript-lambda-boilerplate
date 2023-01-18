@@ -76,7 +76,7 @@ new DbStack(app, 'db', {// NOSONAR
   enhancedMonitoringName: 'aurora-example-enhanced-monitoring',
   environment: process.env.ENV || 'dev',
   region: process.env.AWS_REGION,
-  auroraDbAdminPassword: process.env.PASSWORD,
+  auroraDbAdminPassword: process.env.DB_PASSWORD,
 });
 
 app.synth();
