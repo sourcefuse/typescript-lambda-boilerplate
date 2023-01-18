@@ -155,3 +155,12 @@ terraform.rc
 
 # Mac make this file
 .DS_Store
+
+
+layers
+cdktf.out
+cdktf.log
+.gen
+tsconfig.tsbuildinfo
+!jest.config.js
+!setup.js
