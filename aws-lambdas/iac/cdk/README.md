@@ -34,6 +34,7 @@ This module gives us several commands for the aws lambda function.
   ```shell
   cdktf list
   ``` 
+
 * To deploy the stack on aws and remember to confirm the deploy with a yes.  
   ```shell
   cdktf deploy <stack_name>
@@ -41,6 +42,7 @@ This module gives us several commands for the aws lambda function.
 * To destroy the Infrastructure that you deployed on aws.  
   ```shell
   cdktf destroy <stack_name>
+
   ```
 
 ## Stacks
@@ -87,5 +89,3 @@ This module gives us several commands for the aws lambda function.
 | <a name="input_SnsStack_securityGroupIds"></a> [SnsStack_securityGroupIds](#input\_SnsStack\_securityGroupIds) | Give the security group id to the lambda | `string` | `"n/a"` | no |
 | <a name="input_SnsStack_subnetIds"></a> [SnsStack_subnetIds](#input\_SnsStack\_subnetIds) | Give the subnet Ids to the lambda | `string` | `"n/a"` | no |
 | <a name="input_SnsStack_kmsMasterKeyId"></a> [SnsStack_kmsMasterKeyId](#input\_SnsStack\_kmsMasterKeyId) | Name to assign the name of SNS KMS MASTER KEY ID. | `string` | `"alias/aws/sns"` | no |
-
-
