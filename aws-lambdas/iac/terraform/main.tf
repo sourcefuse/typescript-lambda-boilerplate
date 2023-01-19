@@ -270,7 +270,9 @@ resource "aws_iam_policy" "Policy-for-all-resources" {
         Action = [
           "kms:*"
         ],
-        Resource = ["*"]
+        Resource = ["${aws_sns_topic.this.arn}:*",
+          "${aws_sqs_queue.results_updates.arn}:*"
+        ]
       },
       # lambda-vpc-execution-role
       {
@@ -285,7 +287,9 @@ resource "aws_iam_policy" "Policy-for-all-resources" {
           "ec2:AssignPrivateIpAddresses",
           "ec2:UnassignPrivateIpAddresses"
         ],
-        Resource = "*"
+
+        Resource = "*" //NOSONAR
+
       },
     ]
   })

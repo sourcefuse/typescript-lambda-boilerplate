@@ -1,4 +1,4 @@
-# CDK Module For Lambda
+# CDK Module For Aurora DB
 
 We can use the Cloud Development Kit for Terraform (CDKTF) to define advanced deployment configurations.
 
@@ -18,16 +18,10 @@ CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF a
   * **AWS_SECRET_ACCESS_KEY**: *aws_secret_key*
   * **AWS_ROLE_ARN**: *role_arn*
   * **AWS_PROFILE**: *aws_profile*
-  * **SUBNET_IDS**: *subnet ids eg ["subnet-012", "subnet-123"]* 
-  * **SECURITY_GROUPS**: *security group ids eg ["sg-123"]* 
-  * **DB_HOST**: *Postgres Database host* 
-  * **DB_PORT**: *Postgres Database port* 
-  * **DB_PORT**: *Postgres Database port* 
+  * **SUBNET_IDS**: *subnet ids for db eg ["subnet-012", "subnet-123"]* 
+  * **VPC_ID**: *vpc id*
   * **DB_USER**: *database username*
   * **DB_PASSWORD**: *database password*
-  * **DB_DATABASE**: *database name*
-  * **DB_SCHEMA**: *database schema*
-  * **JWT_SECRET**: *For JWT token*
 
   Note: if You want to use * **AWS_ACCESS_KEY_ID** and * **AWS_SECRET_ACCESS_KEY** then keep 
   * **AWS_PROFILE** as blank.
@@ -35,26 +29,20 @@ CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF a
 3. Run *npm install* to install the dependency packages for cdktf. Now you are ready to go with cdktf commands.
 
 ## How to Run
-This module gives us several commands for the aws lambda function. 
+This module gives us several commands for the aws lambda function.  
+* To generate the Db module from [terraform-aws-ref-arch-db](https://github.com/sourcefuse/terraform-aws-ref-arch-db).  
+  ```shell
+  cdktf get 
+  ```
 * List all the stacks defined in your CDKTF application.  
   ```shell
   cdktf list
   ``` 
-* To deploy the sourceloop authentication in lambda on aws and remember to confirm the deploy with a yes.*(Make sure to run npm run build:layers in root folder to create required lambda layers)*
+* To deploy the lambda stack on aws and remember to confirm the deploy with a yes.  
   ```shell
-  cdktf deploy lambda
-  ```
-* To deploy and run the migration for sourceloop authentication in lambda on aws and remember to confirm the deploy with a yes.*(Make sure to run npm run build:migrations in root folder to create required migrations files)*
-  ```shell
-  cdktf deploy migration
-  ```
-
-* To deploy lambda and migration stack on aws and remember to confirm the deploy with a yes.  
-  ```shell
-  cdktf deploy '*'
+  cdktf deploy db
   ```
 * To destroy the Infrastructure that you deployed on aws.  
   ```shell
-  cdktf destroy lambda
-  cdktf destroy migration
+  cdktf destroy db
   ```
