@@ -11,9 +11,9 @@ variable "environment" {
 }
 
 variable "region" {
-  type = string
-  default = "us-east-1"
-  description = "Name of the region resources will be created in."  
+  type        = string
+  default     = "us-east-1"
+  description = "Name of the region resources will be created in."
 }
 
 variable "profile" {

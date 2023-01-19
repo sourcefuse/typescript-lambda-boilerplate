@@ -15,13 +15,13 @@ resource "aws_security_group" "ec_lambda_security_group" {
   vpc_id      = data.aws_vpc.vpc.id
 
   egress {
-      from_port   = 0
-      to_port     = 6379
-      protocol    = "TCP"
-      cidr_blocks = local.private_subnet_cidr
+    from_port   = 0
+    to_port     = 6379
+    protocol    = "TCP"
+    cidr_blocks = local.private_subnet_cidr
   }
   tags = {
-    Name        = "lambda_elasticache_security_group"
-    redis-user  = "yes"
+    Name       = "lambda_elasticache_security_group"
+    redis-user = "yes"
   }
 }

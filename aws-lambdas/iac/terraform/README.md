@@ -48,6 +48,7 @@ See the [README](../../../README.md) in the repo's root for more information.
 | [aws_sqs_queue.results_updates](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 | [aws_sqs_queue.results_updates_dl_queue](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 | [random_pet.this](https://registry.terraform.io/providers/hashicorp/random/3.3.2/docs/resources/pet) | resource |
+| [aws_caller_identity.current_caller](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.sqs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs

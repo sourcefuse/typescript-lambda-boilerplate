@@ -11,7 +11,7 @@ locals {
     subnet_ids         = var.ec_subnet_ids
     security_group_ids = var.ec_security_group_ids
   })
-  kms_key_admin_arns    = concat([
+  kms_key_admin_arns = concat([
     data.aws_caller_identity.current_caller.arn
   ], var.kms_key_admin_arns)
 }
