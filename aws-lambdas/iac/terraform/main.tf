@@ -55,7 +55,7 @@ module "boilerplate" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = var.kms_key_admin_arns
+  kms_key_admin_arns = local.kms_key_admin_arns
   vpc_config         = var.vpc_config
   tags               = module.tags.extra_tags
 }
@@ -75,7 +75,7 @@ module "sns" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = var.kms_key_admin_arns
+  kms_key_admin_arns = local.kms_key_admin_arns
 
   tags = module.tags.extra_tags
 }
@@ -95,7 +95,7 @@ module "sqs" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = var.kms_key_admin_arns
+  kms_key_admin_arns = local.kms_key_admin_arns
 
   tags = module.tags.extra_tags
 }
@@ -115,12 +115,12 @@ module "cron" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = var.kms_key_admin_arns
+  kms_key_admin_arns = local.kms_key_admin_arns
 
   tags = module.tags.extra_tags
 }
 
-module "elasticache-redis" {
+module "elasticache_redis" {
   source         = "./lambda"
   environment    = var.environment
   region         = var.region
@@ -135,13 +135,13 @@ module "elasticache-redis" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = var.kms_key_admin_arns
+  kms_key_admin_arns = local.kms_key_admin_arns
   vpc_config         = local.lambda_ec_vpc_config
 
   tags = module.tags.extra_tags
 
   custom_vars = tomap({
-    "REDIS_ENDPOINT" = local.redis_endpoint
+    "REDIS_ENDPOINT" = var.redis_endpoint
   })
 }
 
@@ -169,6 +169,12 @@ resource "aws_lambda_permission" "with_sns" {
 }
 
 ################################################################################
+## shared
+################################################################################
+
+data "aws_caller_identity" "current_caller" {}
+
+################################################################################
 ## sqs
 ################################################################################
 resource "aws_sqs_queue" "results_updates" {
@@ -189,6 +195,7 @@ resource "aws_sqs_queue" "results_updates" {
   tags                              = module.tags.tags
   kms_master_key_id                 = local.kms_master_key_id
   kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
+
 }
 
 resource "aws_sqs_queue" "results_updates_dl_queue" {
@@ -329,71 +336,4 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_invoke" {
 resource "aws_cloudwatch_event_target" "invoke_lambda" {
   rule = aws_cloudwatch_event_rule.lambda_cron.name
   arn  = module.cron.lambda_arn
-}
-
-################################################################################
-## elasticache-redis
-################################################################################
-
-module "vpc" {
-  count   = var.custom_ec_vpc != {} ? 0 : 1
-  source  = "cloudposse/vpc/aws"
-  version = "2.0.0"
-
-  ipv4_primary_cidr_block = "172.16.0.0/16"
-
-  context = {
-    tags = tomap({
-      "Name"    = "arc-lambda-boilerplate-vpc",
-      "Project" = "arc-lambda-boilerplate"
-    })
-  }
-}
-
-module "ec-subnets" {
-  count   = var.custom_ec_vpc != {} ? 0 : 1
-  source  = "cloudposse/dynamic-subnets/aws"
-  version = "2.0.4"
-
-  availability_zones   = var.ec_availability_zones
-  vpc_id               = module.vpc[0].vpc_id
-  igw_id               = module.vpc[0].igw_id
-  ipv4_cidr_block      = module.vpc[0].vpc_cidr_block
-  nat_gateway_enabled  = true
-  nat_instance_enabled = false
-
-  context = {
-    tags = tomap({
-      "Name"    = "arc-lambda-boilerplate-vpc-subnet",
-      "Project" = "arc-lambda-boilerplate"
-    })
-  }
-}
-
-module "redis" {
-  count   = var.custom_ec_vpc != {} ? 0 : 1
-  source  = "cloudposse/elasticache-redis/aws"
-  version = "0.49.0"
-
-  availability_zones         = var.ec_availability_zones
-  vpc_id                     = module.vpc[0].vpc_id
-  allowed_security_group_ids = [module.vpc[0].vpc_default_security_group_id]
-  subnets                    = module.ec-subnets[0].private_subnet_ids
-  apply_immediately          = true
-  automatic_failover_enabled = false
-  at_rest_encryption_enabled = true
-  transit_encryption_enabled = true
-  parameter = [
-    {
-      name  = "notify-keyspace-events"
-      value = "lK"
-    }
-  ]
-
-  context = {
-    tags = tomap({
-      "Name"    = "arc-lambda-boilerplate-vpc-subnet",
-      "Project" = "arc-lambda-boilerplate"
-    })
-  }
 }

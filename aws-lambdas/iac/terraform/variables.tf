@@ -114,30 +114,18 @@ variable "cron_lambda_schedule" {
 ## elasticache
 ################################################################################
 
-variable "custom_ec_vpc" {
-  description = <<-EOT
-    The pre created VPC to be used for elasticache.
-    Expects a map of the form:
-    {
-      subnet_ids=[list of subnets]
-      security_group_ids=[list of security groups]
-    } 
-    If this value is set then no elasticache cluster will
-    be created. The user will need to set custom_redis_endpoint too.
-    Leave this unchanged to create a new VPC and elasticache redis cluster.
-    EOT
-  type        = map(any)
-  default     = null
+variable "ec_subnet_ids" {
+  description = "List of subnet ids for lambda elasticache"
+  type        = list(string)
 }
 
-variable "custom_redis_endpoint" {
-  description = "Provide a custom redis endpoint"
+variable "ec_security_group_ids" {
+  description = "List of security group ids for lambda elasticache"
+  type        = list(string)
+}
+
+variable "redis_endpoint" {
+  description = "Provide your elasticache redis endpoint"
   type        = string
   default     = null
-}
-
-variable "ec_availability_zones" {
-  description = "Availability zones for elasticache subnets"
-  type        = list(string)
-  default     = ["us-east-1a", "us-east-1b"]
 }

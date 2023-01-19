@@ -24,13 +24,10 @@ See the [README](../../../README.md) in the repo's root for more information.
 |------|--------|---------|
 | <a name="module_boilerplate"></a> [boilerplate](#module\_boilerplate) | ./lambda | n/a |
 | <a name="module_cron"></a> [cron](#module\_cron) | ./lambda | n/a |
-| <a name="module_ec-subnets"></a> [ec-subnets](#module\_ec-subnets) | cloudposse/dynamic-subnets/aws | 2.0.4 |
-| <a name="module_elasticache-redis"></a> [elasticache-redis](#module\_elasticache-redis) | ./lambda | n/a |
-| <a name="module_redis"></a> [redis](#module\_redis) | cloudposse/elasticache-redis/aws | 0.49.0 |
+| <a name="module_elasticache_redis"></a> [elasticache\_redis](#module\_elasticache\_redis) | ./lambda | n/a |
 | <a name="module_sns"></a> [sns](#module\_sns) | ./lambda | n/a |
 | <a name="module_sqs"></a> [sqs](#module\_sqs) | ./lambda | n/a |
 | <a name="module_tags"></a> [tags](#module\_tags) | git::https://github.com/sourcefuse/terraform-aws-refarch-tags | 1.0.1 |
-| <a name="module_vpc"></a> [vpc](#module\_vpc) | cloudposse/vpc/aws | 2.0.0 |
 
 ## Resources
 
@@ -58,9 +55,8 @@ See the [README](../../../README.md) in the repo's root for more information.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cron_lambda_schedule"></a> [cron\_lambda\_schedule](#input\_cron\_lambda\_schedule) | The cron expression for the event bridge rule | `string` | `"rate(1 day)"` | no |
-| <a name="input_custom_ec_vpc"></a> [custom\_ec\_vpc](#input\_custom\_ec\_vpc) | The pre created VPC to be used for elasticache.<br>Expects a map of the form:<br>{<br>  subnet\_ids=[list of subnets]<br>  security\_group\_ids=[list of security groups]<br>} <br>If this value is set then no elasticache cluster will<br>be created. The user will need to set custom\_redis\_endpoint too.<br>Leave this unchanged to create a new VPC and elasticache redis cluster. | `map(any)` | `null` | no |
-| <a name="input_custom_redis_endpoint"></a> [custom\_redis\_endpoint](#input\_custom\_redis\_endpoint) | Provide a custom redis endpoint | `string` | `null` | no |
-| <a name="input_ec_availability_zones"></a> [ec\_availability\_zones](#input\_ec\_availability\_zones) | Availability zones for elasticache subnets | `list(string)` | <pre>[<br>  "us-east-1a",<br>  "us-east-1b"<br>]</pre> | no |
+| <a name="input_ec_security_group_ids"></a> [ec\_security\_group\_ids](#input\_ec\_security\_group\_ids) | List of security group ids for lambda elasticache | `list(string)` | n/a | yes |
+| <a name="input_ec_subnet_ids"></a> [ec\_subnet\_ids](#input\_ec\_subnet\_ids) | List of subnet ids for lambda elasticache | `list(string)` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Name of the environment resources will be created in. | `string` | `"dev"` | no |
 | <a name="input_kms_data_key_reuse_period_seconds"></a> [kms\_data\_key\_reuse\_period\_seconds](#input\_kms\_data\_key\_reuse\_period\_seconds) | n/a | `number` | `300` | no |
 | <a name="input_kms_key_admin_arns"></a> [kms\_key\_admin\_arns](#input\_kms\_key\_admin\_arns) | Additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE. | `list(string)` | `[]` | no |
@@ -70,6 +66,7 @@ See the [README](../../../README.md) in the repo's root for more information.
 | <a name="input_lambda_runtime"></a> [lambda\_runtime](#input\_lambda\_runtime) | Lambda runtime | `string` | `"nodejs16.x"` | no |
 | <a name="input_lambda_sqs_policy_name"></a> [lambda\_sqs\_policy\_name](#input\_lambda\_sqs\_policy\_name) | Name to assign the Lambda SQS Policy | `string` | `"lambda-sqs"` | no |
 | <a name="input_profile"></a> [profile](#input\_profile) | Name of the AWS Profile configured on your workstation. | `string` | n/a | yes |
+| <a name="input_redis_endpoint"></a> [redis\_endpoint](#input\_redis\_endpoint) | Provide your elasticache redis endpoint | `string` | `null` | no |
 | <a name="input_region"></a> [region](#input\_region) | Name of the region resources will be created in. | `string` | `"us-east-1"` | no |
 | <a name="input_sns_kms_master_key_id"></a> [sns\_kms\_master\_key\_id](#input\_sns\_kms\_master\_key\_id) | The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK | `string` | `null` | no |
 | <a name="input_sns_topic_name"></a> [sns\_topic\_name](#input\_sns\_topic\_name) | Name to assign the SNS Topic. | `string` | `"sns-with-lambda"` | no |
@@ -87,6 +84,9 @@ See the [README](../../../README.md) in the repo's root for more information.
 | <a name="output_lambda_cron_arn"></a> [lambda\_cron\_arn](#output\_lambda\_cron\_arn) | n/a |
 | <a name="output_lambda_cron_name"></a> [lambda\_cron\_name](#output\_lambda\_cron\_name) | n/a |
 | <a name="output_lambda_cron_version"></a> [lambda\_cron\_version](#output\_lambda\_cron\_version) | n/a |
+| <a name="output_lambda_elasticache_arn"></a> [lambda\_elasticache\_arn](#output\_lambda\_elasticache\_arn) | n/a |
+| <a name="output_lambda_elasticache_name"></a> [lambda\_elasticache\_name](#output\_lambda\_elasticache\_name) | n/a |
+| <a name="output_lambda_elasticache_version"></a> [lambda\_elasticache\_version](#output\_lambda\_elasticache\_version) | n/a |
 | <a name="output_lambda_sns_arn"></a> [lambda\_sns\_arn](#output\_lambda\_sns\_arn) | n/a |
 | <a name="output_lambda_sns_name"></a> [lambda\_sns\_name](#output\_lambda\_sns\_name) | n/a |
 | <a name="output_lambda_sns_version"></a> [lambda\_sns\_version](#output\_lambda\_sns\_version) | n/a |
@@ -94,4 +94,3 @@ See the [README](../../../README.md) in the repo's root for more information.
 | <a name="output_lambda_sqs_name"></a> [lambda\_sqs\_name](#output\_lambda\_sqs\_name) | n/a |
 | <a name="output_lambda_sqs_version"></a> [lambda\_sqs\_version](#output\_lambda\_sqs\_version) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-

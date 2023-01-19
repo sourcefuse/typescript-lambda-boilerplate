@@ -15,7 +15,6 @@ terraform {
 ################################################################################
 ## lookups
 ################################################################################
-data "aws_caller_identity" "current_caller" {}
 
 data "archive_file" "function_archive" {
   type        = var.lambda_function_archive_type
