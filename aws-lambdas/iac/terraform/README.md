@@ -48,7 +48,6 @@ See the [README](../../../README.md) in the repo's root for more information.
 | [aws_sqs_queue.results_updates](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 | [aws_sqs_queue.results_updates_dl_queue](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/resources/sqs_queue) | resource |
 | [random_pet.this](https://registry.terraform.io/providers/hashicorp/random/3.3.2/docs/resources/pet) | resource |
-| [aws_caller_identity.current_caller](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.sqs](https://registry.terraform.io/providers/hashicorp/aws/4.20.1/docs/data-sources/iam_policy_document) | data source |
 
 ## Inputs
@@ -60,7 +59,7 @@ See the [README](../../../README.md) in the repo's root for more information.
 | <a name="input_ec_subnet_ids"></a> [ec\_subnet\_ids](#input\_ec\_subnet\_ids) | List of subnet ids for lambda elasticache | `list(string)` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Name of the environment resources will be created in. | `string` | `"dev"` | no |
 | <a name="input_kms_data_key_reuse_period_seconds"></a> [kms\_data\_key\_reuse\_period\_seconds](#input\_kms\_data\_key\_reuse\_period\_seconds) | n/a | `number` | `300` | no |
-| <a name="input_kms_key_admin_arns"></a> [kms\_key\_admin\_arns](#input\_kms\_key\_admin\_arns) | Additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE. | `list(string)` | `[]` | no |
+| <a name="input_kms_key_admin_arns"></a> [kms\_key\_admin\_arns](#input\_kms\_key\_admin\_arns) | IAM roles to map to the KMS key policy for administering <br>                the KMS key used for SSE. Must be set to avoid MalformedPolicyDocumentException<br>                eg: ["arn:aws:iam::$\{data.aws\_caller\_identity.current\_caller.account\_id}:my-key-manager-user"] | `list(string)` | n/a | yes |
 | <a name="input_kms_master_key_id_override"></a> [kms\_master\_key\_id\_override](#input\_kms\_master\_key\_id\_override) | KMS key id for sqs encryption | `string` | `null` | no |
 | <a name="input_lambda_event_source_mapping_batch_size"></a> [lambda\_event\_source\_mapping\_batch\_size](#input\_lambda\_event\_source\_mapping\_batch\_size) | The largest number of records that Lambda will retrieve from your event source at the time of invocation. Defaults to 100 for DynamoDB, Kinesis, MQ and MSK, 10 for SQS. | `number` | `10` | no |
 | <a name="input_lambda_event_source_mapping_enabled"></a> [lambda\_event\_source\_mapping\_enabled](#input\_lambda\_event\_source\_mapping\_enabled) | Determines if the mapping will be enabled on creation. | `bool` | `true` | no |

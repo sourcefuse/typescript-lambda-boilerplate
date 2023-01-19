@@ -55,7 +55,7 @@ module "boilerplate" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = local.kms_key_admin_arns
+  kms_key_admin_arns = var.kms_key_admin_arns
   vpc_config         = var.vpc_config
   tags               = module.tags.extra_tags
 }
@@ -75,7 +75,7 @@ module "sns" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = local.kms_key_admin_arns
+  kms_key_admin_arns = var.kms_key_admin_arns
 
   tags = module.tags.extra_tags
 }
@@ -95,7 +95,7 @@ module "sqs" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = local.kms_key_admin_arns
+  kms_key_admin_arns = var.kms_key_admin_arns
 
   tags = module.tags.extra_tags
 }
@@ -115,7 +115,7 @@ module "cron" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = local.kms_key_admin_arns
+  kms_key_admin_arns = var.kms_key_admin_arns
 
   tags = module.tags.extra_tags
 }
@@ -135,7 +135,7 @@ module "elasticache_redis" {
   lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
   lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
 
-  kms_key_admin_arns = local.kms_key_admin_arns
+  kms_key_admin_arns = var.kms_key_admin_arns
   vpc_config         = local.lambda_ec_vpc_config
 
   tags = module.tags.extra_tags
@@ -167,12 +167,6 @@ resource "aws_lambda_permission" "with_sns" {
   principal     = "sns.amazonaws.com"
   source_arn    = aws_sns_topic.this.arn
 }
-
-################################################################################
-## shared
-################################################################################
-
-data "aws_caller_identity" "current_caller" {}
 
 ################################################################################
 ## sqs
