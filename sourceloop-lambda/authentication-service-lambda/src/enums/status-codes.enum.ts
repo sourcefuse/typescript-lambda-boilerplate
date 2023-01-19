@@ -8,7 +8,6 @@
  */
 /* eslint-disable-next-line  @typescript-eslint/naming-convention */
 export const enum STATUS_CODE {
-    // sonarignore:start
     CONTINUE = 100,
     SWITCHING_PROTOCOLS = 101,
     PROCESSING = 102,
@@ -57,7 +56,6 @@ export const enum STATUS_CODE {
     SERVICE_UNAVAILABLE = 503,
     GATEWAY_TIMEOUT = 504,
     HTTP_VERSION_NOT_SUPPORTED = 505,
-    // sonarignore:end
   }
   
   export const ErrorCodes = {
