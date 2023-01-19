@@ -7,8 +7,10 @@ data "aws_vpc" "vpc" {
   }
 }
 data "aws_subnets" "private" {
-  vpc_id = data.aws_vpc.vpc.id
-
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.vpc.id]
+  }
   filter {
     name = "tag:Name"
 
@@ -17,4 +19,9 @@ data "aws_subnets" "private" {
       "${var.namespace}-${var.environment}-privatesubnet-private-${var.region}b"
     ]
   }
+}
+
+data "aws_subnet" "subnet" {
+  for_each = toset(data.aws_subnets.private.ids)
+  id       = each.value
 }

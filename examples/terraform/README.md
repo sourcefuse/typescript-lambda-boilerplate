@@ -1,8 +1,7 @@
-# Terraform: Lambda Boilerplate
+# Terraform: Lambda Boilerplate example
 
 See the [README](../../../../README.md) in the repo's root for more information.  
 
-This is a build automation directory.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
