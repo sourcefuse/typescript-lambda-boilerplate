@@ -33,7 +33,6 @@ const getSecurityGroup = () => {
   return [];
 };
 
-
 new LambdaStack(app, 'migration', {// NOSONAR
   path: resolve(__dirname, '../../migration'),
   handler: 'lambda.handler',
@@ -76,6 +75,10 @@ new LambdaStack(app, 'lambda', {// NOSONAR
     PORT: '3005',
     LOG_LEVEL: 'info',
     DB_CONNECTOR: 'postgresql',
+  },
+  customDomainName: {
+    domainName: 'sl-auth-lambda.sfrefarch.com',
+    hostedZoneId: process.env.HOSTED_ZONE_ID || '',
   },
 });
 

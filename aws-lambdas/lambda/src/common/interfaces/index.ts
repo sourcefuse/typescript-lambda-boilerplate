@@ -1,1 +1,1 @@
-export * from './any-object';
+export * from './response';

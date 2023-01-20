@@ -1,4 +1,5 @@
 import { XOR } from 'ts-essentials';
+import { ApiGatewayCustomDomainNameBaseConfig } from './apiGatewayCustomDomainName-config';
 
 type LambdaFunctionBaseConfig = {
   path: string;
@@ -13,6 +14,10 @@ type LambdaFunctionBaseConfig = {
   isApiRequired?: boolean;
   invocationData?: string;
   timeout?: number;
+  customDomainName?: Omit<
+    ApiGatewayCustomDomainNameBaseConfig,
+    'acmCertificateArn'
+  > & {acmCertificateArn?: string};
 };
 
 export type LambdaFunctionConfig = XOR<

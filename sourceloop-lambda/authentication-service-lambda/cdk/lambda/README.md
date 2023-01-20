@@ -13,7 +13,6 @@ CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF a
 
 3. Configure the following keys in the `.env` file:  
   * **AWS_REGION**: *aws_region*  
-  * **AWS_KEY**: *aws_key*   
   * **AWS_ACCESS_KEY_ID**: *aws_access_key*
   * **AWS_SECRET_ACCESS_KEY**: *aws_secret_key*
   * **AWS_ROLE_ARN**: *role_arn*
@@ -22,12 +21,13 @@ CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF a
   * **SECURITY_GROUPS**: *security group ids eg ["sg-123"]* 
   * **DB_HOST**: *Postgres Database host* 
   * **DB_PORT**: *Postgres Database port* 
-  * **DB_PORT**: *Postgres Database port* 
   * **DB_USER**: *database username*
   * **DB_PASSWORD**: *database password*
   * **DB_DATABASE**: *database name*
   * **DB_SCHEMA**: *database schema*
   * **JWT_SECRET**: *For JWT token*
+  * **ACM_CERTIFICATE_ARN**: *ARN for ACM certificate*
+  * **HOSTED_ZONE_ID**: *Route53 hosted zone id*
 
   Note: if You want to use * **AWS_ACCESS_KEY_ID** and * **AWS_SECRET_ACCESS_KEY** then keep 
   * **AWS_PROFILE** as blank.
