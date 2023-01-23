@@ -19,9 +19,12 @@ variable "profile" {
 }
 
 variable "kms_key_admin_arns" {
-  description = "Additional IAM roles to map to the KMS key policy for administering the KMS key used for SSE."
+  description = <<EOT
+                IAM roles to map to the KMS key policy for administering 
+                the KMS key used for SSE. Must be set to avoid MalformedPolicyDocumentException
+                eg: ["arn:aws:iam::$\{data.aws_caller_identity.current_caller.account_id}:my-key-manager-user"]
+                EOT
   type        = list(string)
-  default     = []
 }
 
 ################################################################################
@@ -110,3 +113,22 @@ variable "cron_lambda_schedule" {
   default     = "rate(1 day)"
 }
 
+################################################################################
+## elasticache
+################################################################################
+
+variable "ec_subnet_ids" {
+  description = "List of subnet ids for lambda elasticache"
+  type        = list(string)
+}
+
+variable "ec_security_group_ids" {
+  description = "List of security group ids for lambda elasticache"
+  type        = list(string)
+}
+
+variable "redis_endpoint" {
+  description = "Provide your elasticache redis endpoint"
+  type        = string
+  default     = null
+}
