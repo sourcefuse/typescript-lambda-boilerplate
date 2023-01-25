@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import * as dotenvExt from 'dotenv-extended';
 import { resolve } from 'path';
 import { LambdaStack } from './common';
+import { RedisStack } from './common/stacks/redis.stack';
 
 dotenv.config();
 dotenvExt.load({
@@ -80,6 +81,11 @@ new LambdaStack(app, 'lambda', {// NOSONAR
     domainName: process.env.DOMAIN_NAME || '',
     hostedZoneId: process.env.HOSTED_ZONE_ID || '',
   },
+});
+
+new RedisStack(app, 'redis', {// NOSONAR
+  namespace: process.env.NAMESPACE || '',
+  environment: process.env.ENV || ''
 });
 
 app.synth();

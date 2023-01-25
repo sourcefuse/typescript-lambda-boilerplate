@@ -11,7 +11,7 @@ export class ApiGatewayCustomDomainName extends Construct {
     super(scope, name);
 
     const apigatewayv2DomainName =
-      new aws.apigatewayv2DomainName.Apigatewayv2DomainName( 
+      new aws.apigatewayv2DomainName.Apigatewayv2DomainName(
         this,
         'api-gw-domain',
         {
@@ -36,14 +36,12 @@ export class ApiGatewayCustomDomainName extends Construct {
       );
 
     new aws.route53Record.Route53Record(this, 'app_domain_records', {// NOSONAR
-      alias: [
-        {
-          evaluateTargetHealth: false,
-          name: apigatewayv2DomainName.domainNameConfiguration
-            .targetDomainName,
-          zoneId: apigatewayv2DomainName.domainNameConfiguration.hostedZoneId,
-        },
-      ],
+      alias: {
+        evaluateTargetHealth: false,
+        name: apigatewayv2DomainName.domainNameConfiguration.targetDomainName,
+        zoneId: apigatewayv2DomainName.domainNameConfiguration.hostedZoneId,
+      },
+
       name: apigatewayv2ApiMapping.domainName,
       type: 'A',
       zoneId: config.hostedZoneId,
