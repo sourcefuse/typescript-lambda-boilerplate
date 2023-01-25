@@ -106,7 +106,7 @@ module "cron" {
   region         = var.region
   lambda_name    = local.cron_lambda_name
   lambda_runtime = var.lambda_runtime
-  lambda_handler = "sqs.handler"
+  lambda_handler = "cron.handler"
   lambda_memory  = 128
   lambda_timeout = 120
 
@@ -118,6 +118,31 @@ module "cron" {
   kms_key_admin_arns = var.kms_key_admin_arns
 
   tags = module.tags.extra_tags
+}
+
+module "elasticache_redis" {
+  source         = "./lambda"
+  environment    = var.environment
+  region         = var.region
+  lambda_name    = local.ec_lambda_name
+  lambda_runtime = var.lambda_runtime
+  lambda_handler = "ec-redis.handler"
+  lambda_memory  = 128
+  lambda_timeout = 120
+
+  lambda_function_archive_source_dir  = "${path.root}/dist/src"
+  lambda_function_archive_output_path = "${path.root}/dist/function.zip"
+  lambda_layer_archive_source_dir     = "${path.root}/dist/layers"
+  lambda_layer_archive_output_path    = "${path.root}/dist/layers.zip"
+
+  kms_key_admin_arns = var.kms_key_admin_arns
+  vpc_config         = local.lambda_ec_vpc_config
+
+  tags = module.tags.extra_tags
+
+  custom_vars = tomap({
+    "REDIS_ENDPOINT" = var.redis_endpoint
+  })
 }
 
 ################################################################################
@@ -164,6 +189,7 @@ resource "aws_sqs_queue" "results_updates" {
   tags                              = module.tags.tags
   kms_master_key_id                 = local.kms_master_key_id
   kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
+
 }
 
 resource "aws_sqs_queue" "results_updates_dl_queue" {

@@ -15,7 +15,6 @@ terraform {
 ################################################################################
 ## lookups
 ################################################################################
-data "aws_caller_identity" "current_caller" {}
 
 data "archive_file" "function_archive" {
   type        = var.lambda_function_archive_type
@@ -54,10 +53,10 @@ resource "aws_lambda_function" "this" {
   ]
 
   environment {
-    variables = {
-      ENVIRONMENT_NAME = var.environment
-      REGION           = var.region
-    }
+    variables = merge(tomap({
+      "ENVIRONMENT_NAME" = var.environment,
+      "REGION"           = var.region
+    }), var.custom_vars)
   }
 
 
