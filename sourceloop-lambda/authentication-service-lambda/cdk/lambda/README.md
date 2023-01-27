@@ -28,6 +28,7 @@ CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF a
   * **JWT_SECRET**: *For JWT token*
   * **ACM_CERTIFICATE_ARN**: *ARN for ACM certificate*
   * **HOSTED_ZONE_ID**: *Route53 hosted zone id*
+  * **DOMAIN_NAME**: *custom domain name for api gateway*
 
   Note: if You want to use * **AWS_ACCESS_KEY_ID** and * **AWS_SECRET_ACCESS_KEY** then keep 
   * **AWS_PROFILE** as blank.

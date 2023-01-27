@@ -77,7 +77,7 @@ new LambdaStack(app, 'lambda', {// NOSONAR
     DB_CONNECTOR: 'postgresql',
   },
   customDomainName: {
-    domainName: 'sl-auth-lambda.sfrefarch.com',
+    domainName: process.env.DOMAIN_NAME || '',
     hostedZoneId: process.env.HOSTED_ZONE_ID || '',
   },
 });
