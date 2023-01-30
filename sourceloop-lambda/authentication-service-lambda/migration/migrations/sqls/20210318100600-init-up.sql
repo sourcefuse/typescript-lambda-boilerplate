@@ -202,4 +202,3 @@ ALTER TABLE main.user_tenants ADD CONSTRAINT fk_user_tenants_users FOREIGN KEY (
 ALTER TABLE main.user_tenants ADD CONSTRAINT fk_user_tenants_tenants FOREIGN KEY ( tenant_id ) REFERENCES main.tenants( id );
 
 ALTER TABLE main.user_tenants ADD CONSTRAINT fk_user_tenants_roles FOREIGN KEY ( role_id ) REFERENCES main.roles( id );
-

@@ -47,3 +47,14 @@ output "lambda_cron_version" {
   value = module.cron.lambda_version
 }
 
+output "lambda_elasticache_arn" {
+  value = module.elasticache_redis.lambda_arn
+}
+
+output "lambda_elasticache_name" {
+  value = module.elasticache_redis.lambda_function_name
+}
+
+output "lambda_elasticache_version" {
+  value = module.elasticache_redis.lambda_version
+}
