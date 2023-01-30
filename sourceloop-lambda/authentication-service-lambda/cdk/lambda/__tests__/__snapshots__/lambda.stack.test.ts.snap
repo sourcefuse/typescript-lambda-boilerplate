@@ -7,7 +7,7 @@ exports[`My CDKTF Application with all config set should match snapshot test 1`]
       "value": "\${aws_lambda_function.lambda-function.arn}"
     },
     "url": {
-      "value": "\${aws_apigatewayv2_api.api-gw.api_endpoint}"
+      "value": "domainName"
     }
   },
   "provider": {
@@ -30,6 +30,23 @@ exports[`My CDKTF Application with all config set should match snapshot test 1`]
         "name": "test",
         "protocol_type": "HTTP",
         "target": "\${aws_lambda_function.lambda-function.arn}"
+      }
+    },
+    "aws_apigatewayv2_api_mapping": {
+      "api-gateway-custom-domain-name_path-mapping_6F5FF01F": {
+        "api_id": "\${aws_apigatewayv2_api.api-gw.id}",
+        "domain_name": "\${aws_apigatewayv2_domain_name.api-gateway-custom-domain-name_api-gw-domain_F7F49076.domain_name}",
+        "stage": "$default"
+      }
+    },
+    "aws_apigatewayv2_domain_name": {
+      "api-gateway-custom-domain-name_api-gw-domain_F7F49076": {
+        "domain_name": "domainName",
+        "domain_name_configuration": {
+          "certificate_arn": "arn:aws:acm:us-east-1:123456789123:certificate/12345678-1234-1234-1234-123456789123",
+          "endpoint_type": "REGIONAL",
+          "security_policy": "TLS_1_2"
+        }
       }
     },
     "aws_iam_policy": {
@@ -57,7 +74,7 @@ exports[`My CDKTF Application with all config set should match snapshot test 1`]
         "layers": [
           "\${aws_lambda_layer_version.lambda-layer.arn}"
         ],
-        "memory_size": 128,
+        "memory_size": 256,
         "role": "\${aws_iam_role.lambda-exec.arn}",
         "runtime": "nodejs16.x",
         "vpc_config": {
@@ -82,6 +99,20 @@ exports[`My CDKTF Application with all config set should match snapshot test 1`]
         "function_name": "\${aws_lambda_function.lambda-function.function_name}",
         "principal": "apigateway.amazonaws.com",
         "source_arn": "\${aws_apigatewayv2_api.api-gw.execution_arn}/*/*"
+      }
+    },
+    "aws_route53_record": {
+      "api-gateway-custom-domain-name_app_domain_records_4069DD36": {
+        "alias": [
+          {
+            "evaluate_target_health": false,
+            "name": "\${aws_apigatewayv2_domain_name.api-gateway-custom-domain-name_api-gw-domain_F7F49076.domain_name_configuration[0].target_domain_name}",
+            "zone_id": "\${aws_apigatewayv2_domain_name.api-gateway-custom-domain-name_api-gw-domain_F7F49076.domain_name_configuration[0].hosted_zone_id}"
+          }
+        ],
+        "name": "\${aws_apigatewayv2_api_mapping.api-gateway-custom-domain-name_path-mapping_6F5FF01F.domain_name}",
+        "type": "A",
+        "zone_id": "hostedZoneId"
       }
     },
     "random_pet": {

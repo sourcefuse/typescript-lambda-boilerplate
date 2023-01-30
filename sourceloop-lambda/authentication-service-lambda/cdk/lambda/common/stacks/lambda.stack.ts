@@ -8,15 +8,17 @@ import {
   TerraformStack
 } from 'cdktf';
 import { Construct } from 'constructs';
+import { AcmCertificate } from '../constructs/acmCertificate';
+import { ApiGatewayCustomDomainName } from '../constructs/apiGatewayCustomDomainName';
+import { LambdaFunctionConfig } from '../interfaces';
 import {
   iamRolePolicy,
   lambdaAction,
   lambdaPrincipal,
   lambdaRolePolicy
-} from '../constants';
-import { LambdaFunctionConfig } from '../interfaces';
+} from '../utils';
+import { defaultLambdaMemory } from '../utils/constants';
 
-const defaultLambdaMemory = 128;
 export class LambdaStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
     super(scope, name);
@@ -95,14 +97,14 @@ export class LambdaStack extends TerraformStack {
         handler: config.handler,
         runtime: config.runtime,
         role: role.arn,
-        memorySize: config?.memorySize || defaultLambdaMemory,
+        memorySize: config.memorySize || defaultLambdaMemory,
         layers: layers.length ? layers : undefined,
         environment: {variables: config.envVars},
-        timeout: config?.timeout,
+        timeout: config.timeout,
       },
     );
 
-    if (config?.invocationData) {
+    if (config.invocationData) {
       new aws.dataAwsLambdaInvocation.DataAwsLambdaInvocation(// NOSONAR
         this,
         'invocation',
@@ -142,8 +144,28 @@ export class LambdaStack extends TerraformStack {
         },
       );
 
+      if (config.customDomainName) {
+        const customDomainName = {
+          ...config.customDomainName,
+          acmCertificateArn: config.customDomainName.acmCertificateArn || '',
+        };
+        if (!customDomainName.acmCertificateArn) {
+          const acmCertificate = new AcmCertificate(this, 'acmCertificate', {
+            domainName: customDomainName.domainName,
+            hostedZoneId: customDomainName.hostedZoneId,
+          });
+          customDomainName.acmCertificateArn = acmCertificate.acmArn;
+        }
+        new ApiGatewayCustomDomainName(this, 'api-gateway-custom-domain-name', {// NOSONAR
+          apiId: api.id,
+          ...customDomainName,
+        });
+      }
+
       new TerraformOutput(this, 'url', {// NOSONAR
-        value: api.apiEndpoint,
+        value: config.customDomainName
+          ? config.customDomainName.domainName
+          : api.apiEndpoint,
       });
     }
 
