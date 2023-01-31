@@ -1,6 +1,5 @@
 import * as aws from "@cdktf/provider-aws";
 import { LambdaFunctionVpcConfig } from "@cdktf/provider-aws/lib/lambda-function";
-import * as random from '@cdktf/provider-random';
 import {
   AssetType,
   TerraformAsset,
@@ -8,6 +7,7 @@ import {
   TerraformStack
 } from "cdktf";
 import { Construct } from "constructs";
+import * as random from "../../.gen/providers/random";
 import { iamRolePolicy, snsRolePolicy } from "../constants";
 import { AwsProvider } from "../constructs/awsProvider";
 import { SnsFunctionConfig } from "../interfaces";

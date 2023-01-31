@@ -1,10 +1,10 @@
 import * as aws from "@cdktf/provider-aws";
-import * as random from "@cdktf/provider-random";
 import {
   TerraformOutput,
   TerraformStack
 } from "cdktf";
 import { Construct } from "constructs";
+import * as random from "../../.gen/providers/random";
 import {
   lambdaAction,
   lambdaPrincipal

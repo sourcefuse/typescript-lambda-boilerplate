@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "@cdktf/provider-aws": "^12.0.1",
-    "@cdktf/provider-random": "^5.0.0",
     "@cdktf/tf-module-stack": "^2.0.8",
     "cdktf": "^0.15.1",
     "constructs": "^10.1.232",

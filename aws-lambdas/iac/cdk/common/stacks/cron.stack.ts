@@ -1,7 +1,7 @@
 import * as aws from "@cdktf/provider-aws";
-import * as random from "@cdktf/provider-random";
 import { TerraformStack } from "cdktf";
 import { Construct } from "constructs";
+import * as random from "../../.gen/providers/random";
 import { AwsProvider } from "../constructs/awsProvider";
 import { Lambda } from "../constructs/lambda";
 import { LambdaFunctionBaseConfig } from "../interfaces";
