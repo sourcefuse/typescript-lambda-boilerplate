@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "sourcefuse-cloud",
+        "projectKey": "sourcefuse_typescript-lambda-boilerplate"
+    }
+}

@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import * as dotenvExt from "dotenv-extended";
 import { resolve } from "path";
 import { LambdaStack, SnsStack, SqsStack } from "./common";
+import { CronModule } from "./common/stacks/cron.stack";
 
 dotenv.config();
 dotenvExt.load({
@@ -15,21 +16,39 @@ const app = new App();
 const codePath = resolve(__dirname, "../../lambda/dist/src");
 const nodeRuntime = "nodejs16.x";
 const layerPath = resolve(__dirname, "../../lambda/dist/layers");
-const securityGroupIds = ["sg-07f481ec2ced54878"];
-const subnetIds = ["subnet-01c22b0adf9cdd8df", "subnet-0b32fea3b2e13a6ba"];
 
-new LambdaStack(app, "lambda", { // NOSONAR
+const getSubnetIds = () => {
+  try {
+    const subnetIds = process.env?.SUBNET_IDS || "";
+    return JSON.parse(subnetIds);
+  } catch (e) {
+    console.error(e); // NOSONAR
+  }
+  return [];
+};
+
+const getSecurityGroup = () => {
+  try {
+    const securityGroup = process.env?.SECURITY_GROUPS || "";
+    return JSON.parse(securityGroup);
+  } catch (e) {
+    console.error(e); // NOSONAR
+  }
+  return [];
+};
+
+new LambdaStack(app, "lambda", {// NOSONAR
   path: codePath,
   handler: "handlers/api-gateway.handler",
   runtime: nodeRuntime,
   version: "v0.0.1",
   layerPath: layerPath,
   isApiRequired: true,
-  securityGroupIds,
-  subnetIds,
+  securityGroupIds: getSecurityGroup(),
+  subnetIds: getSubnetIds(),
 });
 
-new SqsStack(app, "sqs", { // NOSONAR
+new SqsStack(app, "sqs", {// NOSONAR
   path: codePath,
   handler: "handlers/sqs.handler",
   runtime: nodeRuntime,
@@ -41,13 +60,13 @@ new SqsStack(app, "sqs", { // NOSONAR
   messageRetentionSeconds: 86400,
   receiveWaitTimeSeconds: 10,
   maxReceiveCount: 5,
-  securityGroupIds,
-  subnetIds,
+  securityGroupIds: getSecurityGroup(),
+  subnetIds: getSubnetIds(),
   kmsMasterKeyId: "alias/aws/sqs",
   kmsDataKeyReusePeriodSeconds: 300,
 });
 
-new SnsStack(app, "sns", { // NOSONAR
+new SnsStack(app, "sns", {// NOSONAR
   path: codePath,
   handler: "handlers/sns.handler",
   runtime: nodeRuntime,
@@ -57,9 +76,18 @@ new SnsStack(app, "sns", { // NOSONAR
   lambdaStatementId: "AllowExecutionFromSNS",
   lambdaAction: "lambda:InvokeFunction",
   lambdaPrincipal: "sns.amazonaws.com",
-  securityGroupIds,
-  subnetIds,
+  securityGroupIds: getSecurityGroup(),
+  subnetIds: getSubnetIds(),
   kmsMasterKeyId: "alias/aws/sns",
+});
+
+new CronModule(app, "cron", {// NOSONAR
+  path: codePath,
+  handler: "handlers/cron.handler",
+  runtime: nodeRuntime,
+  version: "v0.0.1",
+  layerPath: layerPath,
+  scheduleExpression:"rate(1 day)"
 });
 
 app.synth();

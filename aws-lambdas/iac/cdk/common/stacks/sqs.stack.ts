@@ -1,5 +1,5 @@
 import * as aws from "@cdktf/provider-aws";
-import { LambdaFunctionVpcConfig } from "@cdktf/provider-aws/lib/lambdafunction";
+import { LambdaFunctionVpcConfig } from "@cdktf/provider-aws/lib/lambda-function";
 import {
   AssetType,
   TerraformAsset,
@@ -9,43 +9,38 @@ import {
 import { Construct } from "constructs";
 import * as random from "../../.gen/providers/random";
 import { iamRolePolicy, sqsRolePolicy } from "../constants";
+import { AwsProvider } from "../constructs/awsProvider";
 import { SqsFunctionConfig } from "../interfaces";
+
 export class SqsStack extends TerraformStack {
   constructor(scope: Construct, name: string, config: SqsFunctionConfig) {
     super(scope, name);
-    new aws.AwsProvider(this, "aws", { // NOSONAR
-      region: process.env.AWS_REGION,
-      accessKey: process.env.AWS_ACCESS_KEY_ID,
-      secretKey: process.env.AWS_SECRET_ACCESS_KEY,
-      profile: process.env.AWS_PROFILE,
-      assumeRole: {
-        roleArn: process.env.AWS_ROLE_ARN,
-      },
-    });
-    new random.RandomProvider(this, "random"); // NOSONAR
+
+    new AwsProvider(this, "aws"); // NOSONAR
+    new random.provider.RandomProvider(this, 'random');// NOSONAR
 
     // Create random value
-    const pet = new random.Pet(this, "random-name", {
+    const pet = new random.pet.Pet(this, "random-name", {
       length: 2,
     });
 
-    const role = new aws.iam.IamRole(this, "sqs-exec", {
+    const role = new aws.iamRole.IamRole(this, "sqs-exec", {
       name: `sqs-role-${name}-${pet.id}`,
       assumeRolePolicy: JSON.stringify(iamRolePolicy),
     });
 
-    const sqsRole = new aws.iam.IamPolicy(this, "sqs-policy", {
+    const sqsRole = new aws.iamPolicy.IamPolicy(this, "sqs-policy", {
       policy: JSON.stringify(sqsRolePolicy),
     });
 
     // Add execution role for lambda to write to CloudWatch logs
-    new aws.iam.IamRolePolicyAttachment(this, "sqs-managed-policy", { // NOSONAR
+    new aws.iamRolePolicyAttachment.IamRolePolicyAttachment(this, "sqs-managed-policy", {// NOSONAR
       policyArn: sqsRole.arn,
       role: role.name,
     });
 
     //Creating DLQueue
-    const resultsUpdatesDlQueue = new aws.sqs.SqsQueue(this, "dl-queue", {
+    const resultsUpdatesDlQueue = new aws.sqsQueue.SqsQueue(this, "dl-queue", {
       name: `sqs-dl-queue-${name}-${pet.id}`,
       kmsMasterKeyId: config.kmsMasterKeyId,
       kmsDataKeyReusePeriodSeconds: config.kmsDataKeyReusePeriodSeconds,
@@ -57,7 +52,7 @@ export class SqsStack extends TerraformStack {
     };
 
     // Create SqsQueue
-    const awsSqsQueue = new aws.sqs.SqsQueue(this, "sqs-queue", {
+    const awsSqsQueue = new aws.sqsQueue.SqsQueue(this, "sqs-queue", {
       delaySeconds: config.delay,
       maxMessageSize: config.maxMessageSize,
       messageRetentionSeconds: config.messageRetentionSeconds,
@@ -83,7 +78,7 @@ export class SqsStack extends TerraformStack {
         type: AssetType.ARCHIVE, // if left empty it infers directory and file
       });
       // Create Lambda Layer for function
-      const lambdaLayers = new aws.lambdafunction.LambdaLayerVersion(
+      const lambdaLayers = new aws.lambdaLayerVersion.LambdaLayerVersion(
         this,
         "lambda-layer",
         {
@@ -95,7 +90,7 @@ export class SqsStack extends TerraformStack {
       layers.push(lambdaLayers.arn);
     }
 
-    const lambdaFunc = new aws.lambdafunction.LambdaFunction(
+    const lambdaFunc = new aws.lambdaFunction.LambdaFunction(
       this,
       "lambda-function",
       {
@@ -118,7 +113,7 @@ export class SqsStack extends TerraformStack {
       lambdaFunc.putVpcConfig(vpcConfig);
     }
 
-    new aws.lambdafunction.LambdaEventSourceMapping( // NOSONAR
+    new aws.lambdaEventSourceMapping.LambdaEventSourceMapping( // NOSONAR
       this,
       "event-source-mapping",
       {
@@ -129,7 +124,7 @@ export class SqsStack extends TerraformStack {
       }
     );
 
-    new TerraformOutput(this, "function", { // NOSONAR
+    new TerraformOutput(this, "function", {// NOSONAR
       value: lambdaFunc.arn,
     });
   }
