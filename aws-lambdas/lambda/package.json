@@ -6,7 +6,7 @@
     "lint": "eslint --ext .js,.ts,.tsx src ./__tests__/",
     "lint:fix": "eslint --fix --ext .js,.ts,.tsx src ./__tests__/",
     "script:build-dependency-layer": "npm install --prod && scripts/build-dependency-layer.sh && npm install;",
-    "build": "tsc && npm script:build-dependency-layer && cp -a dist/. ../iac/terraform/dist/  && npm test ",
+    "build": "tsc && npm run script:build-dependency-layer && cp -a dist/. ../iac/terraform/dist/  && npm test ",
     "cleanup": "rm -rf dist/* && cd ../iac/terraform && rm -rf dist/*",
     "test": "jest"
   },
@@ -28,8 +28,7 @@
     "jest": "^28.1.1",
     "ts-jest": "^28.0.5",
     "ts-node": "^10.8.1",
-    "tsc": "^2.0.4",
-    "typescript": "^4.7.4"
+    "typescript": "^4.9.5"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "3.229.0",
