@@ -37,10 +37,18 @@ CDKTF stacks let us manage multiple Terraform configurations in the same CDKTF a
 
 ## How to Run
 This module gives us several commands for the aws lambda function. 
+* Download all required providers and modules. 
+  ```shell
+  cdktf get
+  ``` 
 * List all the stacks defined in your CDKTF application.  
   ```shell
   cdktf list
   ``` 
+* To deploy the Elasticache redis *(here sourceloop authentication uses kv-memory connector  by default if you wish to use redis connector then change connector from kv-memory to kv-redis in cache.datasource.ts , install the [package](https://www.npmjs.com/package/loopback-connector-kv-redis) and pass the redis envs to lambda)*
+  ```shell
+  cdktf deploy redis
+  ```
 * To deploy the sourceloop authentication in lambda on aws and remember to confirm the deploy with a yes.*(Make sure to run npm run build:layers in root folder to create required lambda layers)*
   ```shell
   cdktf deploy lambda
