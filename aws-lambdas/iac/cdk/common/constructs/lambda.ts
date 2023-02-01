@@ -12,6 +12,7 @@ interface LambdaFunctionConfig extends LambdaFunctionBaseConfig {
 export class Lambda extends Construct {
   arn: string;
   functionName: string;
+  lambda: aws.lambdaFunction.LambdaFunction;
 
   constructor(scope: Construct, id: string, config: LambdaFunctionConfig) {
     super(scope, id);
@@ -86,6 +87,11 @@ export class Lambda extends Construct {
       lambdaFunc.putVpcConfig(vpcConfig);
     }
 
+    if(config.envVars){
+      lambdaFunc.putEnvironment({variables: config.envVars})
+    }
+    
+    this.lambda = lambdaFunc;
     this.arn = lambdaFunc.arn;
     this.functionName = lambdaFunc.functionName;
   }
