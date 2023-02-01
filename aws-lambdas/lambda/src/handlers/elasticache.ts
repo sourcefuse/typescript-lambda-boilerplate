@@ -2,10 +2,10 @@ import { Callback, Context } from "aws-lambda";
 import { createClient } from "redis";
 
 const client = createClient({
-    url: process.env.redisEndpoint
-  });
+  url: process.env.redisEndpoint,
+});
 
-client.on("error", (err) => console.log("Redis Client Error", err));
+client.on("error", err => console.error("Redis Client Error", err)); //NOSONAR
 
 const indentation = 4;
 exports.handler = async (

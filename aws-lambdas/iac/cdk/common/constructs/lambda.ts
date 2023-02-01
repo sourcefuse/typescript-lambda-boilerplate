@@ -88,7 +88,7 @@ export class Lambda extends Construct {
     }
 
     if(config.envVars){
-      lambdaFunc.putEnvironment({variables: config.envVars})
+      lambdaFunc.putEnvironment({variables: config.envVars});
     }
     
     this.lambda = lambdaFunc;
