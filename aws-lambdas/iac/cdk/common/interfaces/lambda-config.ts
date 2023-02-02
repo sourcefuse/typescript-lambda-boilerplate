@@ -6,4 +6,7 @@ export interface LambdaFunctionBaseConfig {
   layerPath?: string;
   securityGroupIds?: string[];
   subnetIds?: string[];
+  envVars?: {
+    [x: string]: string;
+  };
 }

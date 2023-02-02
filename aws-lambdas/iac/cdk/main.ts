@@ -4,6 +4,7 @@ import * as dotenvExt from "dotenv-extended";
 import { resolve } from "path";
 import { LambdaStack, SnsStack, SqsStack } from "./common";
 import { CronModule } from "./common/stacks/cron.stack";
+import { ElasticacheStack } from "./common/stacks/elasticache";
 
 dotenv.config();
 dotenvExt.load({
@@ -88,6 +89,19 @@ new CronModule(app, "cron", {// NOSONAR
   version: "v0.0.1",
   layerPath: layerPath,
   scheduleExpression:"rate(1 day)"
+});
+
+new ElasticacheStack(app, "elasticache", {// NOSONAR
+  path: codePath,
+  handler: "handlers/elasticache.handler",
+  runtime: nodeRuntime,
+  version: "v0.0.1",
+  layerPath: layerPath,
+  namespace: process.env.NAMESPACE || '',
+  environment:process.env.ENV || '',
+  envVars:{
+    redisEndpoint:process.env.REDIS_ENDPOINT || '',
+  }
 });
 
 app.synth();
