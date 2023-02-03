@@ -12,13 +12,14 @@ import {
 import { AwsProvider } from "../constructs/awsProvider";
 import { Lambda } from "../constructs/lambda";
 import { LambdaFunctionBaseConfig } from "../interfaces";
+import { getResourceName } from "../utils/helper";
 
 interface LambdaFunctionConfig extends LambdaFunctionBaseConfig {
   isApiRequired?:boolean;
 }
 export class LambdaStack extends TerraformStack {
-  constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
-    super(scope, name);
+  constructor(scope: Construct, id: string, config: LambdaFunctionConfig) {
+    super(scope, id);
 
     new AwsProvider(this, "aws"); // NOSONAR
 
@@ -27,6 +28,11 @@ export class LambdaStack extends TerraformStack {
     // Create random value
     const pet = new random.pet.Pet(this, "random-name", {
       length: 2,
+    });
+    const name = getResourceName({
+      namespace: config.namespace,
+      environment: config.environment,
+      randomName: pet.id,
     });
 
     const lambdaFunc = new Lambda(this, "lambda", {...config,name:pet.id});

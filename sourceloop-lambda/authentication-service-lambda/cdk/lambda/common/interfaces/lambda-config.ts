@@ -18,6 +18,8 @@ type LambdaFunctionBaseConfig = {
     ApiGatewayCustomDomainNameBaseConfig,
     'acmCertificateArn'
   > & {acmCertificateArn?: string};
+  namespace: string;
+  environment: string;
 };
 
 export type LambdaFunctionConfig = XOR<

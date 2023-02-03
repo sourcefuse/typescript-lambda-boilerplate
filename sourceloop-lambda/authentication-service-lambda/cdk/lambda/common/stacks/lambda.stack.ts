@@ -18,10 +18,11 @@ import {
   lambdaRolePolicy
 } from '../utils';
 import { defaultLambdaMemory } from '../utils/constants';
+import { getResourceName } from '../utils/helper';
 
 export class LambdaStack extends TerraformStack {
-  constructor(scope: Construct, name: string, config: LambdaFunctionConfig) {
-    super(scope, name);
+  constructor(scope: Construct, id: string, config: LambdaFunctionConfig) {
+    super(scope, id);
 
     new aws.provider.AwsProvider(this, 'aws', {// NOSONAR
       region: process.env.AWS_REGION,
@@ -39,6 +40,12 @@ export class LambdaStack extends TerraformStack {
     // Create random value
     const pet = new random.pet.Pet(this, 'random-name', {
       length: 2,
+    });
+
+    const name = getResourceName({
+      namespace: config.namespace,
+      environment: config.environment,
+      randomName: pet.id,
     });
 
     // Creating Archive of Lambda
@@ -60,7 +67,7 @@ export class LambdaStack extends TerraformStack {
         'lambda-layer',
         {
           filename: layerAsset.path,
-          layerName: `${name}-layers-${pet.id}`,
+          layerName: name,
         },
       );
 
@@ -69,7 +76,7 @@ export class LambdaStack extends TerraformStack {
 
     // Create Lambda role
     const role = new aws.iamRole.IamRole(this, 'lambda-exec', {
-      name: `lambda-role-${name}-${pet.id}`,
+      name,
       assumeRolePolicy: JSON.stringify(iamRolePolicy),
     });
 
@@ -92,7 +99,7 @@ export class LambdaStack extends TerraformStack {
       this,
       'lambda-function',
       {
-        functionName: `cdktf-${name}-${pet.id}`,
+        functionName: name,
         filename: asset.path,
         handler: config.handler,
         runtime: config.runtime,

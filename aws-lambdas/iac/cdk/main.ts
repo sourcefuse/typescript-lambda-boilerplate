@@ -47,6 +47,8 @@ new LambdaStack(app, "lambda", {// NOSONAR
   isApiRequired: true,
   securityGroupIds: getSecurityGroup(),
   subnetIds: getSubnetIds(),
+  namespace: process.env.NAMESPACE || '',
+  environment:process.env.ENV || '',
 });
 
 new SqsStack(app, "sqs", {// NOSONAR
@@ -65,6 +67,8 @@ new SqsStack(app, "sqs", {// NOSONAR
   subnetIds: getSubnetIds(),
   kmsMasterKeyId: "alias/aws/sqs",
   kmsDataKeyReusePeriodSeconds: 300,
+  namespace: process.env.NAMESPACE || '',
+  environment:process.env.ENV || '',
 });
 
 new SnsStack(app, "sns", {// NOSONAR
@@ -80,6 +84,8 @@ new SnsStack(app, "sns", {// NOSONAR
   securityGroupIds: getSecurityGroup(),
   subnetIds: getSubnetIds(),
   kmsMasterKeyId: "alias/aws/sns",
+  namespace: process.env.NAMESPACE || '',
+  environment:process.env.ENV || '',
 });
 
 new CronModule(app, "cron", {// NOSONAR
@@ -88,7 +94,9 @@ new CronModule(app, "cron", {// NOSONAR
   runtime: nodeRuntime,
   version: "v0.0.1",
   layerPath: layerPath,
-  scheduleExpression:"rate(1 day)"
+  scheduleExpression:"rate(1 day)",
+  namespace: process.env.NAMESPACE || '',
+  environment:process.env.ENV || '',
 });
 
 new ElasticacheStack(app, "elasticache", {// NOSONAR

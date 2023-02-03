@@ -5,6 +5,7 @@ import * as random from "../../.gen/providers/random";
 import { AwsProvider } from "../constructs/awsProvider";
 import { Lambda } from "../constructs/lambda";
 import { LambdaFunctionBaseConfig } from "../interfaces";
+import { getResourceName } from "../utils/helper";
 
 interface CronLambda extends LambdaFunctionBaseConfig {
   scheduleExpression: string;
@@ -24,9 +25,15 @@ export class CronModule extends TerraformStack {
 
     const lambda = new Lambda(this, "lambda", { ...config, name: pet.id });
 
+    const name = getResourceName({
+      namespace: config.namespace,
+      environment: config.environment,
+      randomName: pet.id,
+    });
+
     const awsCloudwatchEventRuleLambdaCron =
       new aws.cloudwatchEventRule.CloudwatchEventRule(this, "lambda_cron", {
-        name: `${pet.id}-my-cron`,
+        name,
         scheduleExpression: config.scheduleExpression,
       });
 

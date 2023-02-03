@@ -11,10 +11,11 @@ import * as random from "../../.gen/providers/random";
 import { iamRolePolicy, sqsRolePolicy } from "../constants";
 import { AwsProvider } from "../constructs/awsProvider";
 import { SqsFunctionConfig } from "../interfaces";
+import { getResourceName } from "../utils/helper";
 
 export class SqsStack extends TerraformStack {
-  constructor(scope: Construct, name: string, config: SqsFunctionConfig) {
-    super(scope, name);
+  constructor(scope: Construct, id: string, config: SqsFunctionConfig) {
+    super(scope, id);
 
     new AwsProvider(this, "aws"); // NOSONAR
     new random.provider.RandomProvider(this, 'random');// NOSONAR
@@ -24,8 +25,14 @@ export class SqsStack extends TerraformStack {
       length: 2,
     });
 
+    const name = getResourceName({
+      namespace: config.namespace,
+      environment: config.environment,
+      randomName: pet.id,
+    });
+
     const role = new aws.iamRole.IamRole(this, "sqs-exec", {
-      name: `sqs-role-${name}-${pet.id}`,
+      name,
       assumeRolePolicy: JSON.stringify(iamRolePolicy),
     });
 
@@ -41,7 +48,7 @@ export class SqsStack extends TerraformStack {
 
     //Creating DLQueue
     const resultsUpdatesDlQueue = new aws.sqsQueue.SqsQueue(this, "dl-queue", {
-      name: `sqs-dl-queue-${name}-${pet.id}`,
+      name: `${name}-dlq`,
       kmsMasterKeyId: config.kmsMasterKeyId,
       kmsDataKeyReusePeriodSeconds: config.kmsDataKeyReusePeriodSeconds,
     });
@@ -57,7 +64,7 @@ export class SqsStack extends TerraformStack {
       maxMessageSize: config.maxMessageSize,
       messageRetentionSeconds: config.messageRetentionSeconds,
       receiveWaitTimeSeconds: config.receiveWaitTimeSeconds,
-      name: `sqs-queue-${name}-${pet.id}`,
+      name,
       policy: JSON.stringify(sqsRolePolicy),
       redrivePolicy: JSON.stringify(redrivePolicy),
       kmsMasterKeyId: config.kmsMasterKeyId,
@@ -83,7 +90,7 @@ export class SqsStack extends TerraformStack {
         "lambda-layer",
         {
           filename: layerAsset.path,
-          layerName: `${name}-layers-${pet.id}`,
+          layerName: name,
         }
       );
 
@@ -94,7 +101,7 @@ export class SqsStack extends TerraformStack {
       this,
       "lambda-function",
       {
-        functionName: `cdktf-sqs-${name}-${pet.id}`,
+        functionName: name,
         filename: asset.path,
         handler: config.handler,
         runtime: config.runtime,
