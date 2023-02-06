@@ -11,10 +11,11 @@ import * as random from "../../.gen/providers/random";
 import { iamRolePolicy, snsRolePolicy } from "../constants";
 import { AwsProvider } from "../constructs/awsProvider";
 import { SnsFunctionConfig } from "../interfaces";
+import { getResourceName } from "../utils/helper";
 
 export class SnsStack extends TerraformStack {
-  constructor(scope: Construct, name: string, config: SnsFunctionConfig) {
-    super(scope, name);
+  constructor(scope: Construct, id: string, config: SnsFunctionConfig) {
+    super(scope, id);
 
     new AwsProvider(this, "aws"); // NOSONAR
 
@@ -31,8 +32,14 @@ export class SnsStack extends TerraformStack {
       length: 2,
     });
 
+    const name = getResourceName({
+      namespace: config.namespace,
+      environment: config.environment,
+      randomName: pet.id,
+    });
+
     const role = new aws.iamRole.IamRole(this, "sns-exec", {
-      name: `sns-role-${name}-${pet.id}`,
+      name,
       assumeRolePolicy: JSON.stringify(iamRolePolicy),
     });
 
@@ -59,7 +66,7 @@ export class SnsStack extends TerraformStack {
         "lambda-layer",
         {
           filename: layerAsset.path,
-          layerName: `${name}-layers-${pet.id}`,
+          layerName: name,
         }
       );
 
@@ -67,7 +74,7 @@ export class SnsStack extends TerraformStack {
     }
 
     const awsSnsTopic = new aws.snsTopic.SnsTopic(this, "sns-topic", {
-      name: `sns-topic-${name}-${pet.id}`,
+      name,
       kmsMasterKeyId: config.kmsMasterKeyId,
     });
 
@@ -75,7 +82,7 @@ export class SnsStack extends TerraformStack {
       this,
       "lambda-function",
       {
-        functionName: `cdktf-sns-${name}-${pet.id}`,
+        functionName: name,
         filename: asset.path,
         handler: config.handler,
         runtime: config.runtime,

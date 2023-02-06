@@ -14,4 +14,6 @@ export interface SqsFunctionConfig {
   subnetIds?: string[];
   kmsMasterKeyId: string;
   kmsDataKeyReusePeriodSeconds: number;
+  namespace : string;
+  environment : string;
 }

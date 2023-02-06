@@ -11,4 +11,6 @@ export interface SnsFunctionConfig {
   securityGroupIds?: string[];
   subnetIds?: string[];
   kmsMasterKeyId: string;
+  namespace : string;
+  environment : string;
 }

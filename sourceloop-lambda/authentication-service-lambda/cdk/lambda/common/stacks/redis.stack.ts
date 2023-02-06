@@ -3,6 +3,7 @@ import { Fn, TerraformIterator, TerraformStack } from 'cdktf';
 import { Construct } from 'constructs';
 import { Redis } from '../../.gen/modules/redis';
 import { AwsProvider } from '../constructs/awsProvider';
+import { getResourceName } from '../utils/helper';
 
 type Config = {
   namespace: string;
@@ -10,10 +11,16 @@ type Config = {
 };
 
 export class RedisStack extends TerraformStack {
-  constructor(scope: Construct, name: string, config: Config) {
-    super(scope, name);
+  constructor(scope: Construct, id: string, config: Config) {
+    super(scope, id);
 
     new AwsProvider(this, 'aws');// NOSONAR
+
+    const name = getResourceName({
+      namespace: config.namespace,
+      environment: config.environment,
+      randomName: 'Redis-user',
+    });
 
     const dataAwsVpcVpc = new aws.dataAwsVpc.DataAwsVpc(this, 'vpc', {
       filter: [
@@ -80,9 +87,9 @@ export class RedisStack extends TerraformStack {
       "ec_security_group",
       {
         description: "Security Group for ElastiCache redis users",
-        name: `${config.namespace}-${config.environment}-Redis-user`,
+        name,
         tags: {
-          Name: `${config.namespace}-${config.environment}-Redis-user`,
+          Name: name,
           "redis-user": "yes",
         },
         vpcId: dataAwsVpcVpc.id,

@@ -9,4 +9,6 @@ export interface LambdaFunctionBaseConfig {
   envVars?: {
     [x: string]: string;
   };
+  namespace : string;
+  environment : string;
 }

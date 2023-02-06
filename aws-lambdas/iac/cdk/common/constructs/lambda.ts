@@ -4,6 +4,7 @@ import { AssetType, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { iamRolePolicy, lambdaRolePolicy } from "../constants";
 import { LambdaFunctionBaseConfig } from "../interfaces";
+import { getResourceName } from "../utils/helper";
 
 interface LambdaFunctionConfig extends LambdaFunctionBaseConfig {
   name: string;
@@ -16,6 +17,12 @@ export class Lambda extends Construct {
 
   constructor(scope: Construct, id: string, config: LambdaFunctionConfig) {
     super(scope, id);
+
+    const name = getResourceName({
+      namespace: config.namespace,
+      environment: config.environment,
+      randomName: config.name,
+    });
 
     // Creating Archive of Lambda
     const asset = new TerraformAsset(this, "lambda-asset", {
@@ -36,7 +43,7 @@ export class Lambda extends Construct {
         "lambda-layer",
         {
           filename: layerAsset.path,
-          layerName: `${id}-layers-${config.name}`,
+          layerName: name,
         }
       );
 
@@ -45,7 +52,7 @@ export class Lambda extends Construct {
 
     // Create Lambda role
     const role = new aws.iamRole.IamRole(this, "lambda-exec", {
-      name: `lambda-role-${id}-${config.name}`,
+      name,
       assumeRolePolicy: JSON.stringify(iamRolePolicy),
     });
 
@@ -68,7 +75,7 @@ export class Lambda extends Construct {
       this,
       "lambda-function",
       {
-        functionName: `cdktf-${id}-${config.name}`,
+        functionName: name,
         filename: asset.path,
         handler: config.handler,
         runtime: config.runtime,
@@ -87,10 +94,10 @@ export class Lambda extends Construct {
       lambdaFunc.putVpcConfig(vpcConfig);
     }
 
-    if(config.envVars){
-      lambdaFunc.putEnvironment({variables: config.envVars});
+    if (config.envVars) {
+      lambdaFunc.putEnvironment({ variables: config.envVars });
     }
-    
+
     this.lambda = lambdaFunc;
     this.arn = lambdaFunc.arn;
     this.functionName = lambdaFunc.functionName;
