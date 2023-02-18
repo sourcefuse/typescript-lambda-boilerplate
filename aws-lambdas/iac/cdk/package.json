@@ -22,7 +22,7 @@
     "node": ">=14.0"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^12.0.1",
+    "@cdktf/provider-aws": "^12.0.2",
     "@cdktf/tf-module-stack": "^2.0.8",
     "cdktf": "^0.15.1",
     "constructs": "^10.1.232",
