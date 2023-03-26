@@ -7,6 +7,20 @@
 | :exclamation: **Contributors:** See [Development](#dev) |
 | ------------------------------------------------------- |
 
+The boilerplate serves as the starting point for rolling out a new Lambda. The boilerplate includes 
+
+* Terraform
+* Terraform CDK in TypeScript 
+* Example Lambda Handlers and common interfaces, utilities, etc.
+
+The following patterns are shown in the boilerplate in Terraform, Terraform CDK in TypeScript, and TypeScript Lambda handlers.
+
+* SNS consumer
+* SQS consumer
+* CRON job
+* Utilizing ElastiCache in a Lambda
+* API Gateway integration
+
 ## <a id="prereqs"></a> Pre-Requisites
 
 - [node.js](https://nodejs.dev/download/)
