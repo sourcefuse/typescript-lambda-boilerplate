@@ -17,7 +17,7 @@ export class LambdaFunction {
     logger.info(
       `Received event: ${JSON.stringify(this.event, null, indentation)}`
     );
-    this.event?.Records?.forEach((record) => {
+    this.event?.Records?.forEach(record => {
       const { body } = record;
       logger.info(body);
     });    

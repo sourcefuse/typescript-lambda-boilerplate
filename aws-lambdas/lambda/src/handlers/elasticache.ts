@@ -7,7 +7,7 @@ const indentation = 2;
 const client = createClient({
   url: process.env.redisEndpoint,
 });
-client.on("error", (err) => logger.error("Redis Client Error", err));
+client.on("error", err => logger.error("Redis Client Error", err));
 
 export class LambdaFunction {
   context?: Context;
