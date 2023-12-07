@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: sourcefuse-aws-lambdas-boilerplate
-  title: sourcefuse-aws-lambdas-boilerplate
-  description: sourcefuse-aws-lambdas-boilerplate
+  name: arc-lambda-boilerplate
+  title: ARC Lambda Boilerplate
+  description: ARC Lambda Boilerplate
   tags:
     - lambda
     - api-gateway
